@@ -2,6 +2,6 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 
 public class User{
-    User(String name, String surname, String email, String address, String password, String wallet_address, String cvu){
+    User(String name, String surname, String email, String address, String password, String walletAddress, String cvu){
     }
 }
