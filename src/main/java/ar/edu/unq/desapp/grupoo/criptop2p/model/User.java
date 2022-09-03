@@ -17,28 +17,30 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class User{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id")
+    public
     Integer id;
 
-    @Column(name="name")
+    @Column(name="name", nullable = false)
+    public
     String name;
 
-    @Column(name="surname")
+    @Column(name="surname", nullable = false)
     String surname;
 
-    @Column(name="email")
+    @Column(name="email", nullable = false, unique = true)
+    public
     String email;
 
-    @Column(name="address")
+    @Column(name="address", nullable = false)
     String address;
 
-    @Column(name="password")
+    @Column(name="password", nullable = false)
     String password;
 
-    @Column(name="walletAddress")
+    @Column(name="walletAddress", nullable = false, unique = true)
     String walletAddress;
 
-    @Column(name="cvu")
+    @Column(name="cvu", nullable = false)
     String cvu;
     public User(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
         this.name = aName;
