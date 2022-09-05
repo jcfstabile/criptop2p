@@ -13,12 +13,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 public class User{
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public
-    Integer id;
+    Long id;
 
     @Column(name="name", nullable = false)
     public
@@ -37,8 +37,8 @@ public class User{
     @Column(name="password", nullable = false)
     String password;
 
-    @Column(name="walletAddress", nullable = false, unique = true)
-    String walletAddress;
+    @Column(name="w", nullable = false, unique = true)
+    String w;
 
     @Column(name="cvu", nullable = false)
     String cvu;
@@ -48,13 +48,19 @@ public class User{
         this.email = anEmail;
         this.address = anAddress;
         this.password = aPassword;
-        this.walletAddress = aWalletAddress;
+        this.w = aWalletAddress;
         this.cvu = aCvu;
-
-
-
     }
 
     public User() {
+
+    }
+
+    public Long getId(){
+        return this.id;
+    }
+
+    public void setId(Long anId){
+        this.id = anId;
     }
 }
