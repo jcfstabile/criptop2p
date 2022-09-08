@@ -31,8 +31,8 @@ class APITest {
     void userRegister(){
         User getUser = anUserRestController.register(anUser);
         assertNotNull(getUser);
-        assertEquals(anUser.id, getUser.id);
-        assertEquals(anUser.name, getUser.name);
-        assertEquals(anUser.email, getUser.email);
+        assertEquals(anUser.getId(), getUser.getId());
+        assertEquals(anUser.getName(), getUser.getName());
+        assertEquals(anUser.getEmail(), getUser.getEmail());
     }
 }
