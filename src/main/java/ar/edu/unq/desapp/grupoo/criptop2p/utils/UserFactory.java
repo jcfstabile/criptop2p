@@ -20,7 +20,11 @@ public class UserFactory {
 
     }
 
-    private boolean meetAllValidations(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu) {
+    private boolean meetAllValidations(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
+        return this.noParameterIsNull(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu);
+    }
+
+    private boolean noParameterIsNull(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu) {
         ArrayList parameters = new ArrayList();
         parameters.add(aName);
         parameters.add(aSurname);
