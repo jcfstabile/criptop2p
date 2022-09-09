@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.IncorrectFormatMail;
 import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.NoExtensionsParameter;
 import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.NullParameterException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
@@ -7,6 +8,8 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import java.lang.reflect.Array;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserFactory {
 
@@ -16,6 +19,9 @@ public class UserFactory {
         }
         if(this.nameOrSurnameHas3charsLess(aName, aSurname)){
             throw new NoExtensionsParameter();
+        }
+        if(this.emailIsIncorrect(anEmail)){
+            throw new IncorrectFormatMail();
         }
         User anUser = new User(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu);
         return anUser;
@@ -37,5 +43,12 @@ public class UserFactory {
 
     private boolean nameOrSurnameHas3charsLess(String aName, String aSurname){
         return aName.length() < 3 || aSurname.length() < 3;
+    }
+
+    private boolean emailIsIncorrect(String anEmail){
+        String regex = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(anEmail);
+        return !matcher.matches();
     }
 }

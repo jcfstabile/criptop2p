@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.IncorrectFormatMail;
 import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.NoExtensionsParameter;
 import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.NullParameterException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
@@ -201,7 +202,7 @@ class UserFactoryTests {
     }
 
     @Test
-    void userFactoryThrowsAnNoExtensionsParameterWhenTheNameHas1charLess() {
+    void userFactoryThrowsAnNoExtensionsParameterExceptionWhenTheNameHas1charLess() {
         Exception exception = assertThrows(NoExtensionsParameter.class, () -> {
             new UserFactory().createUser("H", "Ken", "jc@gmail.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
             ;
@@ -212,7 +213,7 @@ class UserFactoryTests {
     }
 
     @Test
-    void userFactoryThrowsAnNoExtensionsParameterWhenTheNameHas2char() {
+    void userFactoryThrowsAnNoExtensionsExceptionParameterWhenTheNameHas2char() {
         Exception exception = assertThrows(NoExtensionsParameter.class, () -> {
             new UserFactory().createUser("Ho", "Ken", "jc@gmail.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
             ;
@@ -222,6 +223,7 @@ class UserFactoryTests {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
+    @Test
     void userFactoryThrowsAnNoExtensionsParameterWhenTheSurnameHas1charLess() {
         Exception exception = assertThrows(NoExtensionsParameter.class, () -> {
             new UserFactory().createUser("Jim", "V", "jc@gmail.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
@@ -233,7 +235,7 @@ class UserFactoryTests {
     }
 
     @Test
-    void userFactoryThrowsAnNoExtensionsParameterWhenTheSurnameHas2char() {
+    void userFactoryThrowsAnNoExtensionsParameterExceptionWhenTheSurnameHas2char() {
         Exception exception = assertThrows(NoExtensionsParameter.class, () -> {
             new UserFactory().createUser("Jim", "Va", "jc@gmail.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
             ;
@@ -241,5 +243,22 @@ class UserFactoryTests {
         String expectedMessage = "Some parameter does not meet the required extension";;
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnIncorrectFormatExceptionMailWhenTheFormatMailIsIncorrect() {
+        Exception exception0 = assertThrows(IncorrectFormatMail.class, () -> {
+            new UserFactory().createUser("Jim", "Ken","user#domain.com", "there 123","Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        Exception exception1 = assertThrows(IncorrectFormatMail.class, () -> {
+            new UserFactory().createUser("Jim", "Ken", "@yahoo.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "The email format is incorrect";
+        String actualMessage0 = exception0.getMessage();
+        String actualMessage1 = exception0.getMessage();
+        assertTrue(actualMessage0.contains(expectedMessage));
+        assertTrue(actualMessage1.contains(expectedMessage));
     }
 }
