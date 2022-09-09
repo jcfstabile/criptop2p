@@ -21,10 +21,10 @@ public class UserFactory {
     }
 
     private boolean meetAllValidations(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
-        return this.noParameterIsNull(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu);
+        return !this.parameterIsNullOrEmpty(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu);
     }
 
-    private boolean noParameterIsNull(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu) {
+    private boolean parameterIsNullOrEmpty(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu) {
         ArrayList parameters = new ArrayList();
         parameters.add(aName);
         parameters.add(aSurname);
@@ -33,6 +33,6 @@ public class UserFactory {
         parameters.add(aPassword);
         parameters.add(aWalletAddress);
         parameters.add(aCvu);
-        return !parameters.contains(null);
+        return parameters.contains(null) || parameters.contains("");
     }
 }

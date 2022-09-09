@@ -108,4 +108,81 @@ class UserFactoryTests {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
+    @Test
+    void userFactoryThrowsAnNullParameterExceptionWhenTheNameIsEmpty() {
+        Exception exception = assertThrows(NullParameterException.class, () -> {
+            new UserFactory().createUser("", "Ken", "jk@here.dom", "there 123", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnNullParameterExceptionWhenTheSurnameIsEmpty() {
+        Exception exception = assertThrows(NullParameterException.class, () -> {
+            new UserFactory().createUser("Jim", "", "jk@here.dom", "there 123", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnNullParameterExceptionWhenTheEmailIsEmpty() {
+        Exception exception = assertThrows(NullParameterException.class, () -> {
+            new UserFactory().createUser("Jim", "Ken", "", "there 123", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnNullParameterExceptionWhenTheAddressIsEmpty() {
+        Exception exception = assertThrows(NullParameterException.class, () -> {
+            new UserFactory().createUser("Jim", "Ken", "jc@gmail.com", "", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+
+    @Test
+    void userFactoryThrowsAnNullParameterExceptionWhenThePasswordIsEmpty(){
+        Exception exception = assertThrows(NullParameterException.class, () -> {
+            new UserFactory().createUser("Jim", "Ken", "jc@gmail.com", "there 123", "", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnNullParameterExceptionWhenTheWalletAddressIsEmpty() {
+        Exception exception = assertThrows(NullParameterException.class, () -> {
+            new UserFactory().createUser("Jim", "Ken", "jc@gmail.com", "there 123", "Pepito12", "", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnNullParameterExceptionWhenTheCVUIsEmpty() {
+        Exception exception = assertThrows(NullParameterException.class, () -> {
+            new UserFactory().createUser("Jim", "Ken", "jc@gmail.com", "there 123", "Pepito12", "12345678", "");
+            ;
+        });
+        String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 }
