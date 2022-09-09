@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.NoExtensionsParameter;
 import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.NullParameterException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 
@@ -10,18 +11,16 @@ import java.util.ArrayList;
 public class UserFactory {
 
     public User createUser(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
-        if(this.meetAllValidations(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu)){
-            User anUser = new User(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu);
-            return anUser;
-        }
-        else{
+        if(this.parameterIsNullOrEmpty(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu)){
             throw new NullParameterException();
         }
+        if(this.nameOrSurnameHas3charsLess(aName, aSurname)){
+            throw new NoExtensionsParameter();
+        }
+        User anUser = new User(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu);
+        return anUser;
 
-    }
 
-    private boolean meetAllValidations(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
-        return !this.parameterIsNullOrEmpty(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu);
     }
 
     private boolean parameterIsNullOrEmpty(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu) {
@@ -34,5 +33,9 @@ public class UserFactory {
         parameters.add(aWalletAddress);
         parameters.add(aCvu);
         return parameters.contains(null) || parameters.contains("");
+    }
+
+    private boolean nameOrSurnameHas3charsLess(String aName, String aSurname){
+        return aName.length() < 3 || aSurname.length() < 3;
     }
 }

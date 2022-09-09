@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.NoExtensionsParameter;
 import ar.edu.unq.desapp.grupoo.criptop2p.exceptions.NullParameterException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
+import org.junit.jupiter.api.ClassOrderer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +31,18 @@ class UserFactoryTests {
         assertEquals("12345678", user.getWalletAddress());
         assertEquals("1111111111111111111111", user.getCvu());
     }
+
+    /*
+    void checkIfCreaterUserThrowsNullParameterException(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu) {
+        Exception exception = assertThrows(NullParameterException.class, () -> {
+            new UserFactory().createUser(aName, aSurname, anEmail, anAddress, aPassword, aWalletAddress, aCvu);
+            ;
+        });
+        String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+    */
 
     @Test
     void userFactoryThrowsAnNullParameterExceptionWhenTheNameIsNull() {
@@ -182,6 +196,49 @@ class UserFactoryTests {
             ;
         });
         String expectedMessage = "Some parameter/s is/are null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnNoExtensionsParameterWhenTheNameHas1charLess() {
+        Exception exception = assertThrows(NoExtensionsParameter.class, () -> {
+            new UserFactory().createUser("H", "Ken", "jc@gmail.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter does not meet the required extension";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnNoExtensionsParameterWhenTheNameHas2char() {
+        Exception exception = assertThrows(NoExtensionsParameter.class, () -> {
+            new UserFactory().createUser("Ho", "Ken", "jc@gmail.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter does not meet the required extension";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    void userFactoryThrowsAnNoExtensionsParameterWhenTheSurnameHas1charLess() {
+        Exception exception = assertThrows(NoExtensionsParameter.class, () -> {
+            new UserFactory().createUser("Jim", "V", "jc@gmail.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter does not meet the required extension";;
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void userFactoryThrowsAnNoExtensionsParameterWhenTheSurnameHas2char() {
+        Exception exception = assertThrows(NoExtensionsParameter.class, () -> {
+            new UserFactory().createUser("Jim", "Va", "jc@gmail.com", "there 123", "Pepito12", "12345678", "1111111111111111111111");
+            ;
+        });
+        String expectedMessage = "Some parameter does not meet the required extension";;
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
