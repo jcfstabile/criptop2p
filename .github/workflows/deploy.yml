@@ -16,7 +16,7 @@ jobs:
         with:
             java-version: 17
       - name: Build
-        run: ./gradle clean war stage webapp
+        run: ./gradlew clean war stage webapp
       - name: Deploy to heroku
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
