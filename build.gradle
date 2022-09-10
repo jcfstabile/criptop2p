@@ -29,7 +29,6 @@ dependencies {
 
 configurations.compileOnly.setCanBeResolved(true)
 
-task stage( dependsOn: [clean, build, war, webapp] )
 
 task webapp(type: Copy) {
     into "$buildDir/server"
@@ -42,7 +41,7 @@ build.mustRunAfter clean
 war.mustRunAfter build
 webapp.mustRunAfter war
 
-// stage.dependsOn(webapp)
+task stage( dependsOn: [clean, build, war, webapp] )
 
 tasks.named('test') {
 	useJUnitPlatform()
