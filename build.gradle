@@ -37,8 +37,8 @@ task webapp(type: Copy) {
     }
 }
 
-build.mustRunAfter clean
-war.mustRunAfter build
+war.mustRunAfter clean
+build.mustRunAfter war
 webapp.mustRunAfter war
 
 task stage( dependsOn: [clean, build, war, webapp] )
