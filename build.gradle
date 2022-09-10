@@ -36,14 +36,14 @@ task stage() {
 }
 war.mustRunAfter clean
 
-task copyToLib(type: Copy) {
+task webapp(type: Copy) {
     into "$buildDir/server"
     from(configurations.compileOnly) {
         include "webapp-runner*"
     }
 }
 
-stage.dependsOn(copyToLib)
+stage.dependsOn(webapp)
 
 tasks.named('test') {
 	useJUnitPlatform()
