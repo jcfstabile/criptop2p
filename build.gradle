@@ -25,9 +25,8 @@ dependencies {
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-    // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations
     implementation 'io.swagger.core.v3:swagger-annotations:2.2.2'
-
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
 }
 
 configurations.compileOnly.setCanBeResolved(true)
