@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Column;
@@ -41,6 +42,7 @@ public class User{
     @Column(name="password", nullable = false)
     @Size(min= 6, message ="Password must have more 3 character")
     @NotNull(message = "Password cannot be empty")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{6,}$")
     String password;
 
     @Column(name="w", nullable = false, unique = true)

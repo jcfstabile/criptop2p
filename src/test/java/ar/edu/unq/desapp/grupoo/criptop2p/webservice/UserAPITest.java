@@ -23,7 +23,7 @@ class APITest {
 
     @BeforeAll
     public static void setUp(){
-        anUser = new User("Jim", "Ken", "jk@here.dom", "there 123", "1234", "12345678", "22*1");
+        anUser = new User("Jim", "Ken", "jk@here.dom", "Fake Street 1234", "Pepito1234", "12345678", "1234567890123456789012");
     }
 
     @DisplayName("A User can be registed")
