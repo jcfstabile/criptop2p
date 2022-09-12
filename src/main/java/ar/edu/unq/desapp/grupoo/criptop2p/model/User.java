@@ -42,7 +42,14 @@ public class User{
     @Column(name="password", nullable = false)
     @Size(min= 6, message ="Password must have more 3 character")
     @NotNull(message = "Password cannot be empty")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{6,}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])([A-Za-z\\d$@$!%*?&]|[^ ]){6,}$", message = "Password must contain:\n" +
+            "\n" +
+            "- At least one uppercase\n" +
+            "- At least one lowercase\n" +
+            "- At least one digit\n" +
+            "- At least one special character\n" +
+            "- Min 6 characters\n" +
+            "\n")
     String password;
 
     @Column(name="w", nullable = false, unique = true)

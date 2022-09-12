@@ -271,13 +271,12 @@ class UserTests {
         assertEquals(1, violations.size());
     }
 
-    //ACA FALTA H DEL FUTURO
-    //@Test
-    //void userThrowsAnNoExtensionsParameterExceptionWhenThePasswordDontRespectTheCapsFormat() {
-    //    User userPasswordLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "pepito12", "12345678", "1111111111111111111111");
-    //    Set<ConstraintViolation<User>> violations = validator.validate(userPasswordLess);
-    //    assertEquals(1, violations.size());
-    //}
+    @Test
+    void userThrowsAnNoExtensionsParameterExceptionWhenThePasswordDontRespectTheCapsFormat() {
+        User userPasswordLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "pepito12", "12345678", "1111111111111111111111");
+        Set<ConstraintViolation<User>> violations = validator.validate(userPasswordLess);
+        assertEquals(1, violations.size());
+    }
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheWalletAddressHasLess8chars() {
