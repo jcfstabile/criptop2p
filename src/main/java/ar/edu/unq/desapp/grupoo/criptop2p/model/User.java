@@ -82,4 +82,26 @@ public class User{
     public String getPassword() { return this.password; }
     public String getWalletAddress() { return this.walletAddress; }
     public String getCvu() { return this.cvu; }
+
+    public void setName(String aName) {
+        this.name = aName;
+    }
+    public void setSurname(String aSurname) {
+        this.surname = aSurname;
+    }
+    public void setEmail(String anEmail) {
+        this.email = anEmail;
+    }
+    public void setAddress(String anAddress) {
+        this.address = anAddress;
+    }
+    public void setPassword(String aPassword) {
+        this.password = aPassword;
+    }
+    public void setWalletAddress(String aWalletAddress) {
+        this.walletAddress = aWalletAddress;
+    }
+    public void setCvu(String aCVU) {
+        this.cvu = aCVU;
+    }
 }
