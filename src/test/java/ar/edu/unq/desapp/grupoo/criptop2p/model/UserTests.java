@@ -24,20 +24,20 @@ class UserTests {
     @DisplayName("A User can be instantiated")
     @Test
     void userExist(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         assertNotNull(user);
         assertEquals("Jim", user.getName());
         assertEquals("Ken", user.getSurname());
         assertEquals("jk@here.dom", user.getEmail());
         assertEquals("1234567890", user.getAddress());
-        assertEquals("Pepito12", user.getPassword());
+        assertEquals("Pepito12!", user.getPassword());
         assertEquals("12345678", user.getWalletAddress());
         assertEquals("1111111111111111111111",user.getCvu());
     }
 
     @Test
     void userCanChangeTheName(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito@12", "12345678", "1111111111111111111111");
         assertEquals("Jim", user.getName());
         user.setName("Pepe");
         assertEquals("Pepe", user.getName());
@@ -45,7 +45,7 @@ class UserTests {
 
     @Test
     void userCanChangeTheSurame(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito,12", "12345678", "1111111111111111111111");
         assertEquals("Ken", user.getSurname());
         user.setSurname("Pepe");
         assertEquals("Pepe", user.getSurname());
@@ -53,7 +53,7 @@ class UserTests {
 
     @Test
     void userCanChangeTheEmail(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito;12", "12345678", "1111111111111111111111");
         assertEquals("jk@here.dom", user.getEmail());
         user.setEmail("jk@other.com");
         assertEquals("jk@other.com", user.getEmail());
@@ -62,8 +62,8 @@ class UserTests {
 
     @Test
     void userCanChangeThePassword(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
-        assertEquals("Pepito12", user.getPassword());
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito_12", "12345678", "1111111111111111111111");
+        assertEquals("Pepito_12", user.getPassword());
         user.setPassword("Pepita12");
         assertEquals("Pepita12", user.getPassword());
     }
@@ -71,7 +71,7 @@ class UserTests {
 
     @Test
     void userCanChangeTheWalletAddress(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito#12", "12345678", "1111111111111111111111");
         assertEquals("12345678", user.getWalletAddress());
         user.setWalletAddress("87654321");
         assertEquals("87654321", user.getWalletAddress());
@@ -79,7 +79,7 @@ class UserTests {
 
     @Test
     void userCanChangeTheAddress(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito.12", "12345678", "1111111111111111111111");
         assertEquals("1234567890", user.getAddress());
         user.setAddress("0987654321");
         assertEquals("0987654321", user.getAddress());
@@ -87,7 +87,7 @@ class UserTests {
 
     @Test
     void userCanChangeTheCVU(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito'12", "12345678", "1111111111111111111111");
         assertEquals("1111111111111111111111", user.getCvu());
         user.setCvu("2222222222222222222222");
         assertEquals("2222222222222222222222", user.getCvu());
@@ -96,7 +96,7 @@ class UserTests {
 
     @Test
     void userCreateConsistlyDontBrokeAnyContraints(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito+12", "12345678", "1111111111111111111111");
         assertNotNull(user);
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         assertEquals(0, violations.size());
@@ -104,28 +104,28 @@ class UserTests {
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheNameIsNull() {
-        User userNullName = new User(null, "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userNullName = new User(null, "Ken", "jk@here.dom", "1234567890", "Pepito,12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userNullName);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheSurnameIsNull() {
-        User userNullName = new User("Jim", null, "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userNullName = new User("Jim", null, "jk@here.dom", "1234567890", "Pepito.12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userNullName);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheEmailIsNull() {
-        User userNullEmail = new User("Jim", "Ken", null, "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userNullEmail = new User("Jim", "Ken", null, "1234567890", "Pepito12;", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userNullEmail);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheAddressIsNull() {
-        User userNullAddress = new User("Jim", "Ken", "jc@gmail.com", null, "Pepito12", "12345678", "1111111111111111111111");
+        User userNullAddress = new User("Jim", "Ken", "jc@gmail.com", null, "Pepito_12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userNullAddress);
         assertEquals(1, violations.size());
     }
@@ -139,42 +139,42 @@ class UserTests {
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheWalletAddressIsNull() {
-        User userNullWalletAddress = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito12", null, "1111111111111111111111");
+        User userNullWalletAddress = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito!12", null, "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userNullWalletAddress);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheCVUIsNull() {
-        User userNullCVU = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito12", "12345678", null);
+        User userNullCVU = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito.12", "12345678", null);
         Set<ConstraintViolation<User>> violations = validator.validate(userNullCVU);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheNameIsEmpty() {
-        User userEmptyName = new User("", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userEmptyName = new User("", "Ken", "jk@here.dom", "1234567890", "Pepito12*", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userEmptyName);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheSurnameIsEmpty() {
-        User userEmptySurname = new User("Jim", "", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userEmptySurname = new User("Jim", "", "jk@here.dom", "1234567890", "Pepito!12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userEmptySurname);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheEmailIsEmpty() {
-        User userEmptyEmail = new User("Jim", "Ken", "", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userEmptyEmail = new User("Jim", "Ken", "", "1234567890", "Pepito1.2", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userEmptyEmail);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheAddressIsEmpty() {
-        User userEmptyAddress = new User("Jim", "Ken", "jc@gmail.com", "", "Pepito12", "12345678", "1111111111111111111111");
+        User userEmptyAddress = new User("Jim", "Ken", "jc@gmail.com", "", "Pepito+12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userEmptyAddress);
         assertEquals(1, violations.size());
     }
@@ -183,75 +183,75 @@ class UserTests {
     void userThrowsAnNullParameterExceptionWhenThePasswordIsEmpty(){
         User userEmptyPassword = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userEmptyPassword);
-        assertEquals(1, violations.size());
+        assertEquals(2, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheWalletAddressIsEmpty() {
-        User userEmptyWalletAddress = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito12", "", "1111111111111111111111");
+        User userEmptyWalletAddress = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito.12", "", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userEmptyWalletAddress);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNullParameterExceptionWhenTheCVUIsEmpty() {
-        User userEmptyCVU = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito12", "12345678", "");
+        User userEmptyCVU = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito_12", "12345678", "");
         Set<ConstraintViolation<User>> violations = validator.validate(userEmptyCVU);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheNameHas2charLess() {
-        User userNameLess = new User("Ho", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userNameLess = new User("Ho", "Ken", "jk@here.dom", "1234567890", "Pepito!12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userNameLess);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsExceptionParameterWhenTheNameHas1char() {
-        User userNameLess = new User("H", "Ken", "jk@here.dom", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userNameLess = new User("H", "Ken", "jk@here.dom", "1234567890", "Pepito$12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userNameLess);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsParameterWhenTheSurnameHas1charLess() {
-        User userSurnameLess = new User("Jim", "V", "jc@gmail.com", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userSurnameLess = new User("Jim", "V", "jc@gmail.com", "1234567890", "Pepito%12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userSurnameLess);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheSurnameHas2char() {
-        User userSurnameLess = new User("Jim", "V", "jc@gmail.com", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userSurnameLess = new User("Jim", "V", "jc@gmail.com", "1234567890", "Pepito*12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userSurnameLess);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheNameHasMore30chars() {
-        User userSurnameLess = new User("1234567890123456789012345678901", "Kem", "jc@gmail.com", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userSurnameLess = new User("1234567890123456789012345678901", "Kem", "jc@gmail.com", "1234567890", "Pepito+12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userSurnameLess);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheSurnameHasMore30chars() {
-        User userSurnameLess = new User("Jim", "1234567890123456789012345678901", "jc@gmail.com", "1234567890", "Pepito12", "12345678", "1111111111111111111111");
+        User userSurnameLess = new User("Jim", "1234567890123456789012345678901", "jc@gmail.com", "1234567890", "Pepito.12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userSurnameLess);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnIncorrectFormatExceptionMailWhenTheFormatMailIsIncorrect() {
-        User userInvalidEmail = new User("Jim", "Ken","user#domain.com", "1234567890","Pepito12", "12345678", "1111111111111111111111");
+        User userInvalidEmail = new User("Jim", "Ken","user#domain.com", "1234567890","Pepito#12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userInvalidEmail);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheAddressHasLess10chars() {
-        User userAddressLess = new User("Jim", "Kem", "jc@gmail.com", "123456789", "Pepito12", "12345678", "1111111111111111111111");
+        User userAddressLess = new User("Jim", "Kem", "jc@gmail.com", "123456789", "Pepito.12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userAddressLess);
         assertEquals(1, violations.size());
     }
@@ -259,7 +259,7 @@ class UserTests {
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheAddressHasMore31chars() {
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890123456789012345678901", "Pepito12", "12345678", "1111111111111111111111");
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890123456789012345678901", "Pepito.12", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
         assertEquals(1, violations.size());
     }
@@ -268,7 +268,7 @@ class UserTests {
     void userThrowsAnNoExtensionsParameterExceptionWhenThePasswordHasLess6chars() {
         User userPasswordLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "12345", "12345678", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userPasswordLess);
-        assertEquals(1, violations.size());
+        assertEquals(2, violations.size());
     }
 
     @Test
@@ -280,21 +280,21 @@ class UserTests {
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheWalletAddressHasLess8chars() {
-        User userWalletAddressLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito12", "1234567", "1111111111111111111111");
+        User userWalletAddressLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito.12", "1234567", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userWalletAddressLess);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheWalletAddressHasMore8chars() {
-        User userWalletAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito12", "123456789", "1111111111111111111111");
+        User userWalletAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito,12", "123456789", "1111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userWalletAddressMore);
         assertEquals(1, violations.size());
     }
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheCVUHasLess22chars() {
-        User userAddressLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito12", "12345678", "111111111111111111111");
+        User userAddressLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito.12", "12345678", "111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userAddressLess);
         assertEquals(1, violations.size());
     }
@@ -302,9 +302,58 @@ class UserTests {
 
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheAddressHasMore22chars() {
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito12", "12345678", "11111111111111111111111");
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito++12", "12345678", "11111111111111111111111");
         Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
         assertEquals(1, violations.size());
+    }
+
+    @Test
+    void testAPasswordWithOnlyAnUpperCaseButCheckExtensionBrokesAContrait(){
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito", "12345678", "1234567890123456789012");
+        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
+        assertEquals(1, violations.size());
+    }
+
+    @Test
+    void testAPasswordWithAllItsCharsInUpperCaseButCheckExtensionBrokesAContrait(){
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "PEPITO", "12345678", "1234567890123456789012");
+        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
+        assertEquals(1, violations.size());
+    }
+
+    @Test
+    void testAPasswordWithAllItsCharsInLowerCaseButCheckExtensionBrokesAContrait(){
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "pepito", "12345678", "1234567890123456789012");
+        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
+        assertEquals(1, violations.size());
+    }
+
+    @Test
+    void testAPasswordWithOnlyAnLowerCaseButCheckExtensionBrokesAContrait(){
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "pepito", "12345678", "1234567890123456789012");
+        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
+        assertEquals(1, violations.size());
+    }
+
+    @Test
+    void testAPasswordWithAnLowerAndUpperCaseAndCheckExtensionBrokesAContrait(){
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito", "12345678", "1234567890123456789012");
+        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
+        assertEquals(1, violations.size());
+    }
+
+    @Test
+    void testAPasswordWithAnLowerAndUpperCaseAndCheckExtensionAndADigitBrokesAContrait(){
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito1", "12345678", "1234567890123456789012");
+        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
+        assertEquals(1, violations.size());
+    }
+
+    @Test
+    void testAPasswordWithAnLowerAndUpperCaseAndCheckExtensionAndADigitAndASpecialCharacterDonntBrokeAContrait(){
+        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito.1", "12345678", "1234567890123456789012");
+        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
+        assertEquals(0, violations.size());
     }
 }
 

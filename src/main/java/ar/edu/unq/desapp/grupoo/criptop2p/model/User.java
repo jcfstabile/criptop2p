@@ -42,7 +42,7 @@ public class User{
     @Column(name="password", nullable = false)
     @Size(min= 6, message ="Password must have more 3 character")
     @NotNull(message = "Password cannot be empty")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])([A-Za-z\\d$@$!%*?&]|[^ ]){6,}$", message = "Password must contain:\n" +
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$._+%@()$*`';/=#!%*?&,])([A-Za-z\\d$@$!%*?&]|[^ ]){6,}$", message = "Password must contain:\n" +
             "\n" +
             "- At least one uppercase\n" +
             "- At least one lowercase\n" +
@@ -53,12 +53,12 @@ public class User{
     String password;
 
     @Column(name="w", nullable = false, unique = true)
-    @Size(min= 8, max =8, message ="Waller Address must have 8 character")
+    @Size(min= 8, max =8, message ="Wallet Address must have 8 character")
     @NotNull(message = "Wallet Address cannot be empty")
     String walletAddress;
 
     @Column(name="cvu", nullable = false)
-    @Size(min= 22, max = 22, message ="Waller Address must have 22 character")
+    @Size(min= 22, max = 22, message ="CVU must have 22 character")
     @NotNull(message = "CVU cannot be null")
     String cvu;
 
