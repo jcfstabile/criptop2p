@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -70,7 +69,7 @@ public class User{
         this.password = aPassword;
         this.walletAddress = aWalletAddress;
         this.cvu = aCvu;
-        this.offers = new ArrayList<Intention>();
+        this.offers = new ArrayList<>();
     }
 
     public User() {
@@ -80,11 +79,6 @@ public class User{
     public Long getId(){
         return this.id;
     }
-
-    public void setId(Long anId){
-        this.id = anId;
-    }
-
     public String getName() { return this.name; }
     public String getSurname() { return this.surname; }
     public String getEmail() { return this.email; }
