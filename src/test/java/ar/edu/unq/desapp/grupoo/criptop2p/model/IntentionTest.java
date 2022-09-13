@@ -1,9 +1,12 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-import org.junit.Test;
+
+import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @DisplayName("Intention Tests")
 @SpringBootTest
@@ -18,5 +21,14 @@ public class IntentionTest {
         assertEquals(2L, intention.getPrice());
         assertEquals(Type.SELL, intention.getType());
         assertEquals(Crypto.ATOMUSDT, intention.getCrypto());
+    }
+
+    @Test
+    void testAnIntentionDTOExist(){
+        IntentionDTO intentionDTO = new IntentionDTO(1, 2L,Type.SELL, Crypto.ATOMUSDT);
+        assertEquals(1, intentionDTO.count);
+        assertEquals(2L, intentionDTO.price);
+        assertEquals(Type.SELL, intentionDTO.type);
+        assertEquals(Crypto.ATOMUSDT, intentionDTO.crypto);
     }
 }
