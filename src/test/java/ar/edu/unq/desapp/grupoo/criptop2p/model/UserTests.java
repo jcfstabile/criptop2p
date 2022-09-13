@@ -12,7 +12,7 @@ import javax.validation.Validator;
 import java.util.Set;
 
 
-@DisplayName("Model Tests")
+@DisplayName("User Tests")
 @SpringBootTest
 class UserTests {
     Validator validator;

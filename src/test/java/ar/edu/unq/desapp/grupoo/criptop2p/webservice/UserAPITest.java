@@ -4,7 +4,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.Crypto;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
-import org.junit.jupiter.api.BeforeAll;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Type;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -62,7 +62,7 @@ class APITest {
     void anUserCanMakeANewOfter(){
         User getUser = anUserRestController.register(anUser);
         //assertEquals(0, getUser.getOffers().size());
-        IntentionDTO intentionDTO = new IntentionDTO(10,100L, Crypto.ALICEUSDT);
+        IntentionDTO intentionDTO = new IntentionDTO(10,100L, Type.SELL, Crypto.ALICEUSDT);
         anUserRestController.ofter(getUser.getId(), intentionDTO);
         //assertEquals(1, getUser.getOffers().size());
     }

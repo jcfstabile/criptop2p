@@ -59,8 +59,7 @@ public class User{
     @NotNull(message = "CVU cannot be null")
     String cvu;
 
-    //@OneToMany(mappedBy="user")
-    //@JoinColumn(name = "intention_id")
+    //@OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     //ArrayList<Intention> offers;
 
     public User(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
