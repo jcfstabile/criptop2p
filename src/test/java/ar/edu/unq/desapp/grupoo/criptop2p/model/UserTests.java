@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Set;
@@ -42,6 +43,16 @@ class UserTests {
         user.setName("Pepe");
         assertEquals("Pepe", user.getName());
     }
+
+    @Test
+    void userCanChangeTheNameAndCheckContraint(){
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito@12", "12345678", "1111111111111111111111");
+        assertEquals("Jim", user.getName());
+        user.setName("Pepe");
+        assertEquals("Pepe", user.getName());
+    }
+
+
 
     @Test
     void userCanChangeTheSurame(){
