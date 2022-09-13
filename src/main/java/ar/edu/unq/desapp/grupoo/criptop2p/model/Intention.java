@@ -1,7 +1,5 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-import org.springframework.validation.annotation.Validated;
-
 import javax.persistence.*;
 
 @Entity
@@ -26,6 +24,8 @@ public class Intention {
     private Type type;
     private Crypto crypto;
 
+    private Status status;
+
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
@@ -40,11 +40,12 @@ public class Intention {
         this.price= aPrice;
         this.type = aType;
         this.crypto = aCrypto;
+        this.status = Status.OFFERED;
     }
     public User getUser(){ return this.user; }
     public int getCount(){ return this.count; }
     public Long getPrice(){ return this.price; }
     public Type getType(){ return this.type; }
     public Crypto getCrypto(){ return this.crypto; }
-
+    public Status getStatus() { return this.status; }
 }
