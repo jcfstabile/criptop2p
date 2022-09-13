@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Set;
@@ -365,6 +364,12 @@ class UserTests {
         User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito.1", "12345678", "1234567890123456789012");
         Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
         assertEquals(0, violations.size());
+    }
+
+    @Test
+    void testToBeCreatedAnUserHasNotAnyOffer(){
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        //assertEquals(0, user.getOffers().size());
     }
 }
 

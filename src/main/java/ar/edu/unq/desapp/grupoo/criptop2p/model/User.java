@@ -3,13 +3,10 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -62,6 +59,10 @@ public class User{
     @NotNull(message = "CVU cannot be null")
     String cvu;
 
+    //@OneToMany(mappedBy="user")
+    //@JoinColumn(name = "intention_id")
+    //ArrayList<Intention> offers;
+
     public User(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
         this.name = aName;
         this.surname = aSurname;
@@ -70,6 +71,7 @@ public class User{
         this.password = aPassword;
         this.walletAddress = aWalletAddress;
         this.cvu = aCvu;
+        //this.offers = new ArrayList<Intention>();
     }
 
     public User() {
@@ -113,6 +115,5 @@ public class User{
     public void setCvu(String aCVU) {
         this.cvu = aCVU;
     }
-
-
+    //public List<Intention> getOffers() { return this.offers;}
 }
