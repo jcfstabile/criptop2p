@@ -59,8 +59,8 @@ public class User{
     @NotNull(message = "CVU cannot be null")
     String cvu;
 
-    //@OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    //ArrayList<Intention> offers;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    List<Intention> offers;
 
     public User(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
         this.name = aName;
@@ -70,7 +70,7 @@ public class User{
         this.password = aPassword;
         this.walletAddress = aWalletAddress;
         this.cvu = aCvu;
-        //this.offers = new ArrayList<Intention>();
+        this.offers = new ArrayList<Intention>();
     }
 
     public User() {
@@ -114,5 +114,11 @@ public class User{
     public void setCvu(String aCVU) {
         this.cvu = aCVU;
     }
-    //public List<Intention> getOffers() { return this.offers;}
+    public List<Intention> getOffers() { return this.offers;}
+
+    public Intention offer(Integer aCount, Long aPrice, Type aType, Crypto aCrypto){
+        Intention intention = new Intention(this, aCount, aPrice, aType, aCrypto);
+        this.offers.add(intention);
+        return intention;
+    }
 }
