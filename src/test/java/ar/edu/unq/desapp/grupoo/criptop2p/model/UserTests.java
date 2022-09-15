@@ -373,7 +373,7 @@ class UserTests {
     }
 
     @Test
-    void testToOfferAnUserReturnAnIntention(){
+    void testToOfferAnUserReturnAnIntentionWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         Intention intention = user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
         assertEquals(user, intention.getUser());
@@ -384,7 +384,7 @@ class UserTests {
     }
 
     @Test
-    void testTheUserCanAddOffersToItsListOfOffers(){
+    void testTheUserCanAddOffersToItsListOfOffersWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         assertEquals(0, user.getOffers().size());
         user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
@@ -394,7 +394,7 @@ class UserTests {
     }
 
     @Test
-    void testToOfferAnUserAddAnIntentionToItsListOfIntentions(){
+    void testToOfferAnUserAddAnIntentionToItsListOfIntentionsWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         assertEquals(0, user.getOffers().size());
         Intention intention = user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
@@ -402,7 +402,7 @@ class UserTests {
     }
 
     @Test
-    void testToOfferAnUserAddAnIntentionToItsListOfIntentionsAndItIsTheExpected(){
+    void testToOfferAnUserAddAnIntentionToItsListOfIntentionsAndItIsTheExpectedWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         Intention intention = user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
         Intention uniqueIntention = user.getOffers().get(0);
