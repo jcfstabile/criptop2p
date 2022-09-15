@@ -22,7 +22,7 @@ public class Intention {
     private Long price;
 
     private Type type;
-    private Crypto crypto;
+    private CryptoName cryptoName;
 
     private Status status;
 
@@ -34,18 +34,19 @@ public class Intention {
     public Intention() {
     }
 
-    public Intention(User anUser, int aCount, Long aPrice, Type aType, Crypto aCrypto) {
+    public Intention(User anUser, int aCount, Long aPrice, Type aType, CryptoName aCryptoName) {
         this.user=anUser;
         this.count = aCount;
         this.price= aPrice;
         this.type = aType;
-        this.crypto = aCrypto;
+        this.cryptoName = aCryptoName;
         this.status = Status.OFFERED;
     }
     public User getUser(){ return this.user; }
     public int getCount(){ return this.count; }
     public Long getPrice(){ return this.price; }
     public Type getType(){ return this.type; }
-    public Crypto getCrypto(){ return this.crypto; }
+    public CryptoName getCrypto(){ return this.cryptoName; }
     public Status getStatus() { return this.status; }
+    public void setStatus(Status aStatus){ this.status = aStatus; }
 }

@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Crypto;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
@@ -62,7 +62,7 @@ class APITest {
     void anUserCanMakeANewOfter(){
         User getUser = anUserRestController.register(anUser);
         //assertEquals(0, getUser.getOffers().size());
-        IntentionDTO intentionDTO = new IntentionDTO(10,100L, Type.SELL, Crypto.ALICEUSDT);
+        IntentionDTO intentionDTO = new IntentionDTO(10,100L, Type.SELL, CryptoName.ALICEUSDT);
         anUserRestController.ofter(getUser.getId(), intentionDTO);
         //assertEquals(1, getUser.getOffers().size());
     }

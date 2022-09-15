@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-public enum Crypto {
+public enum CryptoName {
     ALICEUSDT,
     MATICUSDT,
     AXSUSDT,

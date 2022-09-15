@@ -375,21 +375,21 @@ class UserTests {
     @Test
     void testToOfferAnUserReturnAnIntention(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        Intention intention = user.offer(10, 2L, Type.SELL, Crypto.CAKEUSDT);
+        Intention intention = user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
         assertEquals(user, intention.getUser());
         assertEquals(2L, intention.getPrice());
         assertEquals(10, intention.getCount());
         assertEquals(Type.SELL, intention.getType());
-        assertEquals(Crypto.CAKEUSDT, intention.getCrypto());
+        assertEquals(CryptoName.CAKEUSDT, intention.getCrypto());
     }
 
     @Test
     void testTheUserCanAddOffersToItsListOfOffers(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         assertEquals(0, user.getOffers().size());
-        user.offer(10, 2L, Type.SELL, Crypto.CAKEUSDT);
+        user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
         assertEquals(1, user.getOffers().size());
-        user.offer(10, 2L, Type.SELL, Crypto.CAKEUSDT);
+        user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
         assertEquals(2, user.getOffers().size());
     }
 
@@ -397,14 +397,14 @@ class UserTests {
     void testToOfferAnUserAddAnIntentionToItsListOfIntentions(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         assertEquals(0, user.getOffers().size());
-        Intention intention = user.offer(10, 2L, Type.SELL, Crypto.CAKEUSDT);
+        Intention intention = user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
         assertEquals(1, user.getOffers().size());
     }
 
     @Test
     void testToOfferAnUserAddAnIntentionToItsListOfIntentionsAndItIsTheExpected(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        Intention intention = user.offer(10, 2L, Type.SELL, Crypto.CAKEUSDT);
+        Intention intention = user.offer(10, 2L, Type.SELL, CryptoName.CAKEUSDT, 2L);
         Intention uniqueIntention = user.getOffers().get(0);
         assertEquals(intention.getUser(), uniqueIntention.getUser());
         assertEquals(intention.getPrice(), uniqueIntention.getPrice());
