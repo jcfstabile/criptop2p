@@ -3,7 +3,10 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
@@ -19,20 +22,27 @@ public class UserRestController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserMapper mapper;
 
     @PostMapping("/users")
-    public ResponseEntity<User> register(@Valid @RequestBody User user) {
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserCreationDTO userCreationDTO) {
+        User user = mapper.toUser(userCreationDTO);
         this.userService.addUser(user);
-        return ResponseEntity.ok(this.userService.findByID(user.getId()));
+        return ResponseEntity.ok(
+                mapper.toDto(this.userService.findByID(user.getId()))
+        );
     }
 
     @GetMapping("/users/{anId}")
-    public ResponseEntity<User> findUserById(@PathVariable Long anId) {
-        return ResponseEntity.ok(this.userService.findByID(anId));
+    public ResponseEntity<UserDTO> findUserById(@PathVariable Long anId) {
+        return ResponseEntity.ok(
+                mapper.toDto(this.userService.findByID(anId))
+        );
     }
 
     @PostMapping("/users/{anId}")
-    public Intention ofter(@PathVariable Long anId, @RequestBody IntentionDTO anIntentionDTO) {
+    public Intention offer(@PathVariable Long anId, @RequestBody IntentionDTO anIntentionDTO) {
         return this.userService.offer(anId, anIntentionDTO);
     }
 }
