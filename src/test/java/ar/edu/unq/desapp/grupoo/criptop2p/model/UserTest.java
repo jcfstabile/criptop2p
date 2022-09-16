@@ -15,7 +15,7 @@ import java.util.Set;
 
 @DisplayName("User Tests")
 @SpringBootTest
-class UserTests {
+class UserTest {
     Validator validator;
     @BeforeEach
     void setUp(){
