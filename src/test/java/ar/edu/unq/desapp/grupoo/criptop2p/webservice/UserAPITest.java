@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 
 
 @DisplayName("API Tests")
@@ -62,7 +63,7 @@ class APITest {
     void anUserCanMakeANewOfter(){
         User getUser = anUserRestController.register(anUser);
         //assertEquals(0, getUser.getOffers().size());
-        IntentionDTO intentionDTO = new IntentionDTO(10,100L, Type.SELL, CryptoName.ALICEUSDT);
+        IntentionDTO intentionDTO = new IntentionDTO(10,new BigDecimal(10), Type.SELL, CryptoName.ALICEUSDT);
         anUserRestController.ofter(getUser.getId(), intentionDTO);
         //assertEquals(1, getUser.getOffers().size());
     }

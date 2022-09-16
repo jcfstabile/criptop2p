@@ -4,6 +4,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +111,7 @@ public class User{
     }
     public List<Intention> getOffers() { return this.offers;}
 
-    public Intention offer(Integer aCount, Long aPrice, Type aType, CryptoName aCryptoName, Long currentPrice){
+    public Intention offer(Integer aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName, BigDecimal currentPrice){
         Intention intention;
         try{
             intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);

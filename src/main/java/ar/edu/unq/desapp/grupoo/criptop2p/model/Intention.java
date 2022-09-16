@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name="intentions")
@@ -19,7 +20,7 @@ public class Intention {
     }
 
     private int count;
-    private Long price;
+    private BigDecimal price;
 
     private Type type;
     private CryptoName cryptoName;
@@ -34,7 +35,7 @@ public class Intention {
     public Intention() {
     }
 
-    public Intention(User anUser, int aCount, Long aPrice, Type aType, CryptoName aCryptoName) {
+    public Intention(User anUser, int aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName) {
         this.user=anUser;
         this.count = aCount;
         this.price= aPrice;
@@ -44,7 +45,7 @@ public class Intention {
     }
     public User getUser(){ return this.user; }
     public int getCount(){ return this.count; }
-    public Long getPrice(){ return this.price; }
+    public BigDecimal getPrice(){ return this.price; }
     public Type getType(){ return this.type; }
     public CryptoName getCrypto(){ return this.cryptoName; }
     public Status getStatus() { return this.status; }

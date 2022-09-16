@@ -1,17 +1,20 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class ValidatorCryptoPrice {
-    private Long percent;
+    private BigDecimal percent;
     public ValidatorCryptoPrice(){
-        this.percent = (long) 5;
+        this.percent = new BigDecimal(5);
     }
 
-    public Long getPercent() { return percent; }
-    public void setPerCent(Long aPercent){
+    public BigDecimal getPercent() { return percent; }
+    public void setPerCent(BigDecimal aPercent){
         this.percent = aPercent;
     }
 
-    public Intention createIntention(User anUser, Integer aCount, Long aPrice, Type aType, CryptoName aCryptoName, Long currentPrice) {
+    public Intention createIntention(User anUser, Integer aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName, BigDecimal currentPrice) {
         Intention intention = new Intention(anUser, aCount, aPrice, aType, aCryptoName);
         if(!this.isCorrectPrice(aPrice, currentPrice)){
             intention.setStatus(Status.CANCELEDBYSYSTEM);
@@ -19,10 +22,11 @@ public class ValidatorCryptoPrice {
         return intention;
     }
 
-    private Boolean isCorrectPrice(Long aPrice, Long currentPrice){
-        Long fivePerCent = aPrice * (long) 5 / (long) 100;
-        Long more = aPrice + fivePerCent;
-        Long less = aPrice - fivePerCent;
-        return currentPrice >= less && currentPrice <= more;
+    private Boolean isCorrectPrice(BigDecimal aPrice, BigDecimal currentPrice){
+        BigDecimal fivePerCent = aPrice.setScale(2, RoundingMode.HALF_UP).multiply(this.percent).divide(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal more = aPrice.setScale(2, RoundingMode.HALF_UP).add(fivePerCent).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal less = aPrice.setScale(2, RoundingMode.HALF_UP).subtract(fivePerCent).setScale(2, RoundingMode.HALF_UP);
+        return currentPrice.setScale(2, RoundingMode.HALF_UP).compareTo(less) >= 0
+                && currentPrice.setScale(2, RoundingMode.HALF_UP).compareTo(more) <= 0 ;
     }
 }
