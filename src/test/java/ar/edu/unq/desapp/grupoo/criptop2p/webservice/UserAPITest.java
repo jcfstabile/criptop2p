@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 
 @DisplayName("API Tests")
 @SpringBootTest
-// @Transactional
+@Transactional
 class APITest {
     static User anUser;
     @Autowired

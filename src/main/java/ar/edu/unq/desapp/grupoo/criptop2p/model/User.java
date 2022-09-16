@@ -112,13 +112,7 @@ public class User{
     public List<Intention> getOffers() { return this.offers;}
 
     public Intention offer(Integer aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName, BigDecimal currentPrice){
-        Intention intention;
-        try{
-            intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);
-        }
-        catch(Exception e){
-            throw e;
-        }
+        Intention intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);
         this.offers.add(intention);
         return intention;
     }
