@@ -23,6 +23,20 @@ public class ValidatorCryptoPriceTest {
         validator = new ValidatorCryptoPrice();
     }
 
+
+    @Test
+    void testValidatorCanChangeItsPercent(){
+        assertEquals(new BigDecimal(5), validator.getPercent());
+        validator.setPerCent(new BigDecimal(4.20));
+        assertEquals(new BigDecimal(4.20), validator.getPercent());
+
+    }
+
+    @Test
+    void testThePercentOfValidatorBeginIn5(){
+        assertEquals(new BigDecimal(5),validator.getPercent());
+    }
+
     @Test
     void createintentionWithStatusOFFEREDWhenTheCurrentPriceIsBeetweenTheRangeGivenBy5PerCentMoreOrLess(){
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal(2.0));
