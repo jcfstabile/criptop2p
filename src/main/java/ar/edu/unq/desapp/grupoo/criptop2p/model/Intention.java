@@ -90,4 +90,33 @@ public class Intention {
     public void sold() {
         this.setStatus(Status.SOLD);
     }
+
+    public boolean isItsOfferer(User anUser) {
+        return this.isSameUser(this.offered, anUser);
+    }
+
+    public boolean isItsDemander(User anUser){
+        return this.demander != null && this.isSameUser(this.demander, anUser);
+    }
+
+    private boolean isSameUser(User anUser, User otherUser){
+        return  anUser.getId() == otherUser.getId()
+                && anUser.getWalletAddress() == otherUser.getWalletAddress()
+                && anUser.getEmail() == otherUser.getEmail()
+                && anUser.getCvu() == otherUser.getCvu();
+    }
+
+    public void cancel(User user) {
+        if(this.isItsOfferer(user)){
+            this.canceled();
+        }
+        if(this.isItsDemander(user)){
+            this.offered();
+            this.demander = null;
+        }
+    }
+
+    public void offered() {
+        this.setStatus(Status.OFFERED);
+    }
 }

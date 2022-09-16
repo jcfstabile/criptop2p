@@ -121,4 +121,8 @@ public class User{
         anIntention.verifyIfIsAcepted(aCurrentPrice);
         anIntention.setDemander(this);
     }
+
+    public void cancel(Intention intention) {
+        intention.cancel(this);
+    }
 }

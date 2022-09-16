@@ -470,6 +470,55 @@ class UserTest {
         assertEquals(otherUser, intention.getDemander());
     }
 
+    @Test
+    void testWhenAnOffererCancelItsIntentionThisIsMarkedWithCanceledStatus(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        assertEquals(Status.OFFERED, intention.getStatus());
+        anUser.cancel(intention);
+        assertEquals(Status.CANCELED, intention.getStatus());
+    }
+
+    @Test
+    void testWhenAndemanderCancelAnIntentionThisIsMarkedWithOFFEREDStatus(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        assertEquals(Status.OFFERED, intention.getStatus());
+        otherUser.accept(intention, new BigDecimal(2));
+        assertEquals(Status.SOLD, intention.getStatus());
+        otherUser.cancel(intention);
+        assertEquals(Status.OFFERED, intention.getStatus());
+    }
+
+    @Test
+    void testWhenAndemanderCancelAnIntentionThisModificateItsDemander(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        assertEquals(Status.OFFERED, intention.getStatus());
+        assertNull(intention.getDemander());
+        otherUser.accept(intention, new BigDecimal(2));
+        assertNotNull(intention.getDemander());
+        assertEquals(Status.SOLD, intention.getStatus());
+        otherUser.cancel(intention);
+        assertNull(intention.getDemander());
+    }
+
+    @Test
+    void testWhenOtherUserCancelTheIntentionNothingChange(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        otherUser.accept(intention, new BigDecimal(2));
+        User otherOtherUser = new User("Jack", "Kim", "dsa@there.dom", "1234567892", "Pepito13+", "22345679", "2234567890123456789012");
+        otherOtherUser.cancel(intention);
+        assertEquals(Status.SOLD, intention.getStatus());
+        assertEquals(otherUser, intention.getDemander());
+        assertEquals(anUser, intention.getOffered());
+    }
+
+
 }
 
 
