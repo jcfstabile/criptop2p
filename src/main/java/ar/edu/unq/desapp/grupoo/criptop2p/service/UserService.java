@@ -36,7 +36,7 @@ public class UserService implements UserServiceInterface {
     public Intention offer(Long anId, IntentionDTO anIntentionDTO){
         User getUser = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
-        Intention anIntention = new Intention(getUser, anIntentionDTO.count, anIntentionDTO.price, anIntentionDTO.type, anIntentionDTO.cryptoName);
+        Intention anIntention = new Intention(getUser, anIntentionDTO.getCount(), anIntentionDTO.getPrice(), anIntentionDTO.getType(), anIntentionDTO.getCryptoName());
         return this.intentionRepository.save(anIntention);
     }
 }

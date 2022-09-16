@@ -47,7 +47,7 @@ class APITest {
     @Test
     void testAUserIsSearchedById(){
         Exception exception = assertThrows(UserNotFoundException.class, () -> {
-            anUserRestController.findUserById(100000L).getBody();
+            anUserRestController.findUserById(100000L);
         });
         String expectedMessage = "Could not find user 100000";
         String actualMessage = exception.getMessage();

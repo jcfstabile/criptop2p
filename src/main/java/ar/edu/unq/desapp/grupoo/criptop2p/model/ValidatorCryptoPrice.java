@@ -22,7 +22,7 @@ public class ValidatorCryptoPrice {
         return intention;
     }
 
-    private Boolean isCorrectPrice(BigDecimal aPrice, BigDecimal currentPrice){
+    private boolean isCorrectPrice(BigDecimal aPrice, BigDecimal currentPrice){
         BigDecimal fivePerCent = aPrice.setScale(2, RoundingMode.HALF_UP).multiply(this.percent).divide(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP);
         BigDecimal more = aPrice.setScale(2, RoundingMode.HALF_UP).add(fivePerCent).setScale(2, RoundingMode.HALF_UP);
         BigDecimal less = aPrice.setScale(2, RoundingMode.HALF_UP).subtract(fivePerCent).setScale(2, RoundingMode.HALF_UP);

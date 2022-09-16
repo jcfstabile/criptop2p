@@ -30,9 +30,9 @@ public class IntentionTest {
     @Test
     void testAnIntentionDTOExist(){
         IntentionDTO intentionDTO = new IntentionDTO(1, new BigDecimal(2),Type.SELL, CryptoName.ATOMUSDT);
-        assertEquals(1, intentionDTO.count);
-        assertEquals(new BigDecimal(2), intentionDTO.price);
-        assertEquals(Type.SELL, intentionDTO.type);
-        assertEquals(CryptoName.ATOMUSDT, intentionDTO.cryptoName);
+        assertEquals(1, intentionDTO.getCount());
+        assertEquals(new BigDecimal(2), intentionDTO.getPrice());
+        assertEquals(Type.SELL, intentionDTO.getType());
+        assertEquals(CryptoName.ATOMUSDT, intentionDTO.getCryptoName());
     }
 }
