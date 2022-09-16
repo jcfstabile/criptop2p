@@ -525,9 +525,15 @@ class UserTest {
     }
 
     @Test
+    void testIniciallyAnUserHasNotPoints(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        assertEquals(0, anUser.getPoints());
+    }
+
+    @Test
     void testAnUserHasOneOperationWhenOfferOne(){
         User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
         assertEquals(1, anUser.quantityIntentions());
     }
 
@@ -539,6 +545,16 @@ class UserTest {
         assertEquals(2, anUser.quantityIntentions());
     }
 
+    @Test
+    void testAnUserHasNotReputacionInicially(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        assertEquals(0, anUser.getReputation());
+    }
+
+    @Test
+    void concept(){
+        assertEquals("SOLD", Status.SOLD.name());
+    }
 }
 
 

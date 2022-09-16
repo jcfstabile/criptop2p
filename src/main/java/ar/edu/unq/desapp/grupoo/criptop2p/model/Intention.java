@@ -65,9 +65,11 @@ public class Intention {
         this.setStatus(Status.CANCELED);
     }
 
-    public void verifyIfIsAcepted(BigDecimal aCurrentPrice) {
-        this.type.verifyIfIsAcepted(this, aCurrentPrice);
+    public void verifyIfIsAcepted(User anUser, BigDecimal aCurrentPrice) {
+        this.type.verifyIfIsAcepted(anUser, this, aCurrentPrice);
         this.price = aCurrentPrice;
+
+
     }
 
     public boolean isBiggerThan(BigDecimal aCurrentPrice) {
@@ -118,5 +120,26 @@ public class Intention {
 
     public void offered() {
         this.setStatus(Status.OFFERED);
+    }
+
+    public boolean hasStatus(Status aStatus) {
+        return this.status == aStatus;
+    }
+
+    public void addPoints() {
+        int reward;
+        if(this.timestamp() <= 30) {
+            reward = 10;
+        }
+        else{
+            reward = 5;
+        }
+        this.offered.addPoints(reward);
+        this.demander.addPoints(reward);
+    }
+
+    //TO DO
+    private int timestamp() {
+        return 0;
     }
 }

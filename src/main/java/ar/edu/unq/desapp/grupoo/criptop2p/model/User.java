@@ -62,6 +62,9 @@ public class User{
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "offered")
     List<Intention> offers;
 
+    @Column(name="points", nullable = false)
+    private int points;
+
     public User(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
         this.name = aName;
         this.surname = aSurname;
@@ -71,6 +74,7 @@ public class User{
         this.walletAddress = aWalletAddress;
         this.cvu = aCvu;
         this.offers = new ArrayList<>();
+        this.points = 0;
     }
 
     public User() {
@@ -109,6 +113,10 @@ public class User{
     public void setCvu(String aCVU) {
         this.cvu = aCVU;
     }
+    public int getPoints(){ return this.points; }
+    public void setPoints(int newPoints){
+        this.points = newPoints;
+    }
     public List<Intention> getOffers() { return this.offers;}
 
     public Intention offer(Integer aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName, BigDecimal currentPrice){
@@ -118,13 +126,26 @@ public class User{
     }
 
     public void accept(Intention anIntention, BigDecimal aCurrentPrice) {
-        anIntention.verifyIfIsAcepted(aCurrentPrice);
-        anIntention.setDemander(this);
+        anIntention.verifyIfIsAcepted(this, aCurrentPrice);
     }
 
     public void cancel(Intention intention) {
         intention.cancel(this);
+        this.setPoints(this.points-20);
     }
 
-    public int quantityIntentions() { return this.offers.size();}
+    public int quantityIntentions() { return ((int) this.offers.stream().filter(intention -> !intention.hasStatus(Status.CANCELED) || !intention.hasStatus(Status.CANCELEDBYSYSTEM)).count());}
+
+    public int getReputation() {
+        try{
+            return this.points / this.quantityIntentions();
+        }
+        catch(ArithmeticException ex){
+            return 0;
+        }
+    }
+
+    public void addPoints(int reward) {
+        this.points += reward;
+    }
 }

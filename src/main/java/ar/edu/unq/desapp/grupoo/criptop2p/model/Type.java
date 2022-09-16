@@ -23,12 +23,15 @@ public enum Type {
 
     abstract public String shippingAddress(User anUser);
     abstract public boolean isCheck(Intention intention, BigDecimal aCurrentPrice);
-    public void verifyIfIsAcepted(Intention intention, BigDecimal aCurrentPrice){
-            if(this.isCheck(intention, aCurrentPrice)){
+    public void verifyIfIsAcepted(User anUser, Intention intention, BigDecimal aCurrentPrice){
+            boolean condition = this.isCheck(intention, aCurrentPrice);
+            if(condition){
                 intention.canceledBySystem();
             }
             else{
                 intention.sold();
+                intention.setDemander(anUser);
+                intention.addPoints();
             }
         }
 }
