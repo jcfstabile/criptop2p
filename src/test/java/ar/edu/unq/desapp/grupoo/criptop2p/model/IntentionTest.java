@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.Validation;
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @DisplayName("Intention Tests")
@@ -55,6 +55,41 @@ public class IntentionTest {
         assertEquals(Status.OFFERED, intention.getStatus());
         intention.canceledBySystem();
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
+    }
 
+    @Test
+    void testIsBiggerThanReturnTrueWhenTheCurrentPriceIsBiggerThanPrice(){
+        assertTrue(intention.isBiggerThan(new BigDecimal(3)));
+    }
+
+
+    @Test
+    void testIsSmallerThanReturnTrueWhenTheCurrentPriceIsSmallerThanPrice(){
+        assertTrue(intention.isSmallerThan(new BigDecimal(1)));
+    }
+
+
+    @Test
+    void testIsBiggerThanReturnFalseWhenTheCurrentPriceIsNotBiggerThanPrice(){
+        assertFalse(intention.isBiggerThan(new BigDecimal(1.9)));
+    }
+
+
+    @Test
+    void testIsSmallerThanReturnFalseWhenTheCurrentPriceIsNotSmallerThanPrice(){
+        assertFalse(intention.isSmallerThan(new BigDecimal(2.1)));
+    }
+
+
+
+    @Test
+    void testIsBiggerThanReturnFalseWhenTheCurrentPriceIsEqualToPrice(){
+        assertFalse(intention.isBiggerThan(new BigDecimal(2)));
+    }
+
+
+    @Test
+    void testIsSmallerThanReturnFalseWhenTheCurrentPriceIsEqualToPrice(){
+        assertFalse(intention.isSmallerThan(new BigDecimal(2)));
     }
 }

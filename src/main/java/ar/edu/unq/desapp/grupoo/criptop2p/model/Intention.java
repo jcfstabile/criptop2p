@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name="intentions")
@@ -58,5 +59,23 @@ public class Intention {
     public void canceled() {
         this.setStatus(Status.CANCELED);
     }
+
+    public void verifyIfIsAcepted(BigDecimal aCurrentPrice) {
+        this.type.verifyIfIsAcepted(this, aCurrentPrice);
+    }
+
+    public boolean isBiggerThan(BigDecimal aCurrentPrice) {
+        return this.compare(aCurrentPrice, 1); //CP > P
+    }
+
+    public boolean isSmallerThan(BigDecimal aCurrentPrice) {
+        return this.compare(aCurrentPrice, -1); //CP < P
+    }
+
+    private boolean compare(BigDecimal aCurrentPrice, int n){
+        //aCurrentPrice >/< n
+        return aCurrentPrice.setScale(2, RoundingMode.HALF_UP).compareTo(this.price.setScale(2, RoundingMode.HALF_UP)) == n;
+    }
+
 
 }

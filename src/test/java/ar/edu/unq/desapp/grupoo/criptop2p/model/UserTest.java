@@ -398,7 +398,7 @@ class UserTest {
     void testToOfferAnUserAddAnIntentionToItsListOfIntentionsWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         assertEquals(0, user.getOffers().size());
-        Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
         assertEquals(1, user.getOffers().size());
     }
 
@@ -415,6 +415,14 @@ class UserTest {
     }
 
 
+    @Test
+    void testAnUserCanAcceptAnIntention(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
+        otherUser.accept(intention, new BigDecimal(2));
+
+    }
 
 }
 

@@ -116,4 +116,8 @@ public class User{
         this.offers.add(intention);
         return intention;
     }
+
+    public void accept(Intention anIntention, BigDecimal aCurrentPrice) {
+        anIntention.verifyIfIsAcepted(aCurrentPrice);
+    }
 }
