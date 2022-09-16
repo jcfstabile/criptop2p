@@ -85,14 +85,14 @@ public class IntentionTest {
     @Test
     void testthePriceOfAnIntentionBuyDoesNotChangeWhenTheCurrentPriceAndThePriceAreEquals(){
         BigDecimal before = intentionBuy.getPrice();
-        intentionBuy.verifyIfIsAcepted(new BigDecimal(2));
+        intentionBuy.verifyIfIsAcepted(anUser, new BigDecimal(2));
         BigDecimal after = intentionBuy.getPrice();;
         assertEquals(before, after);
     }
     @Test
     void testthePriceOfAnIntentionSellDoesNotChangeWhenTheCurrentPriceAndThePriceAreEquals(){
         BigDecimal before = intentionSell.getPrice();
-        intentionBuy.verifyIfIsAcepted(new BigDecimal(2));
+        intentionBuy.verifyIfIsAcepted(anUser, new BigDecimal(2));
         BigDecimal after = intentionSell.getPrice();;
         assertEquals(before, after);
     }
@@ -100,7 +100,7 @@ public class IntentionTest {
     void testthePriceOfAnIntentionBuyChangeWhenTheCurrentPriceIsSmaller(){
         BigDecimal before = intentionBuy.getPrice();;
         assertEquals(new BigDecimal(2), before);
-        intentionBuy.verifyIfIsAcepted(new BigDecimal(1));
+        intentionBuy.verifyIfIsAcepted(anUser, new BigDecimal(1));
         BigDecimal after = intentionBuy.getPrice();;
         assertEquals(new BigDecimal(1), after);
     }
@@ -108,7 +108,7 @@ public class IntentionTest {
     void testthePriceOfAnIntentionSellDoesNotChangeWhenTheCurrentPriceAndThePriceIsBigger(){
         BigDecimal before = intentionSell.getPrice();;
         assertEquals(new BigDecimal(2), before);
-        intentionSell.verifyIfIsAcepted(new BigDecimal(3));
+        intentionSell.verifyIfIsAcepted(anUser, new BigDecimal(3));
         BigDecimal after = intentionSell.getPrice();;
         assertEquals(new BigDecimal(3), after);
     }

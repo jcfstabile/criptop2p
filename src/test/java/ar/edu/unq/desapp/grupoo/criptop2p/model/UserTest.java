@@ -453,8 +453,7 @@ class UserTest {
         assertNull(intention.getDemander());
         otherUser.accept(intention, new BigDecimal(42));
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
-        assertNotNull(intention.getDemander());
-        assertEquals(otherUser, intention.getDemander());
+        assertNull(intention.getDemander());
     }
 
     @Test
@@ -466,8 +465,7 @@ class UserTest {
         assertEquals(Status.OFFERED, intention.getStatus());
         otherUser.accept(intention, new BigDecimal(1));
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
-        assertNotNull(intention.getDemander());
-        assertEquals(otherUser, intention.getDemander());
+        assertNull(intention.getDemander());
     }
 
     @Test
