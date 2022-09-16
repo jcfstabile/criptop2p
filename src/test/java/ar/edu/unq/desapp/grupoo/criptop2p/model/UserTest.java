@@ -464,7 +464,7 @@ class UserTest {
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
         assertNull(intention.getDemander());
         assertEquals(Status.OFFERED, intention.getStatus());
-        otherUser.accept(intention, new BigDecimal(42));
+        otherUser.accept(intention, new BigDecimal(1));
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
         assertNotNull(intention.getDemander());
         assertEquals(otherUser, intention.getDemander());
