@@ -95,7 +95,6 @@ public class IntentionTest {
         BigDecimal after = intentionSell.getPrice();;
         assertEquals(before, after);
     }
-
     @Test
     void testthePriceOfAnIntentionBuyChangeWhenTheCurrentPriceIsSmaller(){
         BigDecimal before = intentionBuy.getPrice();;
