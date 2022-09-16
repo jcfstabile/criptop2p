@@ -101,9 +101,9 @@ public class Intention {
 
     private boolean isSameUser(User anUser, User otherUser){
         return  anUser.getId() == otherUser.getId()
-                && anUser.getWalletAddress() == otherUser.getWalletAddress()
-                && anUser.getEmail() == otherUser.getEmail()
-                && anUser.getCvu() == otherUser.getCvu();
+                && anUser.getWalletAddress().equals(otherUser.getWalletAddress())
+                && anUser.getEmail().equals(otherUser.getEmail())
+                && anUser.getCvu().equals(otherUser.getCvu());
     }
 
     public void cancel(User user) {
