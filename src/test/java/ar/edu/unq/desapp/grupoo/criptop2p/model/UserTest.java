@@ -443,6 +443,33 @@ class UserTest {
         otherUser.accept(intention, new BigDecimal(2));
         assertEquals(Status.SOLD, intention.getStatus());
     }
+
+    @Test
+    void testWhenAnUserAcceptAnIntentionBuyButTheCurrentPriceIsBiggerTheDemanderChangeButTheIntentionIsCanceledBySystem(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
+        assertEquals(Status.OFFERED, intention.getStatus());
+        assertNull(intention.getDemander());
+        otherUser.accept(intention, new BigDecimal(42));
+        assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
+        assertNotNull(intention.getDemander());
+        assertEquals(otherUser, intention.getDemander());
+    }
+
+    @Test
+    void testWhenAnUserAcceptAnIntentionSellButTheCurrentPriceIsBiggerTheDemanderChangeButTheIntentionIsCanceledBySystem(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        assertNull(intention.getDemander());
+        assertEquals(Status.OFFERED, intention.getStatus());
+        otherUser.accept(intention, new BigDecimal(42));
+        assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
+        assertNotNull(intention.getDemander());
+        assertEquals(otherUser, intention.getDemander());
+    }
+
 }
 
 

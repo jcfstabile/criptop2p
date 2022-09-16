@@ -27,6 +27,8 @@ public enum Type {
             if(this.isCheck(intention, aCurrentPrice)){
                 intention.canceledBySystem();
             }
-            intention.sold();
+            else{
+                intention.sold();
+            }
         }
 }
