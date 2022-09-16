@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.util.TestPropertyValues;
 
 import java.math.BigDecimal;
 
@@ -110,5 +111,34 @@ public class IntentionTest {
         intentionSell.verifyIfIsAcepted(new BigDecimal(3));
         BigDecimal after = intentionSell.getPrice();;
         assertEquals(new BigDecimal(3), after);
+    }
+
+    @Test
+    void testAnIntentionCanIdentificateIfAnUserIsItsOfferer(){
+        Intention anIntention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.MATICUSDT, new BigDecimal(2));
+        assertTrue(anIntention.isItsOfferer(anUser));
+    }
+
+    @Test
+    void testAnIntentionCanIdentificateIfAnUserIsNotItsOfferer(){
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        Intention anIntention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.MATICUSDT, new BigDecimal(2));
+        assertFalse(anIntention.isItsOfferer(otherUser));
+    }
+
+    @Test
+    void testAnIntentionCanIdentificateIfAnUserIsItsDemander(){
+        Intention anIntention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.MATICUSDT, new BigDecimal(2));
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        otherUser.accept(anIntention, new BigDecimal(2));
+        assertTrue(anIntention.isItsDemander(otherUser));
+    }
+
+    @Test
+    void testAnIntentionCanIdentificateIfAnUserIsNotItsDemander(){
+        Intention anIntention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.MATICUSDT, new BigDecimal(2));
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        otherUser.accept(anIntention, new BigDecimal(2));
+        assertFalse(anIntention.isItsDemander(anUser));
     }
 }
