@@ -1,15 +1,12 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -62,6 +59,9 @@ public class User{
     @NotNull(message = "CVU cannot be null")
     String cvu;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    List<Intention> offers;
+
     public User(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
         this.name = aName;
         this.surname = aSurname;
@@ -70,6 +70,7 @@ public class User{
         this.password = aPassword;
         this.walletAddress = aWalletAddress;
         this.cvu = aCvu;
+        this.offers = new ArrayList<>();
     }
 
     public User() {
@@ -79,11 +80,6 @@ public class User{
     public Long getId(){
         return this.id;
     }
-
-    public void setId(Long anId){
-        this.id = anId;
-    }
-
     public String getName() { return this.name; }
     public String getSurname() { return this.surname; }
     public String getEmail() { return this.email; }
@@ -113,6 +109,11 @@ public class User{
     public void setCvu(String aCVU) {
         this.cvu = aCVU;
     }
+    public List<Intention> getOffers() { return this.offers;}
 
-
+    public Intention offer(Integer aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName, BigDecimal currentPrice){
+        Intention intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);
+        this.offers.add(intention);
+        return intention;
+    }
 }

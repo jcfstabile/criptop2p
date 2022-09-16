@@ -7,13 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.math.BigDecimal;
 import java.util.Set;
 
 
-@DisplayName("Model Tests")
+@DisplayName("User Tests")
 @SpringBootTest
 class UserTests {
     Validator validator;
@@ -366,6 +366,54 @@ class UserTests {
         Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
         assertEquals(0, violations.size());
     }
+
+    @Test
+    void testToBeCreatedAnUserHasNotAnyOffer(){
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        assertEquals(0, user.getOffers().size());
+    }
+
+    @Test
+    void testToOfferAnUserReturnAnIntentionWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        assertEquals(user, intention.getUser());
+        assertEquals(new BigDecimal(2), intention.getPrice());
+        assertEquals(10, intention.getCount());
+        assertEquals(Type.SELL, intention.getType());
+        assertEquals(CryptoName.CAKEUSDT, intention.getCrypto());
+    }
+
+    @Test
+    void testTheUserCanAddOffersToItsListOfOffersWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        assertEquals(0, user.getOffers().size());
+        user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        assertEquals(1, user.getOffers().size());
+        user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        assertEquals(2, user.getOffers().size());
+    }
+
+    @Test
+    void testToOfferAnUserAddAnIntentionToItsListOfIntentionsWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        assertEquals(0, user.getOffers().size());
+        Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        assertEquals(1, user.getOffers().size());
+    }
+
+    @Test
+    void testToOfferAnUserAddAnIntentionToItsListOfIntentionsAndItIsTheExpectedWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
+        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        Intention uniqueIntention = user.getOffers().get(0);
+        assertEquals(intention.getUser(), uniqueIntention.getUser());
+        assertEquals(intention.getPrice(), uniqueIntention.getPrice());
+        assertEquals(intention.getCount(), uniqueIntention.getCount());
+        assertEquals(intention.getType(), uniqueIntention.getType());
+        assertEquals(intention.getCrypto(), uniqueIntention.getCrypto());
+    }
+
 }
 
 
