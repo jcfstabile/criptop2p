@@ -59,7 +59,7 @@ public class User{
     @NotNull(message = "CVU cannot be null")
     String cvu;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "offered")
     List<Intention> offers;
 
     public User(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
@@ -119,5 +119,6 @@ public class User{
 
     public void accept(Intention anIntention, BigDecimal aCurrentPrice) {
         anIntention.verifyIfIsAcepted(aCurrentPrice);
+        anIntention.setDemander(this);
     }
 }

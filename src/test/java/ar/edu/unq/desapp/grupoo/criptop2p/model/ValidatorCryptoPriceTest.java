@@ -40,7 +40,7 @@ public class ValidatorCryptoPriceTest {
     @Test
     void createintentionWithStatusOFFEREDWhenTheCurrentPriceIsBeetweenTheRangeGivenBy5PerCentMoreOrLess(){
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal(2.0));
-        assertEquals(anUser, intention.getUser());
+        assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(Type.SELL, intention.getType());
@@ -51,7 +51,7 @@ public class ValidatorCryptoPriceTest {
     @Test
     void createintentionWithStatusOFFEREDWhenTheCurrentPriceIsBeetweenTheRangeGivenBy5PerCentMore(){
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal(2.1));
-        assertEquals(anUser, intention.getUser());
+        assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(Type.SELL, intention.getType());
@@ -63,7 +63,7 @@ public class ValidatorCryptoPriceTest {
     @Test
     void createintentionWithStatusOFFEREDWhenTheCurrentPriceIsBeetweenTheRangeGivenBy5PerCentLess(){
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal(1.9));
-        assertEquals(anUser, intention.getUser());
+        assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(Type.SELL, intention.getType());
@@ -74,7 +74,7 @@ public class ValidatorCryptoPriceTest {
     @Test
     void createintentionCreateAnIntentionWithStatusCANCELEDBYSYSTEMWhenTheCurrentPriceIs5PerCentMore(){
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal(1.8));
-        assertEquals(anUser, intention.getUser());
+        assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(Type.SELL, intention.getType());
@@ -85,7 +85,7 @@ public class ValidatorCryptoPriceTest {
     @Test
     void createintentionCreateAnIntentionWithStatusCANCELEDBYSYSTEMWhenTheCurrentPriceIs5PerCentLess(){
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal (2.2));
-        assertEquals(anUser, intention.getUser());
+        assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(Type.SELL, intention.getType());

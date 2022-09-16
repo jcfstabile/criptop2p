@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.Validation;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,12 +29,13 @@ public class IntentionTest {
     }
     @Test
     void testAnIntentionExist(){
-        assertEquals(anUser, intention.getUser());
+        assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(Type.SELL, intention.getType());
         assertEquals(CryptoName.ATOMUSDT, intention.getCrypto());
         assertEquals(Status.OFFERED, intention.getStatus());
+        assertNull(intention.getDemander());
     }
     @Test
     void testAnIntentionDTOExist(){

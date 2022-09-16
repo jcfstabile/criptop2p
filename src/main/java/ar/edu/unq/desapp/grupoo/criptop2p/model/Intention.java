@@ -11,7 +11,7 @@ public class Intention {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
-
+    
     public Long getId() {
         return id;
     }
@@ -28,23 +28,28 @@ public class Intention {
 
     private Status status;
 
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "offered_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User user;
+    private User offered;
+    @JoinColumn(name = "demander_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User demander;
 
 
     public Intention() {
     }
 
     public Intention(User anUser, int aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName) {
-        this.user=anUser;
+        this.offered = anUser;
         this.count = aCount;
         this.price= aPrice;
         this.type = aType;
         this.cryptoName = aCryptoName;
         this.status = Status.OFFERED;
+        this.demander = null;
     }
-    public User getUser(){ return this.user; }
+    public User getOffered(){ return this.offered; }
+    public User getDemander(){ return this.demander; }
     public int getCount(){ return this.count; }
     public BigDecimal getPrice(){ return this.price; }
     public Type getType(){ return this.type; }
@@ -78,5 +83,11 @@ public class Intention {
         return aCurrentPrice.setScale(2, RoundingMode.HALF_UP).compareTo(this.price.setScale(2, RoundingMode.HALF_UP)) == n;
     }
 
+    public void setDemander(User user) {
+        this.demander = user;
+    }
 
+    public void sold() {
+        this.setStatus(Status.SOLD);
+    }
 }

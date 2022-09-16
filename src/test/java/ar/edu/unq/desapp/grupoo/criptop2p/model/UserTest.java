@@ -3,14 +3,14 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @DisplayName("User Tests")
@@ -377,7 +377,7 @@ class UserTest {
     void testToOfferAnUserReturnAnIntentionWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
-        assertEquals(user, intention.getUser());
+        assertEquals(user, intention.getOffered());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(10, intention.getCount());
         assertEquals(Type.SELL, intention.getType());
@@ -407,7 +407,7 @@ class UserTest {
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
         Intention uniqueIntention = user.getOffers().get(0);
-        assertEquals(intention.getUser(), uniqueIntention.getUser());
+        assertEquals(intention.getOffered(), uniqueIntention.getOffered());
         assertEquals(intention.getPrice(), uniqueIntention.getPrice());
         assertEquals(intention.getCount(), uniqueIntention.getCount());
         assertEquals(intention.getType(), uniqueIntention.getType());
@@ -416,14 +416,33 @@ class UserTest {
 
 
     @Test
-    void testAnUserCanAcceptAnIntention(){
+    void testAnUserCanAcceptAnIntentionSetItsDemander(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
+        assertNull(intention.getDemander());
+        otherUser.accept(intention, new BigDecimal(2));
+        assertNotNull(intention.getDemander());
+    }
+
+    @Test
+    void testWhenAnUserAcceptAnIntentionItsIsItsDemander(){
         User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
         otherUser.accept(intention, new BigDecimal(2));
-
+        assertEquals(otherUser, intention.getDemander());
     }
 
+    @Test
+    void testWhenAnUserAcceptAnIntentionThisChangeItsStatusToSOLD(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
+        assertEquals(Status.OFFERED, intention.getStatus());
+        otherUser.accept(intention, new BigDecimal(2));
+        assertEquals(Status.SOLD, intention.getStatus());
+    }
 }
 
 
