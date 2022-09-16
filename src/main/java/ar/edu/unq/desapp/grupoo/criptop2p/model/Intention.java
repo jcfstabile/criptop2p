@@ -50,4 +50,13 @@ public class Intention {
     public CryptoName getCrypto(){ return this.cryptoName; }
     public Status getStatus() { return this.status; }
     public void setStatus(Status aStatus){ this.status = aStatus; }
+
+    public void canceledBySystem() {
+        this.setStatus(Status.CANCELEDBYSYSTEM);
+    }
+
+    public void canceled() {
+        this.setStatus(Status.CANCELED);
+    }
+
 }

@@ -414,6 +414,8 @@ class UserTest {
         assertEquals(intention.getCrypto(), uniqueIntention.getCrypto());
     }
 
+
+
 }
 
 
