@@ -62,6 +62,7 @@ public class Intention {
 
     public void verifyIfIsAcepted(BigDecimal aCurrentPrice) {
         this.type.verifyIfIsAcepted(this, aCurrentPrice);
+        this.price = aCurrentPrice;
     }
 
     public boolean isBiggerThan(BigDecimal aCurrentPrice) {
