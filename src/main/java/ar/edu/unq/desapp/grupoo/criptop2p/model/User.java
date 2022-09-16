@@ -125,4 +125,6 @@ public class User{
     public void cancel(Intention intention) {
         intention.cancel(this);
     }
+
+    public int quantityIntentions() { return this.offers.size();}
 }

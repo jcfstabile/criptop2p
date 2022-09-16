@@ -518,6 +518,26 @@ class UserTest {
         assertEquals(anUser, intention.getOffered());
     }
 
+    @Test
+    void testIniciallyAnUserHasNotOperation(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        assertEquals(0, anUser.quantityIntentions());
+    }
+
+    @Test
+    void testAnUserHasOneOperationWhenOfferOne(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        assertEquals(1, anUser.quantityIntentions());
+    }
+
+    @Test
+    void testAnUserHasOneOperationWhenOfferTwo(){
+        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        assertEquals(2, anUser.quantityIntentions());
+    }
 
 }
 
