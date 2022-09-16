@@ -68,6 +68,7 @@ public class ValidatorCryptoPriceTest {
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
     }
 
+    @Test
     void createintentionCreateAnIntentionWithStatusCANCELEDBYSYSTEMWhenTheCurrentPriceIs5PerCentLess(){
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal (2.2));
         assertEquals(anUser, intention.getUser());
