@@ -3,6 +3,9 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 @Table(name="intentions")
@@ -35,6 +38,8 @@ public class Intention {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User demander;
 
+    @Column(name="time_stamp")
+    Timestamp timestamp;
 
     public Intention() {
     }
@@ -47,6 +52,7 @@ public class Intention {
         this.cryptoName = aCryptoName;
         this.status = Status.OFFERED;
         this.demander = null;
+        this.timestamp = new Timestamp(System.currentTimeMillis());
     }
     public User getOffered(){ return this.offered; }
     public User getDemander(){ return this.demander; }
@@ -126,20 +132,30 @@ public class Intention {
         return this.status == aStatus;
     }
 
-    public void addPoints() {
-        int reward;
-        if(this.timestamp() <= 30) {
-            reward = 10;
-        }
-        else{
-            reward = 5;
-        }
-        this.offered.addPoints(reward);
-        this.demander.addPoints(reward);
+    public void addPoints() {;
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        this.offered.addPoints(this.reward(now));
+        this.demander.addPoints(this.reward(now));
     }
 
-    //TO DO
-    private int timestamp() {
-        return 0;
+    public int reward(Timestamp anAceptationTimeSt) {
+
+        if(this.differenceBetweenCreationAndAceptation(anAceptationTimeSt) <= TimeUnit.MINUTES.toMillis(30)){
+            return 10;
+        }
+        else{
+            return 5;
+        }
+    }
+
+    private long differenceBetweenCreationAndAceptation(Timestamp anAceptationTimeSt) {
+        long now = anAceptationTimeSt.getTime();
+        long before = this.timestamp.getTime();
+        long diff = now - before;
+        return diff;
+    }
+
+    public Timestamp getTimeStamp() {
+        return this.timestamp;
     }
 }
