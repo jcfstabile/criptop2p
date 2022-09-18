@@ -188,6 +188,5 @@ public class IntentionTest {
         long minuteslater = System.currentTimeMillis()+ TimeUnit.MINUTES.toMillis(31);
         Timestamp now = new Timestamp(minuteslater);
         assertEquals(5, intention.reward(now));
-
     }
 }
