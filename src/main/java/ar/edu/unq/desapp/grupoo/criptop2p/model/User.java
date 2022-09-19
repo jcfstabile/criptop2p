@@ -17,13 +17,13 @@ public class User{
     Long id;
 
     @Column(name="name", nullable = false)
-    @Size(min= 3, max=30, message ="Name must have between 3 and 30")
+    @Size(min= 3, max=30, message ="Name must have between 3 and 30 characters")
     @NotNull(message = "Name cannot be empty or null")
     String name;
 
     @Column(name="surname", nullable = false)
-    @Size(min= 3, max=30, message ="Surname must have between 3 and 30")
-    @NotNull(message = "Surname cannot be empty o")
+    @Size(min= 3, max=30, message ="Surname must have between 3 and 30 characters")
+    @NotNull(message = "Surname cannot be empty")
     String surname;
 
     @Column(name="email", nullable = false, unique = true)
@@ -32,14 +32,14 @@ public class User{
     String email;
 
     @Column(name="address", nullable = false)
-    @Size(min= 10, max=30, message ="Address must have between 10 and 30")
+    @Size(min= 10, max=30, message ="Address must have between 10 and 30 characters")
     @NotNull(message = "Address cannot be empty")
     String address;
 
     @Column(name="password", nullable = false)
-    @Size(min= 6, message ="Password must have more 3 character")
     @NotNull(message = "Password cannot be empty")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$._+%@()$*`';/=#!%*?&,])([A-Za-z\\d$@$!%*?&]|[^ ]){6,}$", message = "Password must contain:\n" +
+//    @Size(min= 6, message ="Password must have at least 6 characters")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Zs])(?=.*\\d)(?=.*[$._+%@()$*`';/=#!%*?&,])([A-Za-z\\d$@$!%*?&]|[^ ]){6,}$", message = "Password must contain:\n" +
             "\n" +
             "- At least one uppercase\n" +
             "- At least one lowercase\n" +
@@ -50,12 +50,12 @@ public class User{
     String password;
 
     @Column(name="w", nullable = false, unique = true)
-    @Size(min= 8, max =8, message ="Wallet Address must have 8 character")
+    @Size(min= 8, max =8, message ="Wallet Address must have 8 characters")
     @NotNull(message = "Wallet Address cannot be empty")
     String walletAddress;
 
     @Column(name="cvu", nullable = false)
-    @Size(min= 22, max = 22, message ="CVU must have 22 character")
+    @Size(min= 22, max = 22, message ="CVU must have 22 characters")
     @NotNull(message = "CVU cannot be null")
     String cvu;
 
