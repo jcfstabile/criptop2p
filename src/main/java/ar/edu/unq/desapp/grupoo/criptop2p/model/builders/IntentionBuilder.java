@@ -17,7 +17,7 @@ public class IntentionBuilder {
     public IntentionBuilder() {
         this.user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         this.count = 1;
-        this.price = new BigDecimal(2);
+        this.price = new BigDecimal("2");
         this.type = Type.SELL;
         this.crypto = CryptoName.ALICEUSDT;
     }
