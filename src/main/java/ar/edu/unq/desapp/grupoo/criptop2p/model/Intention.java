@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
@@ -108,10 +107,9 @@ public class Intention {
     }
 
     private boolean isSameUser(User anUser, User otherUser){
-        return  anUser.getId() == otherUser.getId()
-                && anUser.getWalletAddress().equals(otherUser.getWalletAddress())
-                && anUser.getEmail().equals(otherUser.getEmail())
-                && anUser.getCvu().equals(otherUser.getCvu());
+        return anUser.getWalletAddress().equals(otherUser.getWalletAddress())
+               && anUser.getEmail().equals(otherUser.getEmail())
+               && anUser.getCvu().equals(otherUser.getCvu());
     }
 
     public void cancel(User user) {
@@ -132,7 +130,7 @@ public class Intention {
         return this.status == aStatus;
     }
 
-    public void addPoints() {;
+    public void addPoints() {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         this.offered.addPoints(this.reward(now));
         this.demander.addPoints(this.reward(now));
@@ -151,8 +149,7 @@ public class Intention {
     private long differenceBetweenCreationAndAceptation(Timestamp anAceptationTimeSt) {
         long now = anAceptationTimeSt.getTime();
         long before = this.timestamp.getTime();
-        long diff = now - before;
-        return diff;
+        return now - before;
     }
 
     public Timestamp getTimeStamp() {

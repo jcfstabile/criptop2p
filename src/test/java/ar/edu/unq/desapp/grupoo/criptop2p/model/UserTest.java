@@ -422,7 +422,7 @@ class UserTest {
         assertEquals(CryptoName.CAKEUSDT, intention.getCrypto());
     }
 
-    @DisplayName("When the Intention price is in range the user can make the offer") // TODO 2
+    @DisplayName("When the Intention price is in range the user can make the offer")
     @Test
     void testTheUserCanAddOffersToItsListOfOffersWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = anyUser.build();
