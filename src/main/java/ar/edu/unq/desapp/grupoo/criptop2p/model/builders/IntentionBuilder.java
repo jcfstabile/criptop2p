@@ -22,7 +22,7 @@ public class IntentionBuilder {
         this.crypto = CryptoName.ALICEUSDT;
     }
 
-    IntentionBuilder withCount(int count) {
+    public IntentionBuilder withCount(int count) {
         this.count = count;
         return this;
     }
@@ -32,7 +32,7 @@ public class IntentionBuilder {
         return this;
     }
 
-    IntentionBuilder withUser(User user) {
+    public IntentionBuilder withUser(User user) {
         this.user = user;
         return this;
     }
@@ -42,7 +42,7 @@ public class IntentionBuilder {
         return this;
     }
 
-    IntentionBuilder withCrypto(CryptoName crypto) {
+    public IntentionBuilder withCrypto(CryptoName crypto) {
         this.crypto = crypto;
         return this;
     }
