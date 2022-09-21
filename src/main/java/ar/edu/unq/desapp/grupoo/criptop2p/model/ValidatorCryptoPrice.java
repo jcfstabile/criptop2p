@@ -17,7 +17,7 @@ public class ValidatorCryptoPrice {
     public Intention createIntention(User anUser, Integer aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName, BigDecimal currentPrice) {
         Intention intention = new Intention(anUser, aCount, aPrice, aType, aCryptoName);
         if(!this.isCorrectPrice(aPrice, currentPrice)){
-            intention.setStatus(Status.CANCELEDBYSYSTEM);
+            intention.canceledBySystem();
         }
         return intention;
     }
