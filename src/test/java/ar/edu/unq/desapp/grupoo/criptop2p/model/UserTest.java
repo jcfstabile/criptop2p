@@ -1,8 +1,11 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -16,16 +19,26 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("User Tests")
 @SpringBootTest
 class UserTest {
+
     Validator validator;
+    UserBuilder anyUser;
     @BeforeEach
     void setUp(){
         validator = Validation.buildDefaultValidatorFactory().getValidator();
+        anyUser = new UserBuilder();
     }
 
     @DisplayName("A User can be instantiated")
     @Test
     void userExist(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User user = anyUser.withName("Jim")
+                .withSurname("Ken")
+                .withEmail("jk@here.dom")
+                .withAddress("1234567890")
+                .withPassword("Pepito12!")
+                .withWalletAddress("12345678")
+                .withCvu("1234567890123456789012")
+                .build();
         assertNotNull(user);
         assertEquals("Jim", user.getName());
         assertEquals("Ken", user.getSurname());
@@ -33,350 +46,375 @@ class UserTest {
         assertEquals("1234567890", user.getAddress());
         assertEquals("Pepito12!", user.getPassword());
         assertEquals("12345678", user.getWalletAddress());
-        assertEquals("1111111111111111111111",user.getCvu());
+        assertEquals("1234567890123456789012",user.getCvu());
+
     }
 
+    @DisplayName("A User can change the name")
     @Test
     void userCanChangeTheName(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito@12", "12345678", "1111111111111111111111");
-        assertEquals("Jim", user.getName());
-        user.setName("Pepe");
-        assertEquals("Pepe", user.getName());
+        User user = anyUser.withName("Jim").build();
+
+        user.setName("Pete");
+
+        assertEquals("Pete", user.getName());
     }
 
-    @Test
-    void userCanChangeTheNameAndCheckContraint(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito@12", "12345678", "1111111111111111111111");
-        assertEquals("Jim", user.getName());
-        user.setName("Pepe");
-        assertEquals("Pepe", user.getName());
-    }
-
-
-
+    @DisplayName("A User can change the surname")
     @Test
     void userCanChangeTheSurame(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito,12", "12345678", "1111111111111111111111");
-        assertEquals("Ken", user.getSurname());
-        user.setSurname("Pepe");
-        assertEquals("Pepe", user.getSurname());
+        User user = anyUser.withSurname("Ken").build();
+
+        user.setSurname("Ron");
+
+        assertEquals("Ron", user.getSurname());
     }
 
+    @DisplayName("A User can change the email")
     @Test
     void userCanChangeTheEmail(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito;12", "12345678", "1111111111111111111111");
-        assertEquals("jk@here.dom", user.getEmail());
+        User user = anyUser.withEmail("jk@here.dom").build();
+
         user.setEmail("jk@other.com");
+
         assertEquals("jk@other.com", user.getEmail());
     }
 
 
+    @DisplayName("A User can change the password")
     @Test
     void userCanChangeThePassword(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito_12", "12345678", "1111111111111111111111");
-        assertEquals("Pepito_12", user.getPassword());
+        User user = anyUser.withPassword("Pepito_12").build();
+
         user.setPassword("Pepita12");
+
         assertEquals("Pepita12", user.getPassword());
     }
 
 
+    @DisplayName("A User can change the walletAddress")
     @Test
     void userCanChangeTheWalletAddress(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito#12", "12345678", "1111111111111111111111");
-        assertEquals("12345678", user.getWalletAddress());
+        User user = anyUser.withWalletAddress("12345678").build();
+
         user.setWalletAddress("87654321");
+
         assertEquals("87654321", user.getWalletAddress());
     }
 
+    @DisplayName("A User can change the address")
     @Test
     void userCanChangeTheAddress(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito.12", "12345678", "1111111111111111111111");
-        assertEquals("1234567890", user.getAddress());
+        User user = anyUser.withAddress("1234567890").build();
+
         user.setAddress("0987654321");
+
         assertEquals("0987654321", user.getAddress());
     }
 
+    @DisplayName("A User can change the CVU")
     @Test
     void userCanChangeTheCVU(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito'12", "12345678", "1111111111111111111111");
-        assertEquals("1111111111111111111111", user.getCvu());
-        user.setCvu("2222222222222222222222");
-        assertEquals("2222222222222222222222", user.getCvu());
+        User user = anyUser.withCvu("1234567890123456789012").build();
+
+        user.setCvu("2109876543210987654321");
+
+        assertEquals("2109876543210987654321", user.getCvu());
     }
 
 
+    @DisplayName("A User created consistently breaks no constraints")
     @Test
     void userCreateConsistlyDontBrokeAnyContraints(){
         User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito+12", "12345678", "1111111111111111111111");
-        assertNotNull(user);
+
         Set<ConstraintViolation<User>> violations = validator.validate(user);
+
+        assertNotNull(user);
         assertEquals(0, violations.size());
     }
 
+    void assertExactlyOneConstraintViolationForWith(User user, String message){
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+
+        assertEquals(1, violations.size());
+        assertEquals(message, violations.stream().findFirst().get().getMessage());
+
+    }
+
+    @DisplayName("When the name is null a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheNameIsNull() {
-        User userNullName = new User(null, "Ken", "jk@here.dom", "1234567890", "Pepito,12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userNullName);
-        assertEquals(1, violations.size());
+        User userNullName = anyUser.withName(null).build();
+
+        assertExactlyOneConstraintViolationForWith(userNullName, "Name cannot be empty or null");
     }
 
+    @DisplayName("When the surname is null a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheSurnameIsNull() {
-        User userNullName = new User("Jim", null, "jk@here.dom", "1234567890", "Pepito.12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userNullName);
-        assertEquals(1, violations.size());
+        User userNullSurname = anyUser.withSurname(null).build();
+
+        assertExactlyOneConstraintViolationForWith(userNullSurname, "Surname cannot be empty");
     }
 
+    @DisplayName("When the email is null a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheEmailIsNull() {
-        User userNullEmail = new User("Jim", "Ken", null, "1234567890", "Pepito12;", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userNullEmail);
-        assertEquals(1, violations.size());
+        User userNullEmail = anyUser.withEmail(null).build();
+
+        assertExactlyOneConstraintViolationForWith(userNullEmail, "Email cannot be empty");
     }
 
+    @DisplayName("When the address is null a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheAddressIsNull() {
-        User userNullAddress = new User("Jim", "Ken", "jc@gmail.com", null, "Pepito_12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userNullAddress);
-        assertEquals(1, violations.size());
+        User userNullAddress= anyUser.withAddress(null).build();
+
+        assertExactlyOneConstraintViolationForWith(userNullAddress, "Address cannot be empty");
     }
 
+    @DisplayName("When the password is null a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenThePasswordIsNull() {
-        User userNullPassword = new User("Jim", "Ken", "jc@gmail.com", "1234567890", null, "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userNullPassword);
-        assertEquals(1, violations.size());
+        User userNullPassword = anyUser.withPassword(null).build();
+
+        assertExactlyOneConstraintViolationForWith(userNullPassword, "Password cannot be empty");
     }
 
+    @DisplayName("When the walletAddress is null a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheWalletAddressIsNull() {
-        User userNullWalletAddress = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito!12", null, "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userNullWalletAddress);
-        assertEquals(1, violations.size());
+        User userNullWalletAddress= anyUser.withWalletAddress(null).build();
+
+        assertExactlyOneConstraintViolationForWith(userNullWalletAddress, "Wallet Address cannot be empty");
     }
 
+    @DisplayName("When the cvu is null a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheCVUIsNull() {
-        User userNullCVU = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito.12", "12345678", null);
-        Set<ConstraintViolation<User>> violations = validator.validate(userNullCVU);
-        assertEquals(1, violations.size());
+        User userNullCVU= anyUser.withCvu(null).build();
+
+        assertExactlyOneConstraintViolationForWith(userNullCVU, "CVU cannot be null");
     }
 
+    @DisplayName("When the name is empty a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheNameIsEmpty() {
-        User userEmptyName = new User("", "Ken", "jk@here.dom", "1234567890", "Pepito12*", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userEmptyName);
-        assertEquals(1, violations.size());
+        User userEmptyName = anyUser.withName("").build();
+
+        assertExactlyOneConstraintViolationForWith(userEmptyName, "Name must have between 3 and 30 characters");
     }
 
+    @DisplayName("When the surname is empty a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheSurnameIsEmpty() {
-        User userEmptySurname = new User("Jim", "", "jk@here.dom", "1234567890", "Pepito!12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userEmptySurname);
-        assertEquals(1, violations.size());
+        User userEmptySurname = anyUser.withSurname("").build();
+
+        assertExactlyOneConstraintViolationForWith(userEmptySurname, "Surname must have between 3 and 30 characters");
     }
 
+    @DisplayName("When the email is empty a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheEmailIsEmpty() {
-        User userEmptyEmail = new User("Jim", "Ken", "", "1234567890", "Pepito1.2", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userEmptyEmail);
-        assertEquals(1, violations.size());
+        User userEmptyEmail = anyUser.withEmail("").build();
+
+        assertExactlyOneConstraintViolationForWith(userEmptyEmail, "Email is not valid");
     }
 
+    @DisplayName("When the address is empty a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheAddressIsEmpty() {
-        User userEmptyAddress = new User("Jim", "Ken", "jc@gmail.com", "", "Pepito+12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userEmptyAddress);
-        assertEquals(1, violations.size());
+        User userEmptyAddress = anyUser.withAddress("").build();
+
+        assertExactlyOneConstraintViolationForWith(userEmptyAddress, "Address must have between 10 and 30 characters");
     }
 
+    @DisplayName("When the password is empty a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenThePasswordIsEmpty(){
-        User userEmptyPassword = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userEmptyPassword);
-        assertEquals(2, violations.size());
+        User userEmptyPassword = anyUser.withPassword("").build();
+
+        assertExactlyOneConstraintViolationForWith(userEmptyPassword,
+                """
+                        Password must contain:
+
+                        - At least one uppercase
+                        - At least one lowercase
+                        - At least one digit
+                        - At least one special character
+                        - Min 6 characters
+
+                        """);
     }
 
+    @DisplayName("When the walletAddress is empty a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheWalletAddressIsEmpty() {
-        User userEmptyWalletAddress = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito.12", "", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userEmptyWalletAddress);
-        assertEquals(1, violations.size());
+        User userEmptyWalletAddress = anyUser.withWalletAddress("").build();
+
+        assertExactlyOneConstraintViolationForWith(userEmptyWalletAddress, "Wallet Address must have 8 characters");
     }
 
+    @DisplayName("When the CVU is empty a User show a constraint violation ")
     @Test
     void userThrowsAnNullParameterExceptionWhenTheCVUIsEmpty() {
-        User userEmptyCVU = new User("Jim", "Ken", "jc@gmail.com", "1234567890", "Pepito_12", "12345678", "");
-        Set<ConstraintViolation<User>> violations = validator.validate(userEmptyCVU);
-        assertEquals(1, violations.size());
+        User userEmptyCVU = anyUser.withCvu("").build();
+
+        assertExactlyOneConstraintViolationForWith(userEmptyCVU, "CVU must have 22 characters");
     }
 
+    @DisplayName("When the name shorter than 3 a User show a constraint violation ")
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheNameHas2charLess() {
-        User userNameLess = new User("Ho", "Ken", "jk@here.dom", "1234567890", "Pepito!12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userNameLess);
-        assertEquals(1, violations.size());
+        User userShorterName = anyUser.withName("Ho").build();
+
+        assertExactlyOneConstraintViolationForWith(userShorterName, "Name must have between 3 and 30 characters");
     }
 
+    @DisplayName("When the name has 1 char a User show a constraint violation ")
     @Test
     void userThrowsAnNoExtensionsExceptionParameterWhenTheNameHas1char() {
-        User userNameLess = new User("H", "Ken", "jk@here.dom", "1234567890", "Pepito$12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userNameLess);
-        assertEquals(1, violations.size());
+        User userOneCharName = anyUser.withName("H").build();
+
+        assertExactlyOneConstraintViolationForWith(userOneCharName, "Name must have between 3 and 30 characters");
     }
 
+    @DisplayName("When the surname has 1 char a User show a constraint violation ")
     @Test
     void userThrowsAnNoExtensionsParameterWhenTheSurnameHas1charLess() {
-        User userSurnameLess = new User("Jim", "V", "jc@gmail.com", "1234567890", "Pepito%12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userSurnameLess);
-        assertEquals(1, violations.size());
+        User userOneCharSurname = anyUser.withSurname("V").build();
+
+        assertExactlyOneConstraintViolationForWith(userOneCharSurname, "Surname must have between 3 and 30 characters");
     }
 
+
+    @DisplayName("When the surname has 2 chars a User show a constraint violation ")
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheSurnameHas2char() {
-        User userSurnameLess = new User("Jim", "V", "jc@gmail.com", "1234567890", "Pepito*12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userSurnameLess);
-        assertEquals(1, violations.size());
+        User userShorterSurname = anyUser.withSurname("Vo").build();
+
+        assertExactlyOneConstraintViolationForWith(userShorterSurname, "Surname must have between 3 and 30 characters");
     }
 
+    @DisplayName("When the name has more than 30 chars a User show a constraint violation ")
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheNameHasMore30chars() {
-        User userSurnameLess = new User("1234567890123456789012345678901", "Kem", "jc@gmail.com", "1234567890", "Pepito+12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userSurnameLess);
-        assertEquals(1, violations.size());
+        User userLongestName = anyUser.withName("1234567890123456789012345678901").build();
+
+        assertExactlyOneConstraintViolationForWith(userLongestName, "Name must have between 3 and 30 characters");
     }
 
+    @DisplayName("When the surname has more than 30 chars a User show a constraint violation ")
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheSurnameHasMore30chars() {
-        User userSurnameLess = new User("Jim", "1234567890123456789012345678901", "jc@gmail.com", "1234567890", "Pepito.12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userSurnameLess);
-        assertEquals(1, violations.size());
+        User userLongestSurname = anyUser.withSurname("1234567890123456789012345678901").build();
+
+        assertExactlyOneConstraintViolationForWith(userLongestSurname, "Surname must have between 3 and 30 characters");
     }
 
+    @DisplayName("When the email has an incorrect format a User show a constraint violation ")
     @Test
     void userThrowsAnIncorrectFormatExceptionMailWhenTheFormatMailIsIncorrect() {
-        User userInvalidEmail = new User("Jim", "Ken","user#domain.com", "1234567890","Pepito#12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userInvalidEmail);
-        assertEquals(1, violations.size());
+        User userInvalidEmail = anyUser.withEmail("user#domain.com").build();
+
+        assertExactlyOneConstraintViolationForWith(userInvalidEmail, "Email is not valid");
     }
 
+    @DisplayName("When the address has less than 10 chars a User show a constraint violation ")
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheAddressHasLess10chars() {
-        User userAddressLess = new User("Jim", "Kem", "jc@gmail.com", "123456789", "Pepito.12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressLess);
-        assertEquals(1, violations.size());
+        User userAddressLess = anyUser.withAddress("123456789").build();
+
+        assertExactlyOneConstraintViolationForWith(userAddressLess, "Address must have between 10 and 30 characters");
     }
 
 
+    @DisplayName("When the address has more than 30 chars a User show a constraint violation ")
     @Test
     void userThrowsAnNoExtensionsParameterExceptionWhenTheAddressHasMore31chars() {
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890123456789012345678901", "Pepito.12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
-        assertEquals(1, violations.size());
+        User userAddressMore = anyUser.withAddress("1234567890123456789012345678901").build();
+
+        assertExactlyOneConstraintViolationForWith(userAddressMore, "Address must have between 10 and 30 characters");
     }
 
-    @Test
-    void userThrowsAnNoExtensionsParameterExceptionWhenThePasswordHasLess6chars() {
-        User userPasswordLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "12345", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userPasswordLess);
-        assertEquals(2, violations.size());
+    @DisplayName("@ When the password is not allowed a User show a constraint violation ")
+    @ParameterizedTest
+    @ValueSource(strings = {"", "xx$456", "XX$456", "Xx$abc", "Xxa456", "Xx$45", "Pep$0", "PEPITO", "pepito", "pepit", "Pepito", "Pepito1"})
+    void userThrowsAnNoExtensionsParameterExceptionWhenThePasswordHasLess6chars(String notValidPassword) {
+        User userInvalidPassword = anyUser.withPassword(notValidPassword).build();
+
+        assertExactlyOneConstraintViolationForWith(userInvalidPassword,
+                """
+                        Password must contain:
+
+                        - At least one uppercase
+                        - At least one lowercase
+                        - At least one digit
+                        - At least one special character
+                        - Min 6 characters
+
+                        """);
     }
 
-    @Test
-    void userThrowsAnNoExtensionsParameterExceptionWhenThePasswordDontRespectTheCapsFormat() {
-        User userPasswordLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "pepito12", "12345678", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userPasswordLess);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void userThrowsAnNoExtensionsParameterExceptionWhenTheWalletAddressHasLess8chars() {
-        User userWalletAddressLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito.12", "1234567", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userWalletAddressLess);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void userThrowsAnNoExtensionsParameterExceptionWhenTheWalletAddressHasMore8chars() {
-        User userWalletAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito,12", "123456789", "1111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userWalletAddressMore);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void userThrowsAnNoExtensionsParameterExceptionWhenTheCVUHasLess22chars() {
-        User userAddressLess = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito.12", "12345678", "111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressLess);
-        assertEquals(1, violations.size());
-    }
-
-
-    @Test
-    void userThrowsAnNoExtensionsParameterExceptionWhenTheAddressHasMore22chars() {
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito++12", "12345678", "11111111111111111111111");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void testAPasswordWithOnlyAnUpperCaseButCheckExtensionBrokesAContrait(){
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito", "12345678", "1234567890123456789012");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void testAPasswordWithAllItsCharsInUpperCaseButCheckExtensionBrokesAContrait(){
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "PEPITO", "12345678", "1234567890123456789012");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void testAPasswordWithAllItsCharsInLowerCaseButCheckExtensionBrokesAContrait(){
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "pepito", "12345678", "1234567890123456789012");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void testAPasswordWithOnlyAnLowerCaseButCheckExtensionBrokesAContrait(){
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "pepito", "12345678", "1234567890123456789012");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void testAPasswordWithAnLowerAndUpperCaseAndCheckExtensionBrokesAContrait(){
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito", "12345678", "1234567890123456789012");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
-    void testAPasswordWithAnLowerAndUpperCaseAndCheckExtensionAndADigitBrokesAContrait(){
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito1", "12345678", "1234567890123456789012");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
-        assertEquals(1, violations.size());
-    }
-
+    @DisplayName("When the password has an lower, an uppercase, a digit, a special char and at least 6 chars a User show no constraint violation ")
     @Test
     void testAPasswordWithAnLowerAndUpperCaseAndCheckExtensionAndADigitAndASpecialCharacterDonntBrokeAContrait(){
-        User userAddressMore = new User("Jim", "Kem", "jc@gmail.com", "1234567890", "Pepito.1", "12345678", "1234567890123456789012");
-        Set<ConstraintViolation<User>> violations = validator.validate(userAddressMore);
+        User userWithPassword = anyUser.withPassword("Pepit.0").build();
+
+        Set<ConstraintViolation<User>> violations = validator.validate(userWithPassword);
+
         assertEquals(0, violations.size());
     }
 
+
+
+    @DisplayName("When the walletAddresss has less than 8 chars a User show a constraint violation ")
+    @Test
+    void userThrowsAnNoExtensionsParameterExceptionWhenTheWalletAddressHasLess8chars() {
+        User userWalletAddressLess = anyUser.withWalletAddress("1234567").build();
+
+        assertExactlyOneConstraintViolationForWith(userWalletAddressLess, "Wallet Address must have 8 characters");
+    }
+
+    @DisplayName("When the walletAddresss has more than 8 chars a User show a constraint violation ")
+    @Test
+    void userThrowsAnNoExtensionsParameterExceptionWhenTheWalletAddressHasMore8chars() {
+        User userWalletAddressMore = anyUser.withWalletAddress("123456789").build();
+
+        assertExactlyOneConstraintViolationForWith(userWalletAddressMore, "Wallet Address must have 8 characters");
+    }
+
+    @DisplayName("When the cvu has less than 22 chars a User show a constraint violation ")
+    @Test
+    void userThrowsAnNoExtensionsParameterExceptionWhenTheCVUHasLess22chars() {
+        User userShortCvu= anyUser.withCvu("1234567890123456789012345678901").build();
+
+        assertExactlyOneConstraintViolationForWith(userShortCvu, "CVU must have 22 characters");
+    }
+
+    @DisplayName("When the cvu has more than 22 chars a User show a constraint violation ")
+    @Test
+    void userThrowsAnNoExtensionsParameterExceptionWhenTheAddressHasMore22chars() {
+        User userLargeCvu= anyUser.withCvu("123456789012345678901234567890123").build();
+
+        assertExactlyOneConstraintViolationForWith(userLargeCvu, "CVU must have 22 characters");
+    }
+
+    @DisplayName("When a User is created has no offers")
     @Test
     void testToBeCreatedAnUserHasNotAnyOffer(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User user = anyUser.build();
+
         assertEquals(0, user.getOffers().size());
     }
 
+    @DisplayName("When a user offer give a intention when the price is in the +- 5% range")
     @Test
     void testToOfferAnUserReturnAnIntentionWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User user = anyUser.build();
         Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+
         assertEquals(user, intention.getOffered());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(10, intention.getCount());
@@ -384,9 +422,10 @@ class UserTest {
         assertEquals(CryptoName.CAKEUSDT, intention.getCrypto());
     }
 
+    @DisplayName("When the Intention price is in range the user can make the offer") // TODO 2
     @Test
     void testTheUserCanAddOffersToItsListOfOffersWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User user = anyUser.build();
         assertEquals(0, user.getOffers().size());
         user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
         assertEquals(1, user.getOffers().size());
@@ -394,60 +433,77 @@ class UserTest {
         assertEquals(2, user.getOffers().size());
     }
 
+    @DisplayName("When the Intention price is in range the user can make the offer")
     @Test
     void testToOfferAnUserAddAnIntentionToItsListOfIntentionsWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User user = anyUser.build();
+
         assertEquals(0, user.getOffers().size());
         user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
         assertEquals(1, user.getOffers().size());
     }
 
+    @DisplayName("When a User offer the intention is added to its offers list")
     @Test
     void testToOfferAnUserAddAnIntentionToItsListOfIntentionsAndItIsTheExpectedWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
-        User user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User user = anyUser.build();
         Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
-        Intention uniqueIntention = user.getOffers().get(0);
-        assertEquals(intention.getOffered(), uniqueIntention.getOffered());
-        assertEquals(intention.getPrice(), uniqueIntention.getPrice());
-        assertEquals(intention.getCount(), uniqueIntention.getCount());
-        assertEquals(intention.getType(), uniqueIntention.getType());
-        assertEquals(intention.getCrypto(), uniqueIntention.getCrypto());
+
+        assertEquals(intention, user.getOffers().get(0));
     }
 
 
+    @DisplayName("When a User accept other User intention the first turns on demander")
     @Test
     void testAnUserCanAcceptAnIntentionSetItsDemander(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
+        User anUser = anyUser.withEmail("jk@here.dom").build();
+        User otherUser = anyUser.withEmail("asd@here.dom").build();
+        BigDecimal offerPrice = new BigDecimal(2);
+        BigDecimal quationOnOfferTime = new BigDecimal(2);
+        BigDecimal quationOnAcceptTime = new BigDecimal(2);
+
+        Intention intention = anUser.offer(1, offerPrice, Type.BUY, CryptoName.ETHUSDT, quationOnOfferTime);
+
         assertNull(intention.getDemander());
-        otherUser.accept(intention, new BigDecimal(2));
+        otherUser.accept(intention, quationOnAcceptTime);
         assertNotNull(intention.getDemander());
     }
 
+    @DisplayName("When a User accept other User intention the first turns on demander")
     @Test
     void testWhenAnUserAcceptAnIntentionItsIsItsDemander(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
-        otherUser.accept(intention, new BigDecimal(2));
+        User anUser = anyUser.withEmail("jk@here.dom").build();
+        User otherUser = anyUser.withEmail("asd@here.dom").build();
+        BigDecimal offerPrice = new BigDecimal(2);
+        BigDecimal quationOnOfferTime = new BigDecimal(2);
+        BigDecimal quationOnAcceptTime = new BigDecimal(2);
+        Intention intention = anUser.offer(1, offerPrice, Type.BUY, CryptoName.ETHUSDT, quationOnOfferTime);
+
+        otherUser.accept(intention, quationOnAcceptTime);
+
         assertEquals(otherUser, intention.getDemander());
     }
 
+    @DisplayName("When a User accept an intention this status change to sold")
     @Test
     void testWhenAnUserAcceptAnIntentionThisChangeItsStatusToSOLD(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        // User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        // User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        User anUser = anyUser.withEmail("jk@here.dom").build();
+        User otherUser = anyUser.withEmail("asd@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
         assertEquals(Status.OFFERED, intention.getStatus());
         otherUser.accept(intention, new BigDecimal(2));
         assertEquals(Status.SOLD, intention.getStatus());
     }
 
+    @DisplayName("When a User accept a buy intention and the current price is bigger than the intention offer it is canceled automatically")
     @Test
     void testWhenAnUserAcceptAnIntentionBuyButTheCurrentPriceIsBiggerTheDemanderChangeButTheIntentionIsCanceledBySystem(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        // User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        // User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        User anUser = anyUser.withEmail("jk@here.dom").build();
+        User otherUser = anyUser.withEmail("asd@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
         assertEquals(Status.OFFERED, intention.getStatus());
         assertNull(intention.getDemander());
@@ -456,99 +512,124 @@ class UserTest {
         assertNull(intention.getDemander());
     }
 
+    @DisplayName("When a User accept a sell intention and the quoted price is higger that de intention price it is canceled automatically")
     @Test
     void testWhenAnUserAcceptAnIntentionSellButTheCurrentPriceIsBiggerTheDemanderChangeButTheIntentionIsCanceledBySystem(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        // User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        // User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
+        User anUser = anyUser.withEmail("jk@here.dom").build();
+        User otherUser = anyUser.withEmail("asd@here.dom").build();
+
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
         assertNull(intention.getDemander());
         assertEquals(Status.OFFERED, intention.getStatus());
         otherUser.accept(intention, new BigDecimal(1));
+
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
         assertNull(intention.getDemander());
     }
 
+    @DisplayName("When an offerer cancel its intention this is marked with CANCELED status")
     @Test
     void testWhenAnOffererCancelItsIntentionThisIsMarkedWithCanceledStatus(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+//        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.withEmail("jk@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+
         assertEquals(Status.OFFERED, intention.getStatus());
         anUser.cancel(intention);
         assertEquals(Status.CANCELED, intention.getStatus());
     }
 
+    @DisplayName("When a demander cancel an intention this is marked with OFFERED status")
     @Test
     void testWhenAndemanderCancelAnIntentionThisIsMarkedWithOFFEREDStatus(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.withEmail("jk@here.dom").build();
+        User otherUser = anyUser.withEmail("asd@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
-        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         assertEquals(Status.OFFERED, intention.getStatus());
         otherUser.accept(intention, new BigDecimal(2));
+
         assertEquals(Status.SOLD, intention.getStatus());
         otherUser.cancel(intention);
         assertEquals(Status.OFFERED, intention.getStatus());
     }
 
+    @DisplayName("When a demander cancel an intention this modificate this demander")
     @Test
     void testWhenAndemanderCancelAnIntentionThisModificateItsDemander(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.withEmail("jk@here.dom").build();
+        User otherUser = anyUser.withEmail("asd@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
-        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         assertEquals(Status.OFFERED, intention.getStatus());
         assertNull(intention.getDemander());
         otherUser.accept(intention, new BigDecimal(2));
         assertNotNull(intention.getDemander());
+
         assertEquals(Status.SOLD, intention.getStatus());
         otherUser.cancel(intention);
         assertNull(intention.getDemander());
     }
 
+    @DisplayName("When other User cancel the intention nothing change")
     @Test
     void testWhenOtherUserCancelTheIntentionNothingChange(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.withEmail("jk@here.dom").build();
+        User otherUser = anyUser.withEmail("asd@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
-        User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         otherUser.accept(intention, new BigDecimal(2));
-        User otherOtherUser = new User("Jack", "Kim", "dsa@there.dom", "1234567892", "Pepito13+", "22345679", "2234567890123456789012");
+        User otherOtherUser = anyUser.withEmail("other@there.dom").build();
+
         otherOtherUser.cancel(intention);
         assertEquals(Status.SOLD, intention.getStatus());
         assertEquals(otherUser, intention.getDemander());
         assertEquals(anUser, intention.getOffered());
     }
 
+    @DisplayName("Inicially a User has not operation")
     @Test
     void testIniciallyAnUserHasNotOperation(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.build();
+
         assertEquals(0, anUser.quantityIntentions());
     }
 
+    @DisplayName("Inicially a User has not points")
     @Test
     void testIniciallyAnUserHasNotPoints(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.build();
+
         assertEquals(0, anUser.getPoints());
     }
 
+    @DisplayName("When a User make a offer has one operation")
     @Test
     void testAnUserHasOneOperationWhenOfferOne(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.build();
         Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+
         assertEquals(1, anUser.quantityIntentions());
     }
 
+    @DisplayName("When a User offer two intentions has two operations")
     @Test
     void testAnUserHasOneOperationWhenOfferTwo(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.build();
         anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
         anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+
         assertEquals(2, anUser.quantityIntentions());
     }
 
+    @DisplayName("an User initially has no reputation")
     @Test
     void testAnUserHasNotReputacionInicially(){
-        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        User anUser = anyUser.build();
+
         assertEquals(0, anUser.getReputation());
     }
 
+    @DisplayName("Status has a name")
     @Test
     void concept(){
         assertEquals("SOLD", Status.SOLD.name());
