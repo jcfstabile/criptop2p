@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User findByID(Long anId) {
-        return this.userRepository.findById(anId).get();
+        return this.userRepository.findById(anId)
+                .orElseThrow(() -> new UserNotFoundException(anId));
     }
 }

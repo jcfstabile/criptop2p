@@ -15,33 +15,38 @@ repositories {
 }
 
 dependencies {
+	implementation 'javax.validation:validation-api:2.0.1.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.hibernate:hibernate-validator:8.0.0.CR3'
 	// implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'com.github.jsimone:webapp-runner:9.0.27.1'
+    implementation 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'com.github.jsimone:webapp-runner:9.0.27.1'
 	testImplementation 'junit:junit:4.13.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.2'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
 }
 
 configurations.compileOnly.setCanBeResolved(true)
 
-task stage() {
-    dependsOn clean, war
-}
-war.mustRunAfter clean
 
-task copyToLib(type: Copy) {
+task webapp(type: Copy) {
     into "$buildDir/server"
     from(configurations.compileOnly) {
         include "webapp-runner*"
     }
 }
 
-stage.dependsOn(copyToLib)
+war.mustRunAfter clean
+build.mustRunAfter war
+webapp.mustRunAfter war
+
+task stage( dependsOn: [clean, build, war, webapp] )
 
 tasks.named('test') {
 	useJUnitPlatform()
