@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,13 @@ public class TypeTest {
 
     User anUser;
     IntentionBuilder anyIntention = new IntentionBuilder();
+
+    UserBuilder anyUser = new UserBuilder();
     Intention anIntentionBUY;
     Intention anIntentionSELL;
     @BeforeEach
     void setUp(){
-        anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
+        anUser = anyUser.build();
         anIntentionSELL = anyIntention.withType(Type.SELL).withPrice(2).build();
         anIntentionBUY = anyIntention.withType(Type.BUY).withPrice(2).build();
     }

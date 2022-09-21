@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -18,33 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("User Tests")
 @SpringBootTest
 class UserTest {
-    class UserBuilder {
-        String name;
-        String surname;
-        String email;
-        String address;
-        String password;
-        String walletAddress;
-        String cvu;
-        UserBuilder(){
-            this.name = "aaa";
-            this.surname = "bbb";
-            this.email = "c@d.e";
-            this.address = "fghijklmno";
-            this.password = "Pqrs7$";
-            this.walletAddress = "tuvwxyzA";
-            this.cvu = "1234567890123456789012";
-        }
-        UserBuilder withName(String aName){ this.name = aName;  return this;}
-        UserBuilder withSurname(String aSurname){ this.surname = aSurname;  return this;}
-        UserBuilder withEmail(String aEmail){ this.email = aEmail;  return this;}
-        UserBuilder withAddress(String aAddress){ this.address = aAddress;  return this;}
-        UserBuilder withPassword(String aPassword){ this.password = aPassword;  return this;}
-        UserBuilder withWalletAddress(String aWalletAddress){ this.walletAddress = aWalletAddress;  return this;}
-        UserBuilder withCvu(String aCvu){ this.cvu = aCvu;  return this;}
-
-        User build() { return new User(this.name, this.surname, this.email, this.address, this.password, this.walletAddress, this.cvu); }
-    }
 
     Validator validator;
     UserBuilder anyUser;
