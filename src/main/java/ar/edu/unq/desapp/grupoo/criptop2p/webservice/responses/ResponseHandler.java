@@ -13,12 +13,12 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({UserNotFoundException.class})
     public ResponseEntity<Object> handleUserNotFound(UserNotFoundException exception){
-        return new ResponseEntity<>(new ResponseError("001", "User not found", exception.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ResponseErrorSimple("001", "User not found", exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({UserConstraintViolationException.class})
     public ResponseEntity<Object> handleUserConstraintViolation(UserConstraintViolationException exception){
-        return new ResponseEntity<>(new ResponseError("002", "User data malformed", exception.getErrors()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseErrorList("002", "User data malformed", exception.getErrors()), HttpStatus.BAD_REQUEST);
     }
 
 }
