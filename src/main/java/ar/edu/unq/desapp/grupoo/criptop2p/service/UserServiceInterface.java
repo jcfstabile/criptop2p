@@ -12,4 +12,6 @@ public interface UserServiceInterface {
     User findByID(Long anId);
 
     Intention offer(Long anId, IntentionDTO anIntentionDTO);
+
+    void deleteUserById(Long anId);
 }
