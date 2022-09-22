@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
@@ -28,7 +29,6 @@ public class UserService implements UserServiceInterface {
     @Autowired
     private Validator validator;
 
-
     @Override
     @Transactional
     public User addUser(User user) {
@@ -40,9 +40,12 @@ public class UserService implements UserServiceInterface {
             }
             throw new UserConstraintViolationException(errors);
         }
-        return this.userRepository.save(user);
+        try {
+            return this.userRepository.save(user);
+        } catch (Exception e) {
+            throw new DataIncomingConflictException();
+        }
     }
-
 
     @Override
     public User findByID(Long anId) {
@@ -57,5 +60,13 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(() -> new UserNotFoundException(anId));
         Intention anIntention = new Intention(getUser, anIntentionDTO.getCount(), anIntentionDTO.getPrice(), anIntentionDTO.getType(), anIntentionDTO.getCryptoName());
         return this.intentionRepository.save(anIntention);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserById(Long anId){
+        this.userRepository.findById(anId)
+                .orElseThrow(() -> new UserNotFoundException(anId));
+        this.userRepository.deleteById(anId);
     }
 }

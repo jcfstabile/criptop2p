@@ -9,6 +9,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,5 +45,11 @@ public class UserRestController {
     @PostMapping("/users/{anId}")
     public Intention offer(@PathVariable Long anId, @RequestBody IntentionDTO anIntentionDTO) {
         return this.userService.offer(anId, anIntentionDTO);
+    }
+
+    @DeleteMapping("/users/{anId}")
+    public ResponseEntity unregister(@PathVariable Long anId) {
+        this.userService.deleteUserById(anId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

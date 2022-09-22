@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -20,5 +21,11 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUserConstraintViolation(UserConstraintViolationException exception){
         return new ResponseEntity<>(new ResponseErrorList("002", "User data malformed", exception.getErrors()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler({DataIncomingConflictException.class})
+    public ResponseEntity<Object> handleDataConflictException(DataIncomingConflictException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("003", "User was not registered", exception.getError()), HttpStatus.CONFLICT);
+    }
+
 
 }
