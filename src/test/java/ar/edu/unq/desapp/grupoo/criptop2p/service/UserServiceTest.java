@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +15,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("UserService Tests")
 @SpringBootTest
 class UserServiceTest {
+    class UserBuilderUnique extends UserBuilder {
+        @Override
+        public UserBuilder withEmail(String email){
+            this.withWalletAddress(email.repeat(2).substring(0,8));
+            return super.withEmail(email);
+        }
+    }
 
-    UserBuilder anyUser = new UserBuilder();
+    UserBuilder anyUser = new UserBuilderUnique();
+    UserBuilder otherUser = new UserBuilderUnique();
 
     User user;
 
@@ -26,7 +35,7 @@ class UserServiceTest {
     @DisplayName("When an User is correctly formed is added")
     @Test
     void addAnUser(){
-        user = anyUser.build();
+        user = anyUser.withEmail("just@add.once").build();
 
         userService.addUser(user);
 
@@ -92,7 +101,7 @@ class UserServiceTest {
     @Test
     void findExistentUser(){
         String name = "Pete";
-        user = anyUser.withEmail("pete@here.dom").withWalletAddress("12345678").withName(name).build();
+        user = anyUser.withEmail("pete@here.dom").withName(name).build();
         userService.addUser(user);
 
         assertEquals(name, userService.findByID(user.getId()).getName());
@@ -106,5 +115,33 @@ class UserServiceTest {
         });
 
         assertEquals("Could not find user 0", userNotFoundException.getMessage());
+    }
+
+    @DisplayName("Adding an User with a email already registered throw a DataIncomingConflictException")
+    @Test
+    void addingAnUserWithAUsedEmailThrowException(){
+        User registeredUser = anyUser.withEmail("me@here.throw").withWalletAddress("aaaaaaaa").build();
+        userService.addUser(registeredUser);
+        DataIncomingConflictException dataIncomingConflictException =
+                assertThrows(DataIncomingConflictException.class , () -> {
+                    userService.addUser(otherUser.withEmail("me@here.throw").withWalletAddress("xxxxxxxx").build());
+                });
+        assertEquals("The operation can not be completed due to data conflict",
+                dataIncomingConflictException.getError());
+    }
+    @DisplayName("Delete an User by id")
+    @Test
+    void deleteUserById(){
+        user = anyUser.withEmail("tobe@delete.soon").withWalletAddress("00000000").withCvu("0000 0000 0000 0000 00").build();
+        userService.addUser(user);
+        Long id = user.getId();
+
+        userService.deleteUserById(id);
+
+        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> {
+            userService.findByID(id);
+        });
+
+        assertEquals("Could not find user " + id.toString(), userNotFoundException.getMessage());
     }
 }
