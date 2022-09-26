@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionConverter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,7 +27,8 @@ public class Intention {
     private int count;
     private BigDecimal price;
 
-    private Type type;
+    @Convert(converter = TypeIntentionConverter.class)
+    private TypeIntention type;
     private CryptoName cryptoName;
 
     private Status status;
@@ -43,7 +46,7 @@ public class Intention {
     public Intention() {
     }
 
-    public Intention(User anUser, int aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName) {
+    public Intention(User anUser, int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName) {
         this.offered = anUser;
         this.count = aCount;
         this.price= aPrice;
@@ -57,7 +60,7 @@ public class Intention {
     public User getDemander(){ return this.demander; }
     public int getCount(){ return this.count; }
     public BigDecimal getPrice(){ return this.price; }
-    public Type getType(){ return this.type; }
+    public TypeIntention getType(){ return this.type; }
     public CryptoName getCrypto(){ return this.cryptoName; }
     public Status getStatus() { return this.status; }
     public void setStatus(Status aStatus){ this.status = aStatus; }

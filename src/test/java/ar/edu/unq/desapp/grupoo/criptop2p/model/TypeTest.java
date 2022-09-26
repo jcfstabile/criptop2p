@@ -24,27 +24,39 @@ public class TypeTest {
     @BeforeEach
     void setUp(){
         anUser = anyUser.build();
-        anIntentionSELL = anyIntention.withType(Type.SELL).withPrice(2).build();
-        anIntentionBUY = anyIntention.withType(Type.BUY).withPrice(2).build();
+        anIntentionSELL = anyIntention.withType(new Sell()).withPrice(2).build();
+        anIntentionBUY = anyIntention.withType(new Buy()).withPrice(2).build();
+    }
+
+    @DisplayName("Type SELL has TypeName Sell")
+    @Test
+    void testTypeSellReturnItsName(){
+        assertEquals(TypeName.SELL, new Sell().getName());
+    }
+
+    @DisplayName("Type BUY has TypeName Buy")
+    @Test
+    void testTypeBuyReturnItsName(){
+        assertEquals(TypeName.BUY, new Buy().getName());
     }
 
     @DisplayName("Type SELL give User's CVU as shippingAddress")
     @Test
     void testTypeSellReturnTheUsersCVU(){
-        assertEquals(anUser.getCvu(), Type.SELL.shippingAddress(anUser));
+        assertEquals(anUser.getCvu(), new Sell().shippingAddress(anUser));
     }
 
     @DisplayName("Type BUY give User's walletAddress as shippingAddress")
     @Test
     void testTypeBuyReturnTheUsersWalletAddress(){
-        assertEquals(anUser.getWalletAddress(), Type.BUY.shippingAddress(anUser));
+        assertEquals(anUser.getWalletAddress(), new Buy().shippingAddress(anUser));
     }
 
     @DisplayName("When the current price is greater than the Intention's BUY, verify the acceptance of an Intention to CANCELEDBYSYSTEM")
     @Test
     void testToVerifyIfanIntentionIsAceptedCanceledTheIntentionWhenTheCurrentPriceisBiggerThanIntentionPriceAndtheTypeisBUY(){
         assertEquals(Status.OFFERED, anIntentionBUY.getStatus());
-        Type.BUY.verifyIfIsAcepted(anUser, anIntentionBUY, new BigDecimal(3));
+        new Buy().verifyIfIsAcepted(anUser, anIntentionBUY, new BigDecimal(3));
         assertEquals(Status.CANCELEDBYSYSTEM, anIntentionBUY.getStatus());
     }
 
@@ -52,7 +64,7 @@ public class TypeTest {
     @Test
     void testToVerifyIfanIntentionIsAceptedCanceledTheIntentionWhenTheCurrentPriceisSmallerThanIntentionPriceAndTheTypeIsSELL(){
         assertEquals(Status.OFFERED, anIntentionSELL.getStatus());
-        Type.SELL.verifyIfIsAcepted(anUser, anIntentionSELL, new BigDecimal(1));
+        new Sell().verifyIfIsAcepted(anUser, anIntentionSELL, new BigDecimal(1));
         assertEquals(Status.CANCELEDBYSYSTEM, anIntentionSELL.getStatus());
     }
 
@@ -60,7 +72,7 @@ public class TypeTest {
     @DisplayName("When the current price is smaller than the Intention's, BUY verify the acceptance of an Intention to SOLD")
     void testToVerifyIfanIntentionModicateToSOLDTheIntentionWhenTheCurrentPriceisBiggerThanIntentionPriceAndtheTypeisSELL(){
         assertEquals(Status.OFFERED, anIntentionSELL.getStatus());
-        Type.BUY.verifyIfIsAcepted(anUser, anIntentionSELL, new BigDecimal(1));
+        new Buy().verifyIfIsAcepted(anUser, anIntentionSELL, new BigDecimal(1));
         assertEquals(Status.SOLD, anIntentionSELL.getStatus());
     }
 
@@ -68,7 +80,7 @@ public class TypeTest {
     @Test
     void testToVerifyIfanIntentionModificateToSoldTheIntentionWhenTheCurrentPriceisSmallerThanIntentionPriceAndTheTypeIsSELLBUY(){
         assertEquals(Status.OFFERED, anIntentionBUY.getStatus());
-        Type.SELL.verifyIfIsAcepted(anUser, anIntentionBUY, new BigDecimal(3));
+        new Sell().verifyIfIsAcepted(anUser, anIntentionBUY, new BigDecimal(3));
         assertEquals(Status.SOLD, anIntentionBUY.getStatus());
     }
 
@@ -76,7 +88,7 @@ public class TypeTest {
     @Test
     void testToVerifyIfanIntentionIsAceptedModificateTheIntentionStatusToSOLDWhenTheCurrentPriceisEqualsToTheIntentionPriceAndTheTypeIsSELL(){
         assertEquals(Status.OFFERED, anIntentionSELL.getStatus());
-        Type.SELL.verifyIfIsAcepted(anUser, anIntentionSELL, new BigDecimal(2));
+        new Sell().verifyIfIsAcepted(anUser, anIntentionSELL, new BigDecimal(2));
         assertEquals(Status.SOLD, anIntentionSELL.getStatus());
     }
 
@@ -84,7 +96,7 @@ public class TypeTest {
     @Test
     void testToVerifyIfanIntentionIsAceptedModificateToSoldTheIntentionStatusWhenTheCurrentPriceisEqualsToTheIntentionPriceAndTheTypeIsBUY(){
         assertEquals(Status.OFFERED, anIntentionSELL.getStatus());
-        Type.SELL.verifyIfIsAcepted(anUser, anIntentionSELL, new BigDecimal(2));
+        new Sell().verifyIfIsAcepted(anUser, anIntentionSELL, new BigDecimal(2));
         assertEquals(Status.SOLD, anIntentionSELL.getStatus());
     }
 }

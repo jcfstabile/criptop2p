@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model.builders;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Type;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
 
 import java.math.BigDecimal;
 
@@ -11,14 +8,14 @@ public class IntentionBuilder {
     User user;
     int count;
     BigDecimal price;
-    Type type;
+    TypeIntention type;
     CryptoName crypto;
 
     public IntentionBuilder() {
         this.user = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         this.count = 1;
         this.price = new BigDecimal("2");
-        this.type = Type.SELL;
+        this.type = new Sell();
         this.crypto = CryptoName.ALICEUSDT;
     }
 
@@ -37,7 +34,7 @@ public class IntentionBuilder {
         return this;
     }
 
-    public IntentionBuilder withType(Type type) {
+    public IntentionBuilder withType(TypeIntention type) {
         this.type = type;
         return this;
     }

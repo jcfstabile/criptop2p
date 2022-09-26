@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 @DisplayName("ValidatorCriptoPrice Tests")
 @SpringBootTest
@@ -45,12 +46,12 @@ public class ValidatorCryptoPriceTest {
     @ParameterizedTest
     @ValueSource(doubles = {2.0, 2.1, 1.9})
     void createintentionWithStatusOFFEREDWhenTheCurrentPriceIsBeetweenTheRangeGivenBy5PerCentMoreOrLess(double currentPrice){
-        Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal(currentPrice));
+        Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), new Sell(), CryptoName.ATOMUSDT, new BigDecimal(currentPrice));
 
         assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
-        assertEquals(Type.SELL, intention.getType());
+        assertEquals(new Sell().getName(), intention.getType().getName());
         assertEquals(CryptoName.ATOMUSDT, intention.getCrypto());
         assertEquals(Status.OFFERED, intention.getStatus());
     }
@@ -60,12 +61,12 @@ public class ValidatorCryptoPriceTest {
     @ParameterizedTest
     @ValueSource(doubles = {2.2, 1.8})
     void createintentionCreateAnIntentionWithStatusCANCELEDBYSYSTEMWhenTheCurrentPriceIs5PerCentOutOfRange(double currentPrice){
-        Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT, new BigDecimal(currentPrice));
+        Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), new Sell(), CryptoName.ATOMUSDT, new BigDecimal(currentPrice));
 
         assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
-        assertEquals(Type.SELL, intention.getType());
+        assertInstanceOf(Sell.class, intention.getType());
         assertEquals(CryptoName.ATOMUSDT, intention.getCrypto());
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
     }
