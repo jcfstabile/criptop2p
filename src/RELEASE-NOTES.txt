@@ -1,0 +1,25 @@
+---------------------------------------------------------------------
+TAG 1.0
+---------------------------------------------------------------------
+- NEW FEATURES:
+
+<<<Core>>>
+	Creación de repositorios GitHub
+	Configuración en GitHubActions
+	Build corriendo y SUCCESS
+	Backend registrado en SonarCloud
+    Deploy automático utlizando HEROKU
+    Configuracion de https://swagger.io/ en el back-API (v3)
+
+<<<Modelo>>>
+	Implementación del modelo completo
+
+
+<<<Funcionalidad>>>
+    Proveer servicio de registracion de usuario
+
+NOTES:
+* --
+
+KNOWN ISSUES
+* --
