@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -26,19 +28,24 @@ public class UserRestController {
     @Autowired
     private UserMapper mapper;
 
+    @GetMapping("/users")
+    public ResponseEntity<List<UserInfoDTO>> allUsers() {
+        return ResponseEntity.ok(this.userService.findAll());
+    }
+
     @PostMapping("/users")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         User user = mapper.toUser(userCreationDTO);
         this.userService.addUser(user);
         return ResponseEntity.ok(
-                mapper.toDto(this.userService.findByID(user.getId()))
+                mapper.toUserDto(this.userService.findByID(user.getId()))
         );
     }
 
     @GetMapping("/users/{anId}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable Long anId) {
         return ResponseEntity.ok(
-                mapper.toDto(this.userService.findByID(anId))
+                mapper.toUserDto(this.userService.findByID(anId))
         );
     }
 
