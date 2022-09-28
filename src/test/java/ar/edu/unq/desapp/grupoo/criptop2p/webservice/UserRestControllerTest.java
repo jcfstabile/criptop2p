@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Type;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
@@ -67,7 +67,7 @@ class UserRestControllerTest {
         UserDTO getUser = anUserRestController.register(anUser).getBody();
         assertNotNull(getUser);
         //assertEquals(0, getUser.getOffers().size());
-        IntentionDTO intentionDTO = new IntentionDTO(10,new BigDecimal(10), Type.SELL, CryptoName.ALICEUSDT);
+        IntentionDTO intentionDTO = new IntentionDTO(10,new BigDecimal(10), new Sell(), CryptoName.ALICEUSDT);
 
         anUserRestController.offer(getUser.getId(), intentionDTO);
         //assertEquals(1, getUser.getOffers().size());
