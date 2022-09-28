@@ -16,6 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserServiceTest {
     class UserBuilderUnique extends UserBuilder {
+        public UserBuilderUnique() {
+            super("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
+        }
+
         @Override
         public UserBuilder withEmail(String email){
             this.withWalletAddress(email.repeat(2).substring(0,8));

@@ -18,7 +18,7 @@ public class TypeTest {
     User anUser;
     IntentionBuilder anyIntention = new IntentionBuilder();
 
-    UserBuilder anyUser = new UserBuilder();
+    UserBuilder anyUser = new UserBuilder("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
     Intention anIntentionBUY;
     Intention anIntentionSELL;
     @BeforeEach

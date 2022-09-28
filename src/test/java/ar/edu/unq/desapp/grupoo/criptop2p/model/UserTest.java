@@ -25,7 +25,7 @@ class UserTest {
     @BeforeEach
     void setUp(){
         validator = Validation.buildDefaultValidatorFactory().getValidator();
-        anyUser = new UserBuilder();
+        anyUser = new UserBuilder("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
     }
 
     @DisplayName("A User can be instantiated")
