@@ -30,6 +30,10 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
     implementation 'io.swagger.core.v3:swagger-annotations:2.2.2'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+	testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.2.RELEASE') {
+		exclude group: 'junit'
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
 }
 
 configurations.compileOnly.setCanBeResolved(true)

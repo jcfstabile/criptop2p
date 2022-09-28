@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class IntentionTest {
 
-    UserBuilder anyUser = new UserBuilder();
+    UserBuilder anyUser = new UserBuilder("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
 
     IntentionBuilder anyIntention = new IntentionBuilder();
     User anUser, otherUser;
