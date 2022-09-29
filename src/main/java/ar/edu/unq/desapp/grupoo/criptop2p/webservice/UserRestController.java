@@ -60,7 +60,7 @@ public class UserRestController {
                                     schema = @Schema(implementation = User.class))),
                     @ApiResponse( description = "Malformed data", responseCode = "400",
                             content = @Content(mediaType = "application/json",
-                                    // TODO Schema resolving to an error json
+                                    // FAULT Schema resolving to an error json
                                     schema = @Schema(implementation = UserConstraintViolationException.class))),
             }
     )
@@ -83,7 +83,7 @@ public class UserRestController {
                                     schema = @Schema(implementation = UserInfoDTO.class))),
                     @ApiResponse( description = "User not found", responseCode = "404",
                             content = @Content(mediaType = "application/json",
-                            // TODO Schema resolving to an error json
+                            // FAULT Schema resolving to an error json
                             schema = @Schema(implementation = UserNotFoundException.class))),
             }
     )
@@ -105,7 +105,7 @@ public class UserRestController {
                                     schema = @Schema(implementation = Intention.class))),
                     @ApiResponse( description = "User not found", responseCode = "404",
                             content = @Content(mediaType = "application/json",
-                                    // TODO Schema resolving to an error json
+                                    // FAULT Schema resolving to an error json
                                     schema = @Schema(implementation = UserNotFoundException.class))),
             }
     )
@@ -123,13 +123,13 @@ public class UserRestController {
             @ApiResponse( description = "User has been deleted", responseCode = "204", content = { @Content }),
             @ApiResponse( description = "User not found", responseCode = "404",
                     content = @Content(mediaType = "application/json",
-                            // TODO Schema resolving to an error json
+                            // FAULT Schema resolving to an error json
                             schema = @Schema(implementation = UserNotFoundException.class))),
     }
 )
     @Parameter(name = "id", description = "Id of the user to delete")
     @DeleteMapping("/users/{id}")
-    public ResponseEntity unregister(@PathVariable Long id) {
+    public ResponseEntity<Void> unregister(@PathVariable Long id) {
         this.userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

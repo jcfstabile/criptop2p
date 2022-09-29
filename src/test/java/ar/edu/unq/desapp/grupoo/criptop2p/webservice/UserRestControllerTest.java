@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserRestControllerTest {
 
     static UserCreationDTO anUser, oneUser;
+
     @Autowired
     private UserRestController anUserRestController;
 
@@ -116,13 +118,16 @@ class UserRestControllerTest {
     @DisplayName("An User can be unregistered")
     @Test
     void unregister() {
+        ResponseEntity<Void> deleteResponse;
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
         assertNotNull(registeredUser);
         Long userId = registeredUser.getId();
         anUserRestController.findUserById(userId);
 
-        anUserRestController.unregister(userId);
 
+        deleteResponse = anUserRestController.unregister(userId);
+
+        assertNotNull(deleteResponse);
         assertThrows(UserNotFoundException.class, () -> anUserRestController.findUserById(userId));
     }
 
