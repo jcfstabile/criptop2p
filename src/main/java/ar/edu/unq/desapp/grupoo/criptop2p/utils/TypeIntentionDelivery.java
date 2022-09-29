@@ -5,18 +5,20 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TypeIntentionDelivery {
-    List<ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention> types;
+    Set<TypeIntention> types;
     public TypeIntentionDelivery(){
-        this.types = new ArrayList<ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention>();
-        this.types.add(new Sell());
-        this.types.add(new Buy());
+        this.types = new HashSet<TypeIntention>();
+        this.addType(new Sell());
+        this.addType(new Buy());
     }
 
     public TypeIntention get(String dbName){
-        return (TypeIntention) this.types.stream().filter(type -> type.getName().name() == dbName);
+        return (TypeIntention) this.types.stream().filter(type -> type.getName().name() == dbName).findFirst().get();
     }
 
     public void addType(TypeIntention aType){

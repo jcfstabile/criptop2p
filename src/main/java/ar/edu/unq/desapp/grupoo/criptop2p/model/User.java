@@ -132,10 +132,9 @@ public class User{
 
     public void cancel(Intention intention) {
         intention.cancel(this);
-        this.setPoints(this.points-20);
     }
 
-    public int quantityIntentions() { return ((int) this.offers.stream().filter(intention -> !intention.hasStatus(Status.CANCELED) || !intention.hasStatus(Status.CANCELEDBYSYSTEM)).count());}
+    public int quantityIntentions() { return ((int) this.offers.stream().filter(intention -> intention.hasStatus(Status.SOLD)).count());}
 
     public int getReputation() {
         try{
@@ -148,5 +147,15 @@ public class User{
 
     public void addPoints(int reward) {
         this.points += reward;
+    }
+
+    public boolean isSameUser(User otherUser) {
+        return this.walletAddress.equals(otherUser.getWalletAddress())
+                && this.email.equals(otherUser.getEmail())
+                && this.cvu.equals(otherUser.getCvu());
+    }
+
+    public void applyPenalty(int i) {
+        this.points -= i;
     }
 }
