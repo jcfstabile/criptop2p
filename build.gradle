@@ -20,6 +20,7 @@ sonarqube {
         property "sonar.projectKey", "grupoo_criptop2p"
         property "sonar.organization", "criptop2p-grupoo"
         property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 dependencies {
