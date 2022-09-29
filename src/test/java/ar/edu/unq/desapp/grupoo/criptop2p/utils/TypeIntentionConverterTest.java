@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("TypeIntention tests")
 @SpringBootTest
-public class TypeIntentionConverterTest {
+class TypeIntentionConverterTest {
     TypeIntentionConverter typeConverter;
     @BeforeEach
     void setUp(){

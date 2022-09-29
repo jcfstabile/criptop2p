@@ -94,7 +94,7 @@ class UserRestControllerTest {
         List<UserInfoDTO> userInfoDTOS = anUserRestController.allUsers().getBody();
 
         assertNotNull(userInfoDTOS);
-        assertEquals(userInfoDTOS.size(), 0);
+        assertEquals(0, userInfoDTOS.size() );
     }
 
 
