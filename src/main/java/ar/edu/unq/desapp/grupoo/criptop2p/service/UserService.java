@@ -71,7 +71,7 @@ public class UserService implements UserServiceInterface {
         List<UserInfoDTO> users = new ArrayList<>();
         for (User user : this.userRepository.findAll()){
             users.add(mapper.toUserInfoDto(user));
-        };
+        }
         return users;
     }
 
