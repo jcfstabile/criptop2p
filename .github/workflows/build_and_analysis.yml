@@ -18,25 +18,24 @@ jobs:
       uses: actions/setup-java@v1
       with:
           java-version: 17
-    - name: Build
-      run: ./gradlew stage
 
-  sonarcloud:
-    name: Analysis with sonarcloud
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+    - name: Cache sonarcloud packages
+      uses: actions/cache@v1
       with:
-        # Disabling shallow clone for improving relevancy of reporting
-        fetch-depth: 0
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+    - name: Cache gradle packages
+      uses: actions/cache@v1
       with:
-          projectBaseDir: src
-          args: >
-              -Dsonar.organization=criptop2p-grupoo
-              -Dsonar.projectKey=grupoo_criptop2p
-              -Dsonar.java.binaries=target
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+    - name: Build and analyze
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: ./gradlew build sonarqube --info
+
