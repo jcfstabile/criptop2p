@@ -16,7 +16,7 @@ public class TypeIntentionDelivery {
     }
 
     public TypeIntention get(String dbName){
-        return (TypeIntention) this.types.stream().filter(type -> type.getName().name() == dbName);
+        return (TypeIntention) this.types.stream().filter(type -> type.getName().name() == dbName).findFirst().get();
     }
 
     public void addType(TypeIntention aType){
