@@ -5,12 +5,14 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TypeIntentionDelivery {
-    List<ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention> types;
+    Set<TypeIntention> types;
     public TypeIntentionDelivery(){
-        this.types = new ArrayList<ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention>();
+        this.types = new HashSet<TypeIntention>();
         this.addType(new Sell());
         this.addType(new Buy());
     }
