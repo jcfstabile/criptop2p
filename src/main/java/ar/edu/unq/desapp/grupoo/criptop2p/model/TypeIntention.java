@@ -21,8 +21,6 @@ public abstract class TypeIntention {
         }
         else{
             intention.sold();
-            intention.setDemander(anUser);
-            intention.addPoints();
         }
     }
 }

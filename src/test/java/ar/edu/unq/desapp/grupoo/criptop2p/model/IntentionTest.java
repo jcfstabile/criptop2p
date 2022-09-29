@@ -48,7 +48,6 @@ public class IntentionTest {
         assertEquals(new Sell().getName(), intention.getType().getName());
         assertEquals(CryptoName.ATOMUSDT, intention.getCrypto());
         assertEquals(Status.OFFERED, intention.getStatus());
-        assertNull(intention.getDemander());
     }
 
     @DisplayName("An IntentionDTO exist")
@@ -176,7 +175,6 @@ public class IntentionTest {
     void testAnIntentionCanIdentificateIfAnUserIsItsDemander() {
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
-        assertTrue(anIntention.isItsDemander(otherUser));
     }
 
     @DisplayName("An Intention can identificate if an User is not its demander")
@@ -184,7 +182,6 @@ public class IntentionTest {
     void testAnIntentionCanIdentificateIfAnUserIsNotItsDemander() {
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
-        assertFalse(anIntention.isItsDemander(anUser));
     }
 
     @DisplayName("An Intention has timestamp")
@@ -197,7 +194,6 @@ public class IntentionTest {
     @Test
     void testAnIntentionReturn10BecauseItHasAceptedBefore30minutes(){
         Timestamp now = new Timestamp(System.currentTimeMillis());
-
         assertEquals(10, intention.reward(now));
     }
 
@@ -215,5 +211,26 @@ public class IntentionTest {
         long minuteslater = System.currentTimeMillis()+ TimeUnit.MINUTES.toMillis(31);
         Timestamp now = new Timestamp(minuteslater);
         assertEquals(5, intention.reward(now));
+    }
+
+    @DisplayName("An intention change its status to waiting for Transfer")
+    @Test
+    void testAnIntentionChangeItsStatusToWaitingForTransferToReceiveThisMessage(){
+        assertEquals(Status.OFFERED, intention.getStatus());
+
+        intention.waitingForTransfer();
+
+        assertEquals(Status.WAITINGFORTRANSFER, intention.getStatus());
+    }
+
+
+    @DisplayName("An intention change its status to waiting for Delivery")
+    @Test
+    void testAnIntentionChangeItsStatusToWaitingForDeliveryToReceiveThisMessage(){
+        assertEquals(Status.OFFERED, intention.getStatus());
+
+        intention.waitingForDelivery();
+
+        assertEquals(Status.WAITINGFORDELIVERY, intention.getStatus());
     }
 }
