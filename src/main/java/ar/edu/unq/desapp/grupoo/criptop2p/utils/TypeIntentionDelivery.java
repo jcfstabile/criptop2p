@@ -11,8 +11,8 @@ public class TypeIntentionDelivery {
     List<ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention> types;
     public TypeIntentionDelivery(){
         this.types = new ArrayList<ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention>();
-        this.types.add(new Sell());
-        this.types.add(new Buy());
+        this.addType(new Sell());
+        this.addType(new Buy());
     }
 
     public TypeIntention get(String dbName){
