@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TypeIntentionDelivery {
     Set<TypeIntention> types;
@@ -26,6 +27,7 @@ public class TypeIntentionDelivery {
     }
 
     public void removeType(TypeIntention aType){
-        this.types.remove(aType);
+
+        this.types = this.types.stream().filter(type -> type.getName().name() == aType.getName().name()).collect(Collectors.toSet());
     }
 }
