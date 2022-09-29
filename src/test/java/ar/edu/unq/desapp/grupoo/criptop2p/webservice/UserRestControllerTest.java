@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
@@ -61,16 +63,19 @@ class UserRestControllerTest {
         assertEquals(registeredUser.getEmail(), getUser.getEmail());
     }
 
-    @DisplayName("An User can make a offer")
+    @DisplayName("When an User make a offer it get an intention with status of OFFERED and the User as offered")
     @Test
     void anUserCanMakeANewOfter(){
-        UserDTO getUser = anUserRestController.register(anUser).getBody();
-        assertNotNull(getUser);
-        //assertEquals(0, getUser.getOffers().size());
+        UserDTO userDTO = anUserRestController.register(anUser).getBody();
+        assertNotNull(userDTO);
         IntentionDTO intentionDTO = new IntentionDTO(10,new BigDecimal(10), new Sell(), CryptoName.ALICEUSDT);
+        assertNotNull(userDTO.getId());
 
-        anUserRestController.offer(getUser.getId(), intentionDTO);
-        //assertEquals(1, getUser.getOffers().size());
+        Intention intention = anUserRestController.offer(userDTO.getId(), intentionDTO);
+
+        assertNotNull(intention);
+        assertEquals(Status.OFFERED, intention.getStatus() );
+        assertEquals(anUser.getEmail(), intention.getOffered().getEmail());
     }
 
     void eraseAllUsers() {
@@ -79,15 +84,15 @@ class UserRestControllerTest {
         for(UserInfoDTO user : users) { anUserRestController.unregister(user.getId()); }
     }
 
-    @DisplayName("Get no UserInfo users")
+    @DisplayName("When there is no User registered allUsers get no UserInfo users")
     @Test
     void allUsersEmpty() {
         eraseAllUsers();
 
-        List<UserInfoDTO> users = anUserRestController.allUsers().getBody();
+        List<UserInfoDTO> userInfoDTOS = anUserRestController.allUsers().getBody();
 
-        assertNotNull(users);
-        assertEquals(users.size(), 0);
+        assertNotNull(userInfoDTOS);
+        assertEquals(userInfoDTOS.size(), 0);
     }
 
 
