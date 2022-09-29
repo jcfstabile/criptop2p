@@ -25,7 +25,7 @@ class UserTest {
     @BeforeEach
     void setUp(){
         validator = Validation.buildDefaultValidatorFactory().getValidator();
-        anyUser = new UserBuilder();
+        anyUser = new UserBuilder("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
     }
 
     @DisplayName("A User can be instantiated")
@@ -413,12 +413,12 @@ class UserTest {
     @Test
     void testToOfferAnUserReturnAnIntentionWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = anyUser.build();
-        Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        Intention intention = user.offer(10, new BigDecimal(2), new Sell(), CryptoName.CAKEUSDT, new BigDecimal(2));
 
         assertEquals(user, intention.getOffered());
         assertEquals(new BigDecimal(2), intention.getPrice());
         assertEquals(10, intention.getCount());
-        assertEquals(Type.SELL, intention.getType());
+        assertInstanceOf(Sell.class, intention.getType());
         assertEquals(CryptoName.CAKEUSDT, intention.getCrypto());
     }
 
@@ -427,9 +427,9 @@ class UserTest {
     void testTheUserCanAddOffersToItsListOfOffersWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = anyUser.build();
         assertEquals(0, user.getOffers().size());
-        user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        user.offer(10, new BigDecimal(2), new Sell(), CryptoName.CAKEUSDT, new BigDecimal(2));
         assertEquals(1, user.getOffers().size());
-        user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        user.offer(10, new BigDecimal(2), new Sell(), CryptoName.CAKEUSDT, new BigDecimal(2));
         assertEquals(2, user.getOffers().size());
     }
 
@@ -439,7 +439,7 @@ class UserTest {
         User user = anyUser.build();
 
         assertEquals(0, user.getOffers().size());
-        user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        user.offer(10, new BigDecimal(2), new Sell(), CryptoName.CAKEUSDT, new BigDecimal(2));
         assertEquals(1, user.getOffers().size());
     }
 
@@ -447,41 +447,9 @@ class UserTest {
     @Test
     void testToOfferAnUserAddAnIntentionToItsListOfIntentionsAndItIsTheExpectedWhenThePriceIsBeetweenInTheRange5PerCentMoreAndLess(){
         User user = anyUser.build();
-        Intention intention = user.offer(10, new BigDecimal(2), Type.SELL, CryptoName.CAKEUSDT, new BigDecimal(2));
+        Intention intention = user.offer(10, new BigDecimal(2), new Sell(), CryptoName.CAKEUSDT, new BigDecimal(2));
 
         assertEquals(intention, user.getOffers().get(0));
-    }
-
-
-    @DisplayName("When a User accept other User intention the first turns on demander")
-    @Test
-    void testAnUserCanAcceptAnIntentionSetItsDemander(){
-        User anUser = anyUser.withEmail("jk@here.dom").build();
-        User otherUser = anyUser.withEmail("asd@here.dom").build();
-        BigDecimal offerPrice = new BigDecimal(2);
-        BigDecimal quationOnOfferTime = new BigDecimal(2);
-        BigDecimal quationOnAcceptTime = new BigDecimal(2);
-
-        Intention intention = anUser.offer(1, offerPrice, Type.BUY, CryptoName.ETHUSDT, quationOnOfferTime);
-
-        assertNull(intention.getDemander());
-        otherUser.accept(intention, quationOnAcceptTime);
-        assertNotNull(intention.getDemander());
-    }
-
-    @DisplayName("When a User accept other User intention the first turns on demander")
-    @Test
-    void testWhenAnUserAcceptAnIntentionItsIsItsDemander(){
-        User anUser = anyUser.withEmail("jk@here.dom").build();
-        User otherUser = anyUser.withEmail("asd@here.dom").build();
-        BigDecimal offerPrice = new BigDecimal(2);
-        BigDecimal quationOnOfferTime = new BigDecimal(2);
-        BigDecimal quationOnAcceptTime = new BigDecimal(2);
-        Intention intention = anUser.offer(1, offerPrice, Type.BUY, CryptoName.ETHUSDT, quationOnOfferTime);
-
-        otherUser.accept(intention, quationOnAcceptTime);
-
-        assertEquals(otherUser, intention.getDemander());
     }
 
     @DisplayName("When a User accept an intention this status change to sold")
@@ -491,7 +459,7 @@ class UserTest {
         // User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Buy(), CryptoName.ETHUSDT,new BigDecimal(2));
         assertEquals(Status.OFFERED, intention.getStatus());
         otherUser.accept(intention, new BigDecimal(2));
         assertEquals(Status.SOLD, intention.getStatus());
@@ -504,12 +472,10 @@ class UserTest {
         // User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.BUY, CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Buy(), CryptoName.ETHUSDT,new BigDecimal(2));
         assertEquals(Status.OFFERED, intention.getStatus());
-        assertNull(intention.getDemander());
         otherUser.accept(intention, new BigDecimal(42));
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
-        assertNull(intention.getDemander());
     }
 
     @DisplayName("When a User accept a sell intention and the quoted price is higger that de intention price it is canceled automatically")
@@ -520,13 +486,10 @@ class UserTest {
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
 
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
-        assertNull(intention.getDemander());
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
         assertEquals(Status.OFFERED, intention.getStatus());
         otherUser.accept(intention, new BigDecimal(1));
-
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
-        assertNull(intention.getDemander());
     }
 
     @DisplayName("When an offerer cancel its intention this is marked with CANCELED status")
@@ -534,7 +497,7 @@ class UserTest {
     void testWhenAnOffererCancelItsIntentionThisIsMarkedWithCanceledStatus(){
 //        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         User anUser = anyUser.withEmail("jk@here.dom").build();
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
 
         assertEquals(Status.OFFERED, intention.getStatus());
         anUser.cancel(intention);
@@ -546,7 +509,7 @@ class UserTest {
     void testWhenAndemanderCancelAnIntentionThisIsMarkedWithOFFEREDStatus(){
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
         assertEquals(Status.OFFERED, intention.getStatus());
         otherUser.accept(intention, new BigDecimal(2));
 
@@ -560,15 +523,11 @@ class UserTest {
     void testWhenAndemanderCancelAnIntentionThisModificateItsDemander(){
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
         assertEquals(Status.OFFERED, intention.getStatus());
-        assertNull(intention.getDemander());
         otherUser.accept(intention, new BigDecimal(2));
-        assertNotNull(intention.getDemander());
-
         assertEquals(Status.SOLD, intention.getStatus());
         otherUser.cancel(intention);
-        assertNull(intention.getDemander());
     }
 
     @DisplayName("When other User cancel the intention nothing change")
@@ -576,13 +535,12 @@ class UserTest {
     void testWhenOtherUserCancelTheIntentionNothingChange(){
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
         otherUser.accept(intention, new BigDecimal(2));
         User otherOtherUser = anyUser.withEmail("other@there.dom").build();
 
         otherOtherUser.cancel(intention);
-        assertEquals(Status.SOLD, intention.getStatus());
-        assertEquals(otherUser, intention.getDemander());
+        assertEquals(Status.OFFERED, intention.getStatus());
         assertEquals(anUser, intention.getOffered());
     }
 
@@ -602,23 +560,73 @@ class UserTest {
         assertEquals(0, anUser.getPoints());
     }
 
-    @DisplayName("When a User make a offer has one operation")
+    @DisplayName("When a User make a offer hasn't one operation")
     @Test
-    void testAnUserHasOneOperationWhenOfferOne(){
+    void testAnUserHasNoOneMadeOperationWhenOfferOne(){
         User anUser = anyUser.build();
-        Intention intention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
 
-        assertEquals(1, anUser.quantityIntentions());
+        assertEquals(0, anUser.quantityIntentions());
     }
 
-    @DisplayName("When a User offer two intentions has two operations")
+    @DisplayName("When a User offer two intentions hasn't any operations")
     @Test
     void testAnUserHasOneOperationWhenOfferTwo(){
         User anUser = anyUser.build();
-        anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
-        anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.ETHUSDT,new BigDecimal(2));
+        anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+
+        assertEquals(0, anUser.quantityIntentions());
+    }
+
+
+    @DisplayName("When a User make a offer has one operation when it is solded")
+    @Test
+    void testAnUserHasOneMadeOperationWhenOfferOne(){
+        User anUser = anyUser.build();
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        intention.sold();
+        assertEquals(1, anUser.quantityIntentions());
+    }
+
+    @DisplayName("When a User offer two intentions hasn two operations")
+    @Test
+    void testAnUserHasTwoOperationsWhenTwoFromItsOperationAreSolded(){
+        User anUser = anyUser.build();
+        Intention intention0 = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention1 = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        intention0.sold();
+        intention1.sold();
 
         assertEquals(2, anUser.quantityIntentions());
+    }
+
+    @DisplayName("When a User canceled an intention it doesn't count")
+    @Test
+    void testAnUserHasNotOperationsWhenCanceledTheOne(){
+        User anUser = anyUser.build();
+        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        intention.sold();
+        assertEquals(1, anUser.quantityIntentions());
+        intention.canceled();
+        assertEquals(0, anUser.quantityIntentions());
+    }
+
+    @DisplayName("When a User cancel two intentions hasn't two operations")
+    @Test
+    void testAnUserHasAnyOperationsWhenItsOperationAreCanceled(){
+        User anUser = anyUser.build();
+        Intention intention0 = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        Intention intention1 = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        intention0.sold();
+        intention1.sold();
+
+        assertEquals(2, anUser.quantityIntentions());
+
+        intention0.canceled();
+        intention1.canceled();
+
+        assertEquals(0, anUser.quantityIntentions());
     }
 
     @DisplayName("an User initially has no reputation")
