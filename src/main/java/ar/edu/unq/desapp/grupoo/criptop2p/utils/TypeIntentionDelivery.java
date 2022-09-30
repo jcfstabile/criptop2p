@@ -9,9 +9,9 @@ import java.util.*;
 
 
 public class TypeIntentionDelivery {
-    List<TypeIntention> types;
+    ArrayList<TypeIntention> types;
     public TypeIntentionDelivery(){
-        this.types = new ArrayList(Arrays.asList(new Buy(), new Sell()));
+        this.types = new ArrayList<TypeIntention>(Arrays.asList(new Buy(), new Sell()));
     }
 
     public TypeIntention get(String dbName){
