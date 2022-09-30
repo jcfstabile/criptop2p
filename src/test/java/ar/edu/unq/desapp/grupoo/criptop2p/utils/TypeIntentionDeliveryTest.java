@@ -28,21 +28,4 @@ class TypeIntentionDeliveryTest {
     void testGetReturnsAStatusBuyWhenReceiveAnIntentionOfThisType(){
         assertInstanceOf(Buy.class, typeDelivery.get("BUY"));
     }
-
-    @DisplayName("Remove Type delete Instance of Sell when receive this instance")
-    @Test
-    void testRemoveTypeDeleteSell(){
-        assertEquals(2, typeDelivery.types.size());
-        typeDelivery.removeType(new Sell());
-        assertEquals(1, typeDelivery.types.size());
-
-    }
-
-    @DisplayName("Remove Type delete Instance of Buy when receive this instance")
-    @Test
-    void testRemoveTypeDeleteBuy(){
-        assertEquals(2, typeDelivery.types.size());
-        typeDelivery.removeType(new Buy());
-        assertEquals(1, typeDelivery.types.size());
-    }
 }
