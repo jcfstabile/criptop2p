@@ -170,11 +170,12 @@ class IntentionTest {
         assertFalse(anIntention.isItsOfferer(otherUser));
     }
 
-    @DisplayName("An Intention can identificate if an User is its demander")
+    @DisplayName("An Intention can identificate if an User is its offered")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsItsDemander() {
+    void testAnIntentionCanIdentificateIfAnUserIsItsOffered() {
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
+        assertTrue(anIntention.isItsOfferer(anUser));
     }
 
     @DisplayName("An Intention can identificate if an User is not its offered")
@@ -182,7 +183,6 @@ class IntentionTest {
     void testAnIntentionCanIdentificateIfAnUserIsNotItsOffered() {
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
-        assertTrue(intention.isItsOfferer(anUser));
         User otherUser = anyUser.build();
         assertFalse(intention.isItsOfferer(otherUser));
     }
