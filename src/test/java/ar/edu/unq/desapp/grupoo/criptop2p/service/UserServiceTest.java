@@ -125,8 +125,11 @@ class UserServiceTest {
     void addingAnUserWithAUsedEmailThrowException(){
         User registeredUser = anyUser.withEmail("me@here.throw").withWalletAddress("aaaaaaaa").build();
         userService.addUser(registeredUser);
+        User otherUser = anyUser.withEmail("me@here.throw").withWalletAddress("xxxxxxxx").build();
         DataIncomingConflictException dataIncomingConflictException =
-                assertThrows(DataIncomingConflictException.class , () -> userService.addUser(otherUser.withEmail("me@here.throw").withWalletAddress("xxxxxxxx").build()));
+                assertThrows(DataIncomingConflictException.class , () -> {
+                    userService.addUser(otherUser);
+                });
         assertEquals("The operation can not be completed due to data conflict",
                 dataIncomingConflictException.getError());
     }
