@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 
