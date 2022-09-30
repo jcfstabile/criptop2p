@@ -116,7 +116,7 @@ class IntentionTest {
     @Test
     void testthePriceOfAnIntentionBuyDoesNotChangeWhenTheCurrentPriceAndThePriceAreEquals() {
         BigDecimal before = intentionBuy.getPrice();
-        intentionBuy.verifyIfIsAcepted(anUser, new BigDecimal(2));
+        intentionBuy.verifyIfIsAcepted(new BigDecimal(2));
         BigDecimal after = intentionBuy.getPrice();
 
         assertEquals(before, after);
@@ -126,7 +126,7 @@ class IntentionTest {
     @Test
     void testthePriceOfAnIntentionSellDoesNotChangeWhenTheCurrentPriceAndThePriceAreEquals() {
         BigDecimal before = intentionSell.getPrice();
-        intentionSell.verifyIfIsAcepted(anUser, new BigDecimal(2));
+        intentionSell.verifyIfIsAcepted(new BigDecimal(2));
         BigDecimal after = intentionSell.getPrice();
 
         assertEquals(before, after);
@@ -138,7 +138,7 @@ class IntentionTest {
         BigDecimal before = intentionBuy.getPrice();
 
         assertEquals(new BigDecimal(2), before);
-        intentionBuy.verifyIfIsAcepted(anUser, new BigDecimal(1));
+        intentionBuy.verifyIfIsAcepted(new BigDecimal(1));
         BigDecimal after = intentionBuy.getPrice();
 
         assertEquals(new BigDecimal(1), after);
@@ -150,7 +150,7 @@ class IntentionTest {
         BigDecimal before = intentionSell.getPrice();
 
         assertEquals(new BigDecimal(2), before);
-        intentionSell.verifyIfIsAcepted(anUser, new BigDecimal(3));
+        intentionSell.verifyIfIsAcepted(new BigDecimal(3));
         BigDecimal after = intentionSell.getPrice();
 
         assertEquals(new BigDecimal(3), after);
@@ -170,18 +170,21 @@ class IntentionTest {
         assertFalse(anIntention.isItsOfferer(otherUser));
     }
 
-    @DisplayName("An Intention can identificate if an User is its demander")
+    @DisplayName("An Intention can identificate if an User is its offered")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsItsDemander() {
+    void testAnIntentionCanIdentificateIfAnUserIsItsOffered() {
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
+        assertTrue(anIntention.isItsOfferer(anUser));
     }
 
-    @DisplayName("An Intention can identificate if an User is not its demander")
+    @DisplayName("An Intention can identificate if an User is not its offered")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsNotItsDemander() {
+    void testAnIntentionCanIdentificateIfAnUserIsNotItsOffered() {
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
+        User otherUser = anyUser.build();
+        assertFalse(intention.isItsOfferer(otherUser));
     }
 
     @DisplayName("An Intention has timestamp")

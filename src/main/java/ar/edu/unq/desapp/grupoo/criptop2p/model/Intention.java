@@ -68,8 +68,8 @@ public class Intention {
         this.setStatus(Status.CANCELED);
     }
 
-    public void verifyIfIsAcepted(User anUser, BigDecimal aCurrentPrice) {
-        this.type.verifyIfIsAccepted(anUser, this, aCurrentPrice);
+    public void verifyIfIsAcepted(BigDecimal aCurrentPrice) {
+        this.type.verifyIfIsAccepted(this, aCurrentPrice);
         this.price = aCurrentPrice;
     }
 
