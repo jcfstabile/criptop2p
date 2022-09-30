@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 @DisplayName("ValidatorCriptoPrice Tests")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class ValidatorCryptoPriceTest {
+class ValidatorCryptoPriceTest {
     ValidatorCryptoPrice validator;
     @Mock
     User anUser;
@@ -31,8 +31,8 @@ public class ValidatorCryptoPriceTest {
     @Test
     void testValidatorCanChangeItsPercent(){
         assertEquals(new BigDecimal(5), validator.getPercent());
-        validator.setPerCent(new BigDecimal(4.20));
-        assertEquals(new BigDecimal(4.20), validator.getPercent());
+        validator.setPerCent(new BigDecimal("4.20"));
+        assertEquals(new BigDecimal("4.20"), validator.getPercent());
 
     }
 

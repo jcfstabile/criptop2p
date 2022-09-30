@@ -5,8 +5,18 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -15,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -26,30 +37,100 @@ public class UserRestController {
     @Autowired
     private UserMapper mapper;
 
+
+
+    @Operation(
+            summary = "List of registered users",
+            responses = {
+                    @ApiResponse( responseCode = "200", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserInfoDTO.class)))),
+            }
+    )
+    @GetMapping("/users")
+    public ResponseEntity<List<UserInfoDTO>> allUsers() {
+        return ResponseEntity.ok(this.userService.findAll());
+    }
+
+
+
+    @Operation(
+            summary = "Register an user",
+            responses = {
+                    @ApiResponse( description = "User registered on platform", responseCode = "200",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class))),
+                    @ApiResponse( description = "Malformed data", responseCode = "400",
+                            content = @Content(mediaType = "application/json",
+                                    // FAULT Schema resolving to an error json
+                                    schema = @Schema(implementation = UserConstraintViolationException.class))),
+            }
+    )
     @PostMapping("/users")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         User user = mapper.toUser(userCreationDTO);
         this.userService.addUser(user);
         return ResponseEntity.ok(
-                mapper.toDto(this.userService.findByID(user.getId()))
+                mapper.toUserDto(this.userService.findByID(user.getId()))
         );
     }
 
-    @GetMapping("/users/{anId}")
-    public ResponseEntity<UserDTO> findUserById(@PathVariable Long anId) {
+
+
+    @Operation(
+            summary = "Get user information",
+            responses = {
+                    @ApiResponse( description = "User information for id", responseCode = "200",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = UserInfoDTO.class))),
+                    @ApiResponse( description = "User not found", responseCode = "404",
+                            content = @Content(mediaType = "application/json",
+                            // FAULT Schema resolving to an error json
+                            schema = @Schema(implementation = UserNotFoundException.class))),
+            }
+    )
+    @Parameter(name = "id", description = "Id of the user to retrieve information")
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok(
-                mapper.toDto(this.userService.findByID(anId))
+                mapper.toUserDto(this.userService.findByID(id))
         );
     }
 
-    @PostMapping("/users/{anId}")
-    public Intention offer(@PathVariable Long anId, @RequestBody IntentionDTO anIntentionDTO) {
-        return this.userService.offer(anId, anIntentionDTO);
+
+
+    @Operation(
+            summary = "Add an intention of buy or sell a crypto",
+            responses = {
+                    @ApiResponse( description = "Intention registered", responseCode = "200",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Intention.class))),
+                    @ApiResponse( description = "User not found", responseCode = "404",
+                            content = @Content(mediaType = "application/json",
+                                    // FAULT Schema resolving to an error json
+                                    schema = @Schema(implementation = UserNotFoundException.class))),
+            }
+    )
+    @Parameter(name = "id", description = "Id of the user adding the intention")
+    @SecurityRequirement(name = "JWT")
+    @PostMapping("/users/{id}/intentions")
+    public Intention offer(@PathVariable Long id, @RequestBody IntentionDTO anIntentionDTO) {
+        return this.userService.offer(id, anIntentionDTO);
     }
 
-    @DeleteMapping("/users/{anId}")
-    public ResponseEntity unregister(@PathVariable Long anId) {
-        this.userService.deleteUserById(anId);
+
+
+    @Operation( summary = "Remove user by id",
+    responses = {
+            @ApiResponse( description = "User has been deleted", responseCode = "204", content = { @Content }),
+            @ApiResponse( description = "User not found", responseCode = "404",
+                    content = @Content(mediaType = "application/json",
+                            // FAULT Schema resolving to an error json
+                            schema = @Schema(implementation = UserNotFoundException.class))),
+    }
+)
+    @Parameter(name = "id", description = "Id of the user to delete")
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Void> unregister(@PathVariable Long id) {
+        this.userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -69,7 +69,7 @@ public class Intention {
     }
 
     public void verifyIfIsAcepted(User anUser, BigDecimal aCurrentPrice) {
-        this.type.verifyIfIsAcepted(anUser, this, aCurrentPrice);
+        this.type.verifyIfIsAccepted(anUser, this, aCurrentPrice);
         this.price = aCurrentPrice;
     }
 

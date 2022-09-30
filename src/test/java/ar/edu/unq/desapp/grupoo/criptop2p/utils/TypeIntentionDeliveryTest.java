@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-public class TyṕeIntentionDeliveryTest {
+class TypeIntentionDeliveryTest {
     TypeIntentionDelivery typeDelivery;
     @BeforeEach
     void setUp(){
@@ -17,13 +17,13 @@ public class TyṕeIntentionDeliveryTest {
     }
 
 
-    @DisplayName("When get of TypeDelivery receive Sell return a instance of Sell class")
+    @DisplayName("When get of TypeDelivery receive 'SELL' return a instance of Sell class")
     @Test
     void testGetReturnsAStatusSellWhenReceiveAnIntentionOfThisType(){
         assertInstanceOf(Sell.class, typeDelivery.get("SELL"));
     }
 
-    @DisplayName("When get of TypeDelivery receive Buy return a instance of Buy class")
+    @DisplayName("When get of TypeDelivery receive 'BUY' return a instance of Buy class")
     @Test
     void testGetReturnsAStatusBuyWhenReceiveAnIntentionOfThisType(){
         assertInstanceOf(Buy.class, typeDelivery.get("BUY"));

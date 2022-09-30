@@ -1,9 +1,12 @@
-name: deploy
+# Trigger deploy to heroku when pushing in main or pull_request
+#   and when creating a pull_request
+name: Deploy to heroku
 on:
   push:
     branches:
         - main
-        - dev
+  pull_request:
+      types: [opened, synchronize, reopened]
 
 jobs:
   build:

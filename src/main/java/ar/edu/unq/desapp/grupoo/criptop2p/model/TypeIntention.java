@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public abstract class TypeIntention {
     TypeName name;
 
-    public TypeIntention(TypeName aTypeName){
+    protected TypeIntention(TypeName aTypeName){
         this.name = aTypeName;
     }
 
@@ -14,7 +14,7 @@ public abstract class TypeIntention {
     }
     public abstract String shippingAddress(User anUser);
     public abstract boolean isCheck(Intention intention, BigDecimal aCurrentPrice);
-    public void verifyIfIsAcepted(User anUser, Intention intention, BigDecimal aCurrentPrice){
+    public void verifyIfIsAccepted(User anUser, Intention intention, BigDecimal aCurrentPrice){
         boolean condition = this.isCheck(intention, aCurrentPrice);
         if(condition){
             intention.canceledBySystem();

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 @DisplayName("Builder Tests")
 @SpringBootTest
-public class UserBuilderTest {
+class UserBuilderTest {
     UserBuilder anyUser = new UserBuilder("aaa", "bbb", "c@d.e", "fghijklmno", "Pqrs7$", "12345678", "1234567890123456789012");
 
     @DisplayName("When create a UserBuilder, it is consistent with its data")

@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Intention Tests")
 @SpringBootTest
-public class IntentionTest {
+class IntentionTest {
 
     UserBuilder anyUser = new UserBuilder("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
 
@@ -91,13 +91,13 @@ public class IntentionTest {
     @DisplayName("When the current price is not bigger isBiggerThan is false")
     @Test
     void testIsBiggerThanReturnFalseWhenTheCurrentPriceIsNotBiggerThanPrice() {
-        assertFalse(intention.isBiggerThan(new BigDecimal(1.9)));
+        assertFalse(intention.isBiggerThan(new BigDecimal("1.9")));
     }
 
     @DisplayName("When the current price is not smaller isSmallerThan is false")
     @Test
     void testIsSmallerThanReturnFalseWhenTheCurrentPriceIsNotSmallerThanPrice() {
-        assertFalse(intention.isSmallerThan(new BigDecimal(2.1)));
+        assertFalse(intention.isSmallerThan(new BigDecimal("2.1")));
     }
 
     @DisplayName("When the current price is same isBiggerThan is false")

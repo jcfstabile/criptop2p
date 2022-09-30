@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("UserService Tests")
 @SpringBootTest
 class UserServiceTest {
-    class UserBuilderUnique extends UserBuilder {
+    static class UserBuilderUnique extends UserBuilder {
         public UserBuilderUnique() {
             super("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
         }
@@ -51,9 +51,9 @@ class UserServiceTest {
     void addAnUserWithBadFormedEmailThrowException(){
         user = anyUser.withEmail("a$b.c").build();
 
-        userConstraintViolationException = assertThrows(UserConstraintViolationException.class, () -> {
-            userService.addUser(user);
-        });
+        userConstraintViolationException = assertThrows(
+                UserConstraintViolationException.class, () -> userService.addUser(user));
+
         assertEquals("Email is not valid", userConstraintViolationException.getErrors().get(0) );
     }
 
@@ -62,9 +62,9 @@ class UserServiceTest {
     void addAnUserWithBadFormedPasswordThrowException(){
         user = anyUser.withPassword("123456").build();
 
-        userConstraintViolationException = assertThrows(UserConstraintViolationException.class, () -> {
-            userService.addUser(user);
-        });
+        userConstraintViolationException = assertThrows(
+                UserConstraintViolationException.class, () -> userService.addUser(user));
+
         assertTrue(userConstraintViolationException.getErrors().get(0).contains("Password must contain:") );
     }
 
@@ -73,10 +73,11 @@ class UserServiceTest {
     void addAnUserWithBadFormedAddressThrowException(){
         user = anyUser.withAddress("Here 234").build();
 
-        userConstraintViolationException = assertThrows(UserConstraintViolationException.class, () -> {
-            userService.addUser(user);
-        });
-        assertEquals("Address must have between 10 and 30 characters", userConstraintViolationException.getErrors().get(0) );
+        userConstraintViolationException = assertThrows(
+                UserConstraintViolationException.class, () -> userService.addUser(user));
+
+        assertEquals("Address must have between 10 and 30 characters",
+                      userConstraintViolationException.getErrors().get(0) );
     }
 
     @DisplayName("When an User has a bad formed WalletAddress throws a UserConstraintException")
@@ -84,9 +85,9 @@ class UserServiceTest {
     void addAnUserWithBadFormedWalletAddressThrowException(){
         user = anyUser.withWalletAddress("1234567").build();
 
-        userConstraintViolationException = assertThrows(UserConstraintViolationException.class, () -> {
-            userService.addUser(user);
-        });
+        userConstraintViolationException = assertThrows(
+                UserConstraintViolationException.class, () -> userService.addUser(user));
+
         assertEquals("Wallet Address must have 8 characters", userConstraintViolationException.getErrors().get(0) );
     }
 
@@ -95,9 +96,9 @@ class UserServiceTest {
     void addAnUserWithBadFormedCVUThrowException(){
         user = anyUser.withCvu("abcdefghijKLMNOPQRST1").build();
 
-        userConstraintViolationException = assertThrows(UserConstraintViolationException.class, () -> {
-            userService.addUser(user);
-        });
+        userConstraintViolationException = assertThrows(
+                UserConstraintViolationException.class, () -> userService.addUser(user));
+
         assertEquals("CVU must have 22 characters", userConstraintViolationException.getErrors().get(0) );
     }
 
@@ -114,9 +115,7 @@ class UserServiceTest {
     @DisplayName("Finding a  not existent User throws a UserNotFoundException")
     @Test
     void findNotExistentUser(){
-        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> {
-            userService.findByID((long)0);
-        });
+        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> userService.findByID((long)0));
 
         assertEquals("Could not find user 0", userNotFoundException.getMessage());
     }
@@ -127,9 +126,7 @@ class UserServiceTest {
         User registeredUser = anyUser.withEmail("me@here.throw").withWalletAddress("aaaaaaaa").build();
         userService.addUser(registeredUser);
         DataIncomingConflictException dataIncomingConflictException =
-                assertThrows(DataIncomingConflictException.class , () -> {
-                    userService.addUser(otherUser.withEmail("me@here.throw").withWalletAddress("xxxxxxxx").build());
-                });
+                assertThrows(DataIncomingConflictException.class , () -> userService.addUser(otherUser.withEmail("me@here.throw").withWalletAddress("xxxxxxxx").build()));
         assertEquals("The operation can not be completed due to data conflict",
                 dataIncomingConflictException.getError());
     }
@@ -142,9 +139,7 @@ class UserServiceTest {
 
         userService.deleteUserById(id);
 
-        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> {
-            userService.findByID(id);
-        });
+        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> userService.findByID(id));
 
         assertEquals("Could not find user " + id.toString(), userNotFoundException.getMessage());
     }
