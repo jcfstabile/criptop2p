@@ -5,14 +5,13 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 
 public class TypeIntentionDelivery {
-    List<TypeIntention> types;
+    ArrayList<TypeIntention> types;
     public TypeIntentionDelivery(){
-        this.types = new ArrayList(Arrays.asList(new Buy(), new Sell()));
+        this.types = new ArrayList<TypeIntention>(Arrays.asList(new Buy(), new Sell()));
     }
 
     public TypeIntention get(String dbName){
