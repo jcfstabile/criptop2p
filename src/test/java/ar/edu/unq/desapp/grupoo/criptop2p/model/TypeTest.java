@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Type Tests")
 @SpringBootTest
-public class TypeTest {
+class TypeTest {
 
     User anUser;
     IntentionBuilder anyIntention = new IntentionBuilder();
