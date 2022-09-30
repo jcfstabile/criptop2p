@@ -45,5 +45,4 @@ public class TyṕeIntentionDeliveryTest {
         typeDelivery.removeType(new Buy());
         assertEquals(1, typeDelivery.types.size());
     }
-
 }
