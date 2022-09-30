@@ -6,8 +6,6 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorList;
@@ -62,7 +60,6 @@ public class UserRestController {
                                     schema = @Schema(implementation = User.class))),
                     @ApiResponse( description = "Malformed data", responseCode = "400",
                             content = @Content(mediaType = "application/json",
-                                    // FAULT Schema resolving to an error json
                                     schema = @Schema(implementation = ResponseErrorList.class))),
             }
     )
@@ -85,7 +82,6 @@ public class UserRestController {
                                     schema = @Schema(implementation = UserInfoDTO.class))),
                     @ApiResponse( description = "User not found", responseCode = "404",
                             content = @Content(mediaType = "application/json",
-                            // FAULT Schema resolving to an error json
                             schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
@@ -107,7 +103,6 @@ public class UserRestController {
                                     schema = @Schema(implementation = Intention.class))),
                     @ApiResponse( description = "User not found", responseCode = "404",
                             content = @Content(mediaType = "application/json",
-                                    // FAULT Schema resolving to an error json
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
@@ -125,7 +120,6 @@ public class UserRestController {
             @ApiResponse( description = "User has been deleted", responseCode = "204", content = { @Content }),
             @ApiResponse( description = "User not found", responseCode = "404",
                     content = @Content(mediaType = "application/json",
-                            // FAULT Schema resolving to an error json
                             schema = @Schema(implementation = ResponseErrorSimple.class))),
     }
 )
