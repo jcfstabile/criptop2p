@@ -177,11 +177,14 @@ class IntentionTest {
         otherUser.accept(anIntention, new BigDecimal(2));
     }
 
-    @DisplayName("An Intention can identificate if an User is not its demander")
+    @DisplayName("An Intention can identificate if an User is not its offered")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsNotItsDemander() {
+    void testAnIntentionCanIdentificateIfAnUserIsNotItsOffered() {
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
+        assertTrue(intention.isItsOfferer(anUser));
+        User otherUser = anyUser.build();
+        assertFalse(intention.isItsOfferer(otherUser));
     }
 
     @DisplayName("An Intention has timestamp")
