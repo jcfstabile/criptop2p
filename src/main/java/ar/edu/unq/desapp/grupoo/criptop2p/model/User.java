@@ -127,7 +127,7 @@ public class User{
     }
 
     public void accept(Intention anIntention, BigDecimal aCurrentPrice) {
-        anIntention.verifyIfIsAcepted(this, aCurrentPrice);
+        anIntention.verifyIfIsAcepted(aCurrentPrice);
     }
 
     public void cancel(Intention intention) {

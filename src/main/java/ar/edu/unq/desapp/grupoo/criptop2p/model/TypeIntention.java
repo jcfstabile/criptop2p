@@ -14,7 +14,7 @@ public abstract class TypeIntention {
     }
     public abstract String shippingAddress(User anUser);
     public abstract boolean isCheck(Intention intention, BigDecimal aCurrentPrice);
-    public void verifyIfIsAccepted(User anUser, Intention intention, BigDecimal aCurrentPrice){
+    public void verifyIfIsAccepted(Intention intention, BigDecimal aCurrentPrice){
         boolean condition = this.isCheck(intention, aCurrentPrice);
         if(condition){
             intention.canceledBySystem();
