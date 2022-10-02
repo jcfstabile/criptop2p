@@ -24,7 +24,7 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({DataIncomingConflictException.class})
     public ResponseEntity<Object> handleDataConflictException(DataIncomingConflictException exception){
-        return new ResponseEntity<>(new ResponseErrorSimple("003", "User was not registered", exception.getError()), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(new ResponseErrorSimple("003", "User was already registered", exception.getError()), HttpStatus.CONFLICT);
     }
 
 
