@@ -6,11 +6,11 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
 import java.math.BigDecimal;
 
 public class IntentionDTO {
-    private int count;
-    private BigDecimal price;
+    private final int count;
+    private final BigDecimal price;
 
-    private TypeIntention type;
-    private CryptoName cryptoName;
+    private final TypeIntention type;
+    private final CryptoName cryptoName;
     public IntentionDTO(int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName) {
         this.count = aCount;
         this.price= aPrice;
