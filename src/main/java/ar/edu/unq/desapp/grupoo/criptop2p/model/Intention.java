@@ -83,8 +83,7 @@ public class Intention {
 
     private boolean compare(BigDecimal aCurrentPrice, int n){
         BigDecimal current = aCurrentPrice.setScale(2, RoundingMode.HALF_UP);
-        BigDecimal price = this.price.setScale(2, RoundingMode.HALF_UP);
-        return current.compareTo(price) == n;
+        return current.compareTo(this.price) == n;
     }
 
     public void sold(Timestamp aTimeStamp, User anDemander){
