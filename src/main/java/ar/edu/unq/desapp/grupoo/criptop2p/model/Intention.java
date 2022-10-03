@@ -92,6 +92,7 @@ public class Intention {
         this.offered.addPoints(reward);
         anDemander.addPoints(reward);
         this.sold();
+        anDemander.addIntention(this);
     }
 
     public void sold() {
