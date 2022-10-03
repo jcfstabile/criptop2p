@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions;
 import java.util.List;
 
 public class UserConstraintViolationException extends RuntimeException {
-    private List<String> errors;
+    private final List<String> errors;
     public UserConstraintViolationException(List<String> errors) {
         this.errors = errors;
     }

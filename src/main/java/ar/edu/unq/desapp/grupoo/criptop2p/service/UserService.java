@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
@@ -8,6 +9,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolati
 import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ public class UserService implements UserServiceInterface {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private UserMapper mapper;
     @Override
     @Transactional
     public User addUser(User user) {
@@ -60,6 +64,15 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(() -> new UserNotFoundException(anId));
         Intention anIntention = new Intention(getUser, anIntentionDTO.getCount(), anIntentionDTO.getPrice(), anIntentionDTO.getType(), anIntentionDTO.getCryptoName());
         return this.intentionRepository.save(anIntention);
+    }
+
+    @Override
+    public List<UserInfoDTO> findAll(){
+        List<UserInfoDTO> users = new ArrayList<>();
+        for (User user : this.userRepository.findAll()){
+            users.add(mapper.toUserInfoDto(user));
+        }
+        return users;
     }
 
     @Override

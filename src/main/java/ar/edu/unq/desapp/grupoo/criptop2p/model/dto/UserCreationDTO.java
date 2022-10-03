@@ -2,31 +2,6 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model.dto;
 
 public class UserCreationDTO {
     private final String name;
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getWalletAddress() {
-        return walletAddress;
-    }
-
-    public String getCvu() {
-        return cvu;
-    }
-
     private final String surname;
     private final String email;
     private final String address;
@@ -46,5 +21,23 @@ public class UserCreationDTO {
 
     public String getName() {
         return name;
+    }
+    public String getSurname() {
+        return surname;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getAddress() {
+        return address;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getWalletAddress() {
+        return walletAddress;
+    }
+    public String getCvu() {
+        return cvu;
     }
 }

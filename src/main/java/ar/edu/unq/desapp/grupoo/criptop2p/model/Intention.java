@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionConverter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,7 +27,8 @@ public class Intention {
     private int count;
     private BigDecimal price;
 
-    private Type type;
+    @Convert(converter = TypeIntentionConverter.class)
+    private TypeIntention type;
     private CryptoName cryptoName;
 
     private Status status;
@@ -33,9 +36,6 @@ public class Intention {
     @JoinColumn(name = "offered_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User offered;
-    @JoinColumn(name = "demander_id")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User demander;
 
     @Column(name="time_stamp")
     Timestamp timestamp;
@@ -43,21 +43,19 @@ public class Intention {
     public Intention() {
     }
 
-    public Intention(User anUser, int aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName) {
+    public Intention(User anUser, int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName) {
         this.offered = anUser;
         this.count = aCount;
         this.price= aPrice;
         this.type = aType;
         this.cryptoName = aCryptoName;
         this.status = Status.OFFERED;
-        this.demander = null;
         this.timestamp = new Timestamp(System.currentTimeMillis());
     }
     public User getOffered(){ return this.offered; }
-    public User getDemander(){ return this.demander; }
     public int getCount(){ return this.count; }
     public BigDecimal getPrice(){ return this.price; }
-    public Type getType(){ return this.type; }
+    public TypeIntention getType(){ return this.type; }
     public CryptoName getCrypto(){ return this.cryptoName; }
     public Status getStatus() { return this.status; }
     public void setStatus(Status aStatus){ this.status = aStatus; }
@@ -70,11 +68,9 @@ public class Intention {
         this.setStatus(Status.CANCELED);
     }
 
-    public void verifyIfIsAcepted(User anUser, BigDecimal aCurrentPrice) {
-        this.type.verifyIfIsAcepted(anUser, this, aCurrentPrice);
+    public void verifyIfIsAcepted(BigDecimal aCurrentPrice) {
+        this.type.verifyIfIsAccepted(this, aCurrentPrice);
         this.price = aCurrentPrice;
-
-
     }
 
     public boolean isBiggerThan(BigDecimal aCurrentPrice) {
@@ -86,12 +82,16 @@ public class Intention {
     }
 
     private boolean compare(BigDecimal aCurrentPrice, int n){
-        //aCurrentPrice >/< n
-        return aCurrentPrice.setScale(2, RoundingMode.HALF_UP).compareTo(this.price.setScale(2, RoundingMode.HALF_UP)) == n;
+        BigDecimal current = aCurrentPrice.setScale(2, RoundingMode.HALF_UP);
+        return current.compareTo(this.price) == n;
     }
 
-    public void setDemander(User user) {
-        this.demander = user;
+    public void sold(Timestamp aTimeStamp, User anDemander){
+        Integer reward = this.reward(aTimeStamp);
+        this.offered.addPoints(reward);
+        anDemander.addPoints(reward);
+        this.sold();
+        anDemander.addIntention(this);
     }
 
     public void sold() {
@@ -99,27 +99,17 @@ public class Intention {
     }
 
     public boolean isItsOfferer(User anUser) {
-        return this.isSameUser(this.offered, anUser);
-    }
-
-    public boolean isItsDemander(User anUser){
-        return this.demander != null && this.isSameUser(this.demander, anUser);
-    }
-
-    private boolean isSameUser(User anUser, User otherUser){
-        return anUser.getWalletAddress().equals(otherUser.getWalletAddress())
-               && anUser.getEmail().equals(otherUser.getEmail())
-               && anUser.getCvu().equals(otherUser.getCvu());
+        return this.offered.isSameUser(anUser);
     }
 
     public void cancel(User user) {
         if(this.isItsOfferer(user)){
             this.canceled();
         }
-        if(this.isItsDemander(user)){
+        else{
             this.offered();
-            this.demander = null;
         }
+        user.applyPenalty(20);
     }
 
     public void offered() {
@@ -130,14 +120,7 @@ public class Intention {
         return this.status == aStatus;
     }
 
-    public void addPoints() {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        this.offered.addPoints(this.reward(now));
-        this.demander.addPoints(this.reward(now));
-    }
-
     public int reward(Timestamp anAceptationTimeSt) {
-
         if(this.differenceBetweenCreationAndAceptation(anAceptationTimeSt) <= TimeUnit.MINUTES.toMillis(30)){
             return 10;
         }
@@ -155,4 +138,14 @@ public class Intention {
     public Timestamp getTimeStamp() {
         return this.timestamp;
     }
+
+    public void waitingForTransfer(){
+        this.setStatus(Status.WAITINGFORTRANSFER);
+    }
+
+    public void waitingForDelivery(){
+        this.setStatus(Status.WAITINGFORDELIVERY);
+    }
+
+
 }

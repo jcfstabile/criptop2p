@@ -4,6 +4,8 @@ plugins {
     id 'com.adarshr.test-logger' version '3.2.0'
 	id 'java'
 	id 'war'
+    id 'jacoco'
+    id 'org.sonarqube' version "3.4.0.2513"
 }
 
 group = 'ar.edu.unq.desapp.grupoo'
@@ -12,6 +14,21 @@ sourceCompatibility = '17'
 
 repositories {
 	mavenCentral()
+}
+
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "grupoo_criptop2p"
+        property "sonar.organization", "criptop2p-grupoo"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 dependencies {
@@ -30,6 +47,10 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
     implementation 'io.swagger.core.v3:swagger-annotations:2.2.2'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+	testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.2.RELEASE') {
+		exclude group: 'junit'
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
 }
 
 configurations.compileOnly.setCanBeResolved(true)

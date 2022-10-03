@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Intention Tests")
 @SpringBootTest
-public class IntentionTest {
+class IntentionTest {
 
-    UserBuilder anyUser = new UserBuilder();
+    UserBuilder anyUser = new UserBuilder("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
 
     IntentionBuilder anyIntention = new IntentionBuilder();
     User anUser, otherUser;
@@ -33,9 +33,9 @@ public class IntentionTest {
     void setUp() {
         anUser = anyUser.withEmail("he@here.dom").build();
         otherUser = anyUser.withEmail("asd@there.dom").build();
-        intention = anyIntention.withUser(anUser).withType(Type.SELL).withCrypto(CryptoName.ATOMUSDT).build();
-        intentionBuy = anyIntention.withType(Type.BUY).withCrypto(CryptoName.ATOMUSDT).build();
-        intentionSell = anyIntention.withType(Type.SELL).withCrypto(CryptoName.ATOMUSDT).build();
+        intention = anyIntention.withUser(anUser).withType(new Sell()).withCrypto(CryptoName.ATOMUSDT).build();
+        intentionBuy = anyIntention.withType(new Buy()).withCrypto(CryptoName.ATOMUSDT).build();
+        intentionSell = anyIntention.withType(new Sell()).withCrypto(CryptoName.ATOMUSDT).build();
 
     }
 
@@ -45,19 +45,18 @@ public class IntentionTest {
         assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
-        assertEquals(Type.SELL, intention.getType());
+        assertEquals(new Sell().getName(), intention.getType().getName());
         assertEquals(CryptoName.ATOMUSDT, intention.getCrypto());
         assertEquals(Status.OFFERED, intention.getStatus());
-        assertNull(intention.getDemander());
     }
 
     @DisplayName("An IntentionDTO exist")
     @Test
     void testAnIntentionDTOExist() {
-        IntentionDTO intentionDTO = new IntentionDTO(1, new BigDecimal(2), Type.SELL, CryptoName.ATOMUSDT);
+        IntentionDTO intentionDTO = new IntentionDTO(1, new BigDecimal(2), new Sell(), CryptoName.ATOMUSDT);
         assertEquals(1, intentionDTO.getCount());
         assertEquals(new BigDecimal(2), intentionDTO.getPrice());
-        assertEquals(Type.SELL, intentionDTO.getType());
+        assertEquals(new Sell().getName(), intentionDTO.getType().getName());
         assertEquals(CryptoName.ATOMUSDT, intentionDTO.getCryptoName());
     }
 
@@ -92,13 +91,13 @@ public class IntentionTest {
     @DisplayName("When the current price is not bigger isBiggerThan is false")
     @Test
     void testIsBiggerThanReturnFalseWhenTheCurrentPriceIsNotBiggerThanPrice() {
-        assertFalse(intention.isBiggerThan(new BigDecimal(1.9)));
+        assertFalse(intention.isBiggerThan(new BigDecimal("1.9")));
     }
 
     @DisplayName("When the current price is not smaller isSmallerThan is false")
     @Test
     void testIsSmallerThanReturnFalseWhenTheCurrentPriceIsNotSmallerThanPrice() {
-        assertFalse(intention.isSmallerThan(new BigDecimal(2.1)));
+        assertFalse(intention.isSmallerThan(new BigDecimal("2.1")));
     }
 
     @DisplayName("When the current price is same isBiggerThan is false")
@@ -117,7 +116,7 @@ public class IntentionTest {
     @Test
     void testthePriceOfAnIntentionBuyDoesNotChangeWhenTheCurrentPriceAndThePriceAreEquals() {
         BigDecimal before = intentionBuy.getPrice();
-        intentionBuy.verifyIfIsAcepted(anUser, new BigDecimal(2));
+        intentionBuy.verifyIfIsAcepted(new BigDecimal(2));
         BigDecimal after = intentionBuy.getPrice();
 
         assertEquals(before, after);
@@ -127,7 +126,7 @@ public class IntentionTest {
     @Test
     void testthePriceOfAnIntentionSellDoesNotChangeWhenTheCurrentPriceAndThePriceAreEquals() {
         BigDecimal before = intentionSell.getPrice();
-        intentionSell.verifyIfIsAcepted(anUser, new BigDecimal(2));
+        intentionSell.verifyIfIsAcepted(new BigDecimal(2));
         BigDecimal after = intentionSell.getPrice();
 
         assertEquals(before, after);
@@ -139,7 +138,7 @@ public class IntentionTest {
         BigDecimal before = intentionBuy.getPrice();
 
         assertEquals(new BigDecimal(2), before);
-        intentionBuy.verifyIfIsAcepted(anUser, new BigDecimal(1));
+        intentionBuy.verifyIfIsAcepted(new BigDecimal(1));
         BigDecimal after = intentionBuy.getPrice();
 
         assertEquals(new BigDecimal(1), after);
@@ -151,7 +150,7 @@ public class IntentionTest {
         BigDecimal before = intentionSell.getPrice();
 
         assertEquals(new BigDecimal(2), before);
-        intentionSell.verifyIfIsAcepted(anUser, new BigDecimal(3));
+        intentionSell.verifyIfIsAcepted(new BigDecimal(3));
         BigDecimal after = intentionSell.getPrice();
 
         assertEquals(new BigDecimal(3), after);
@@ -160,31 +159,32 @@ public class IntentionTest {
     @DisplayName("An Intention can identificate if an User is its offerer")
     @Test
     void testAnIntentionCanIdentificateIfAnUserIsItsOfferer() {
-        Intention anIntention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.MATICUSDT, new BigDecimal(2));
+        Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         assertTrue(anIntention.isItsOfferer(anUser));
     }
 
     @DisplayName("An Intention can identificate if an User is not its offerer")
     @Test
     void testAnIntentionCanIdentificateIfAnUserIsNotItsOfferer() {
-        Intention anIntention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.MATICUSDT, new BigDecimal(2));
+        Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         assertFalse(anIntention.isItsOfferer(otherUser));
     }
 
-    @DisplayName("An Intention can identificate if an User is its demander")
+    @DisplayName("An Intention can identificate if an User is its offered")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsItsDemander() {
-        Intention anIntention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.MATICUSDT, new BigDecimal(2));
+    void testAnIntentionCanIdentificateIfAnUserIsItsOffered() {
+        Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
-        assertTrue(anIntention.isItsDemander(otherUser));
+        assertTrue(anIntention.isItsOfferer(anUser));
     }
 
-    @DisplayName("An Intention can identificate if an User is not its demander")
+    @DisplayName("An Intention can identificate if an User is not its offered")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsNotItsDemander() {
-        Intention anIntention = anUser.offer(1, new BigDecimal(2), Type.SELL, CryptoName.MATICUSDT, new BigDecimal(2));
+    void testAnIntentionCanIdentificateIfAnUserIsNotItsOffered() {
+        Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
-        assertFalse(anIntention.isItsDemander(anUser));
+        User otherUser = anyUser.build();
+        assertFalse(intention.isItsOfferer(otherUser));
     }
 
     @DisplayName("An Intention has timestamp")
@@ -197,7 +197,6 @@ public class IntentionTest {
     @Test
     void testAnIntentionReturn10BecauseItHasAceptedBefore30minutes(){
         Timestamp now = new Timestamp(System.currentTimeMillis());
-
         assertEquals(10, intention.reward(now));
     }
 
@@ -215,5 +214,72 @@ public class IntentionTest {
         long minuteslater = System.currentTimeMillis()+ TimeUnit.MINUTES.toMillis(31);
         Timestamp now = new Timestamp(minuteslater);
         assertEquals(5, intention.reward(now));
+    }
+
+    @DisplayName("An intention change its status to waiting for Transfer")
+    @Test
+    void testAnIntentionChangeItsStatusToWaitingForTransferToReceiveThisMessage(){
+        assertEquals(Status.OFFERED, intention.getStatus());
+
+        intention.waitingForTransfer();
+
+        assertEquals(Status.WAITINGFORTRANSFER, intention.getStatus());
+    }
+
+
+    @DisplayName("An intention change its status to waiting for Delivery")
+    @Test
+    void testAnIntentionChangeItsStatusToWaitingForDeliveryToReceiveThisMessage(){
+        assertEquals(Status.OFFERED, intention.getStatus());
+
+        intention.waitingForDelivery();
+
+        assertEquals(Status.WAITINGFORDELIVERY, intention.getStatus());
+    }
+
+    @DisplayName("When an intention was solded, its status changed to SOLD")
+    @Test
+    void testWhenAnIntentionHasSoledByOtherUserThisChangeItsStatusToSold(){
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        intention.sold(now, otherUser);
+        assertEquals(Status.SOLD, intention.getStatus());
+    }
+
+
+    @DisplayName("When an intention was solded, before 30 minutes, its add 10 points to its offered")
+    @Test
+    void testWhenAnIntentionWasSoledBefore30MinutesItAdd10PointsToItsOffered(){
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        assertEquals(0, intention.getOffered().getPoints());
+        intention.sold(now, otherUser);
+        assertEquals(10, intention.getOffered().getPoints());
+    }
+
+
+    @DisplayName("When an intention was solded, before 30 minutes, its add 10 points to its demander")
+    @Test
+    void testWhenAnIntentionWasSoledBefore30MinutesItAdd10PointsToItsDemander(){
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        assertEquals(0, otherUser.getPoints());
+        intention.sold(now, otherUser);
+        assertEquals(10, otherUser.getPoints());
+    }
+
+    @DisplayName("When an intention was solded, after 30 minutes, its add 5 points to its offered")
+    @Test
+    void testWhenAnIntentionWasSoledAfter30MinutesItAdd5PointsToItsOffered(){
+        Timestamp moment = new Timestamp(System.currentTimeMillis()+TimeUnit.MINUTES.toMillis(31));
+        assertEquals(0, intention.getOffered().getPoints());
+        intention.sold(moment, otherUser);
+        assertEquals(5, intention.getOffered().getPoints());
+    }
+
+    @DisplayName("When an intention was solded, after 30 minutes, its add 5 points to its demander")
+    @Test
+    void testWhenAnIntentionWasSoledAfter30MinutesItAdd5PointsToItsDemander(){
+        Timestamp moment = new Timestamp(System.currentTimeMillis()+TimeUnit.MINUTES.toMillis(31));
+        assertEquals(0, otherUser.getPoints());
+        intention.sold(moment, otherUser);
+        assertEquals(5, otherUser.getPoints());
     }
 }

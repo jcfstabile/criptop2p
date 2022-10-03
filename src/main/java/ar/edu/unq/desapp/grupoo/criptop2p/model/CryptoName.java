@@ -14,5 +14,5 @@ public enum CryptoName {
     BNBUSDT,
     ADAUSDT,
     TRXUSDT,
-    AUDIOUSDT;
+    AUDIOUSDT
 }

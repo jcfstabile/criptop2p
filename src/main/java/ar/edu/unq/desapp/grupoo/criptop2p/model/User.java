@@ -120,22 +120,21 @@ public class User{
     }
     public List<Intention> getOffers() { return this.offers;}
 
-    public Intention offer(Integer aCount, BigDecimal aPrice, Type aType, CryptoName aCryptoName, BigDecimal currentPrice){
+    public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice){
         Intention intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);
-        this.offers.add(intention);
+        this.addIntention(intention);
         return intention;
     }
 
     public void accept(Intention anIntention, BigDecimal aCurrentPrice) {
-        anIntention.verifyIfIsAcepted(this, aCurrentPrice);
+        anIntention.verifyIfIsAcepted(aCurrentPrice);
     }
 
     public void cancel(Intention intention) {
         intention.cancel(this);
-        this.setPoints(this.points-20);
     }
 
-    public int quantityIntentions() { return ((int) this.offers.stream().filter(intention -> !intention.hasStatus(Status.CANCELED) || !intention.hasStatus(Status.CANCELEDBYSYSTEM)).count());}
+    public int quantityIntentions() { return ((int) this.offers.stream().filter(intention -> intention.hasStatus(Status.SOLD)).count());}
 
     public int getReputation() {
         try{
@@ -148,5 +147,19 @@ public class User{
 
     public void addPoints(int reward) {
         this.points += reward;
+    }
+
+    public boolean isSameUser(User otherUser) {
+        return this.walletAddress.equals(otherUser.getWalletAddress())
+                && this.email.equals(otherUser.getEmail())
+                && this.cvu.equals(otherUser.getCvu());
+    }
+
+    public void applyPenalty(int i) {
+        this.points -= i;
+    }
+
+    public void addIntention(Intention intention) {
+        this.offers.add(intention);
     }
 }

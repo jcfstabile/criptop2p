@@ -3,22 +3,22 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model.builders;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 
 public class UserBuilder {
-    String name;
-    String surname;
-    String email;
-    String address;
-    String password;
-    String walletAddress;
-    String cvu;
+    protected String name;
+    protected String surname;
+    protected String email;
+    protected String address;
+    protected String password;
+    protected String walletAddress;
+    protected String cvu;
 
-    public UserBuilder() {
-        this.name = "aaa";
-        this.surname = "bbb";
-        this.email = "c@d.e";
-        this.address = "fghijklmno";
-        this.password = "Pqrs7$";
-        this.walletAddress = "tuvwxyzA";
-        this.cvu = "1234567890123456789012";
+    public UserBuilder(String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu) {
+        this.name = aName;
+        this.surname = aSurname;
+        this.email = anEmail;
+        this.address = anAddress;
+        this.password = aPassword;
+        this.walletAddress = aWalletAddress;
+        this.cvu = aCvu;
     }
 
      public UserBuilder withName(String aName) {
