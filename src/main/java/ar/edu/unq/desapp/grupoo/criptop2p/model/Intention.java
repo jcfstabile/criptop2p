@@ -82,8 +82,16 @@ public class Intention {
     }
 
     private boolean compare(BigDecimal aCurrentPrice, int n){
-        //aCurrentPrice >/< n
-        return aCurrentPrice.setScale(2, RoundingMode.HALF_UP).compareTo(this.price.setScale(2, RoundingMode.HALF_UP)) == n;
+        BigDecimal current = aCurrentPrice.setScale(2, RoundingMode.HALF_UP);
+        BigDecimal price = this.price.setScale(2, RoundingMode.HALF_UP);
+        return current.compareTo(price) == n;
+    }
+
+    public void sold(Timestamp aTimeStamp, User anDemander){
+        Integer reward = this.reward(aTimeStamp);
+        this.offered.addPoints(reward);
+        anDemander.addPoints(reward);
+        this.sold();
     }
 
     public void sold() {
@@ -140,8 +148,9 @@ public class Intention {
         this.setStatus(Status.WAITINGFORTRANSFER);
     }
 
-
     public void waitingForDelivery(){
         this.setStatus(Status.WAITINGFORDELIVERY);
     }
+
+
 }
