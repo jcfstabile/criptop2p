@@ -120,11 +120,6 @@ public class Intention {
         return this.status == aStatus;
     }
 
-    public void addPoints() {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        this.offered.addPoints(this.reward(now));
-    }
-
     public int reward(Timestamp anAceptationTimeSt) {
         if(this.differenceBetweenCreationAndAceptation(anAceptationTimeSt) <= TimeUnit.MINUTES.toMillis(30)){
             return 10;
