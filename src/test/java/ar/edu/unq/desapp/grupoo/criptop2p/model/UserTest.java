@@ -637,10 +637,33 @@ class UserTest {
         assertEquals(0, anUser.getReputation());
     }
 
-    @DisplayName("Status has a name")
+    @DisplayName("An User can add an intention to his list of intentions")
     @Test
-    void concept(){
-        assertEquals("SOLD", Status.SOLD.name());
+    void testAnUserCanAddAnIntentionToItsOffers(){
+        User user = anyUser.build();
+        assertEquals(0, user.quantityIntentions());
+        Intention anIntention = new Intention();
+        anIntention.sold();
+        user.addIntention(anIntention);
+        assertEquals(1, user.quantityIntentions());
+    }
+
+    @DisplayName("An User substract N to its Points")
+    @Test
+    void testAnUserCanBePenalized(){
+        User user = anyUser.build();
+        assertEquals(0, user.getPoints());
+        user.applyPenalty(10);
+        assertEquals(-10, user.getPoints());
+    }
+
+    @DisplayName("An User add N to its Points")
+    @Test
+    void testAnUserCanBeRewarded(){
+        User user = anyUser.build();
+        assertEquals(0, user.getPoints());
+        user.addPoints(10);
+        assertEquals(10, user.getPoints());
     }
 }
 

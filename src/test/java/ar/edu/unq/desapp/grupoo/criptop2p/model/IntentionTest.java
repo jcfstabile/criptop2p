@@ -236,4 +236,32 @@ class IntentionTest {
 
         assertEquals(Status.WAITINGFORDELIVERY, intention.getStatus());
     }
+
+    @DisplayName("When an intention was solded, its status changed to SOLD")
+    @Test
+    void testWhenAnIntentionHasSoledByOtherUserThisChangeItsStatusToSold(){
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        intention.sold(now, otherUser);
+        assertEquals(Status.SOLD, intention.getStatus());
+    }
+
+
+    @DisplayName("When an intention was solded, before 30 minutes, its add 10 points to its offered")
+    @Test
+    void testWhenAnIntentionWasSoledBefore30MinutesItAdd10PointsToItsOffered(){
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        assertEquals(0, intention.getOffered().getPoints());
+        intention.sold(now, otherUser);
+        assertEquals(10, intention.getOffered().getPoints());
+    }
+
+
+    @DisplayName("When an intention was solded, before 30 minutes, its add 10 points to its demander")
+    @Test
+    void testWhenAnIntentionWasSoledBefore30MinutesItAdd10PointsToItsDemander(){
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        assertEquals(0, otherUser.getPoints());
+        intention.sold(now, otherUser);
+        assertEquals(10, otherUser.getPoints());
+    }
 }
