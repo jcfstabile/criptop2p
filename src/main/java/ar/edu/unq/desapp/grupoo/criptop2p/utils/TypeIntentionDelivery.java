@@ -9,7 +9,7 @@ import java.util.*;
 
 
 public class TypeIntentionDelivery {
-    ArrayList<TypeIntention> types;
+    List<TypeIntention> types;
     public TypeIntentionDelivery(){
         this.types = new ArrayList(Arrays.asList(new Buy(), new Sell()));
     }
