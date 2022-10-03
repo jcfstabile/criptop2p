@@ -264,4 +264,22 @@ class IntentionTest {
         intention.sold(now, otherUser);
         assertEquals(10, otherUser.getPoints());
     }
+
+    @DisplayName("When an intention was solded, after 30 minutes, its add 5 points to its offered")
+    @Test
+    void testWhenAnIntentionWasSoledAfter30MinutesItAdd5PointsToItsOffered(){
+        Timestamp moment = new Timestamp(System.currentTimeMillis()+TimeUnit.MINUTES.toMillis(31));
+        assertEquals(0, intention.getOffered().getPoints());
+        intention.sold(moment, otherUser);
+        assertEquals(5, intention.getOffered().getPoints());
+    }
+
+    @DisplayName("When an intention was solded, after 30 minutes, its add 5 points to its demander")
+    @Test
+    void testWhenAnIntentionWasSoledAfter30MinutesItAdd5PointsToItsDemander(){
+        Timestamp moment = new Timestamp(System.currentTimeMillis()+TimeUnit.MINUTES.toMillis(31));
+        assertEquals(0, otherUser.getPoints());
+        intention.sold(moment, otherUser);
+        assertEquals(5, otherUser.getPoints());
+    }
 }
