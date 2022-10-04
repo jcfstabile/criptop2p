@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import static ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName.BNBUSDT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Binance Integration tests")
 @SpringBootTest
@@ -40,7 +40,10 @@ public class BinanceIntegrationTest {
     @DisplayName("The price of BNBUSDT is the expected")
     @Test
     void testPriceOfAProductIsTheExpected(){
-        assertEquals("286.60000000", binanceIntegrator.priceOf(CryptoName.BNBUSDT));
+        String result = binanceIntegrator.priceOf(CryptoName.BNBUSDT);
+        assertNotNull(result);
+        assertInstanceOf(String.class, result);
+        assertNotSame("", result);
     }
 
 
