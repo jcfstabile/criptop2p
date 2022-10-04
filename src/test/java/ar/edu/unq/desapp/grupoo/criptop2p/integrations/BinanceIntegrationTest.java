@@ -1,23 +1,14 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.utils.integrations;
+package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeName;
-import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionConverter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
-import static ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName.BNBUSDT;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Binance Integration tests")
