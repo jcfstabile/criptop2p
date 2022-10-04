@@ -2,15 +2,14 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
 abstract public class Integrator {
-    RestTemplate restTemplate = new RestTemplate();
-    String resourceUrl;
-    ObjectMapper mapper = new ObjectMapper();
+    private RestTemplate restTemplate = new RestTemplate();
+    protected String resourceUrl;
+    private ObjectMapper mapper = new ObjectMapper();
 
     public Integrator(String aResourceUrl){
         this.resourceUrl = aResourceUrl;
@@ -28,11 +27,7 @@ abstract public class Integrator {
         return value.asText();
     }
 
-    ResponseEntity<String> response(String anUrl, Class aClass){
+    private ResponseEntity<String> response(String anUrl, Class aClass){
         return restTemplate.getForEntity(anUrl, aClass);
-    }
-
-    protected String url(){
-        return this.resourceUrl;
     }
 }
