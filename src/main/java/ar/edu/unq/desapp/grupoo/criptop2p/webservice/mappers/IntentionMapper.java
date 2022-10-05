@@ -11,7 +11,7 @@ public class IntentionMapper {
         return new IntentionDTO( anIntention.getCount(), anIntention.getPrice(), anIntention.getType(), anIntention.getCrypto());
     }
 
-    public Intention toIntention(IntentionDTO anIntentionDTO){
+    public Intention toIntention(){
         return new Intention();
     }
 }
