@@ -1,12 +1,13 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.BinanceQueryErrorException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
-abstract public class Integrator {
+public abstract class Integrator {
     private final RestTemplate restTemplate;
     protected final String resourceUrl;
     private final ObjectMapper mapper;
@@ -23,7 +24,7 @@ abstract public class Integrator {
         try {
             root = mapper.readTree(response.getBody());
         } catch(IOException ex) {
-            throw new RuntimeException(ex);
+            throw new BinanceQueryErrorException(ex);
         }
         JsonNode value = root.path(field);
         return value.asText();
