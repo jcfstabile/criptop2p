@@ -11,7 +11,7 @@ abstract public class Integrator {
     protected final String resourceUrl;
     private final ObjectMapper mapper;
 
-    public Integrator(String aResourceUrl){
+    protected Integrator(String aResourceUrl){
         this.resourceUrl = aResourceUrl;
         mapper = new ObjectMapper();
         restTemplate = new RestTemplate();
