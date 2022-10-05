@@ -1,16 +1,14 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Binance Integration tests")
 @SpringBootTest
+@Disabled
 public class BinanceIntegrationTest {
 
     BinanceIntegration binanceIntegrator;
