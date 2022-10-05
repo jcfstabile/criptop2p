@@ -38,7 +38,7 @@ public class User{
 
     @Column(name="password", nullable = false)
     @NotNull(message = "Password cannot be empty")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Zs])(?=.*\\d)(?=.*[$._+%@()*`';/=#!?&,])([A-Za-z\\d$@!%*?&]|[^ ]){6,}$", message = """
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$._+%@()*`';/=#!?&,]).{6,}$", message = """
             Password must contain:
 
             - At least one uppercase
