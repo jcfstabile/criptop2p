@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Binance Integration tests")
 @SpringBootTest
-@Disabled
 public class BinanceIntegrationTest {
 
     BinanceIntegration binanceIntegrator;
@@ -21,7 +20,9 @@ public class BinanceIntegrationTest {
     @DisplayName("Check connectivity with the Binance API")
     @Test
     void testCheck(){
-        Assertions.assertEquals("", binanceIntegrator.check());
+         assertEquals("", binanceIntegrator.check());
+
+//        assertThrows( HttpServerErrorException.class , () -> binanceIntegrator.check());
     }
 
     @DisplayName("The price of BNBUSDT is the expected")
@@ -31,6 +32,7 @@ public class BinanceIntegrationTest {
         assertNotNull(result);
         assertInstanceOf(String.class, result);
         assertNotSame("", result);
+//        assertThrows( HttpServerErrorException.class , () -> binanceIntegrator.priceOf(CryptoName.BNBUSDT));
     }
 
 
