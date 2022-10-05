@@ -25,7 +25,7 @@ public class IntentionBuilder {
     }
 
     public IntentionBuilder withPrice(double price) {
-        this.price = new BigDecimal(price);
+        this.price = BigDecimal.valueOf(price);
         return this;
     }
 
