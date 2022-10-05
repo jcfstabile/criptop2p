@@ -1,10 +1,11 @@
 # Trigger build and analysis on sonarcloud when pushing in dev or pull_request
 #   and when creating a pull_request
-name: Build and analisys on sonarcloud
+name: Build and analysis on sonarcloud
 on:
   push:
     branches:
-        - dev
+      - main
+      - dev
   pull_request:
       types: [opened, synchronize, reopened]
 
