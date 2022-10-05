@@ -1,7 +1,5 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
-
-import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

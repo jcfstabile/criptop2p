@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.utils;
+package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
