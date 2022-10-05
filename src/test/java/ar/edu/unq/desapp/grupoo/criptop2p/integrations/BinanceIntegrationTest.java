@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Binance Integration tests")
 @SpringBootTest
-public class BinanceIntegrationTest {
+class BinanceIntegrationTest {
 
     BinanceIntegration binanceIntegrator;
 
