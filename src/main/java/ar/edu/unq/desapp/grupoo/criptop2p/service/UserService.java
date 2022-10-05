@@ -78,8 +78,8 @@ public class UserService implements UserServiceInterface {
     @Override
     @Transactional
     public void deleteUserById(Long anId){
-        this.userRepository.findById(anId)
+        User user = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
-        this.userRepository.deleteById(anId);
+        this.userRepository.deleteById(user.getId());
     }
 }
