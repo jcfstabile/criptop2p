@@ -7,17 +7,19 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
 abstract public class Integrator {
-    private RestTemplate restTemplate = new RestTemplate();
-    protected String resourceUrl;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final RestTemplate restTemplate;
+    protected final String resourceUrl;
+    private final ObjectMapper mapper;
 
-    public Integrator(String aResourceUrl){
+    protected Integrator(String aResourceUrl){
         this.resourceUrl = aResourceUrl;
+        mapper = new ObjectMapper();
+        restTemplate = new RestTemplate();
     }
 
-    protected String query(Class aClass, String anUrl, String field){
-        ResponseEntity<String> response = this.response(anUrl, aClass);
-        JsonNode root = null;
+    protected String query(String anUrl, String field){
+        ResponseEntity<String> response = this.response(anUrl);
+        JsonNode root;
         try {
             root = mapper.readTree(response.getBody());
         } catch(IOException ex) {
@@ -27,7 +29,7 @@ abstract public class Integrator {
         return value.asText();
     }
 
-    private ResponseEntity<String> response(String anUrl, Class aClass){
-        return restTemplate.getForEntity(anUrl, aClass);
+    private ResponseEntity<String> response(String anUrl){
+        return restTemplate.getForEntity(anUrl, String.class);
     }
 }
