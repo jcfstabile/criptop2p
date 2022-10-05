@@ -1,10 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +20,9 @@ public class BinanceIntegrationTest {
     @DisplayName("Check connectivity with the Binance API")
     @Test
     void testCheck(){
-        Assertions.assertEquals("", binanceIntegrator.check());
+         assertEquals("", binanceIntegrator.check());
+
+//        assertThrows( HttpServerErrorException.class , () -> binanceIntegrator.check());
     }
 
     @DisplayName("The price of BNBUSDT is the expected")
@@ -33,6 +32,7 @@ public class BinanceIntegrationTest {
         assertNotNull(result);
         assertInstanceOf(String.class, result);
         assertNotSame("", result);
+//        assertThrows( HttpServerErrorException.class , () -> binanceIntegrator.priceOf(CryptoName.BNBUSDT));
     }
 
 
