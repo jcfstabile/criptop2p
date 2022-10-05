@@ -11,7 +11,7 @@ import java.util.*;
 public class TypeIntentionDelivery {
     List<TypeIntention> types;
     public TypeIntentionDelivery(){
-        this.types = new ArrayList(Arrays.asList(new Buy(), new Sell()));
+        this.types = Arrays.asList(new Buy(), new Sell());
     }
 
     public TypeIntention get(String dbName){
