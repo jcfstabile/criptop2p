@@ -55,7 +55,7 @@ public class UserRestController {
     @Operation(
             summary = "Register an user",
             responses = {
-                    @ApiResponse( description = "User registered on platform", responseCode = "200",
+                    @ApiResponse( description = "User registered on platform", responseCode = "201",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = UserDTO.class))),
                     @ApiResponse( description = "Malformed data", responseCode = "400",
@@ -70,7 +70,7 @@ public class UserRestController {
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         User user = mapper.toUser(userCreationDTO);
         this.userService.addUser(user);
-        return ResponseEntity.ok(
+        return ResponseEntity.status(201).body(
                 mapper.toUserDto(this.userService.findByID(user.getId()))
         );
     }
