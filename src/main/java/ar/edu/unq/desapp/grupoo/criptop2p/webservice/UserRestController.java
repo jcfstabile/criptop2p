@@ -57,10 +57,13 @@ public class UserRestController {
             responses = {
                     @ApiResponse( description = "User registered on platform", responseCode = "200",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = User.class))),
+                                    schema = @Schema(implementation = UserDTO.class))),
                     @ApiResponse( description = "Malformed data", responseCode = "400",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseErrorList.class))),
+                    @ApiResponse( description = "User already registered", responseCode = "409",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
     @PostMapping("/users")
