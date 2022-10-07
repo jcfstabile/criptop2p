@@ -1,10 +1,13 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
-import java.util.List;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 
 abstract class ResponseError {
 
+    @Schema(example = "001")
     private final String errorCode;
+    @Schema(example = "Error message")
     private final String message;
 
     public ResponseError(String errorCode, String message) {
