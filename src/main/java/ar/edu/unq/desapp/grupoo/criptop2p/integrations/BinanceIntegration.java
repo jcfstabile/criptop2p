@@ -1,11 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-<<<<<<< HEAD
-import ar.edu.unq.desapp.grupoo.criptop2p.utils.Integrator;
 import org.springframework.stereotype.Component;
-=======
->>>>>>> 83d60b5b9d3992c56b8884241f83b72a069bfef1
 
 @Component
 public class BinanceIntegration extends Integrator {

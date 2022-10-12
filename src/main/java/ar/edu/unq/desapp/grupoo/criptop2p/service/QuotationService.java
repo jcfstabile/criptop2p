@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuotationService {
@@ -16,6 +17,7 @@ public class QuotationService {
 
     public List<Quotation> allQuotations() {
         List cryptos = Arrays.asList(CryptoName.values());
-        return cryptos.stream().map(crypto -> new Quotation(crypto, binanceIntegrator.priceOf(crypto.toString()));
+        return (List<Quotation>) cryptos.stream().map(crypto ->
+            new Quotation(crypto.toString(), binanceIntegrator.priceOf((CryptoName)crypto))).collect(Collectors.toList());
     }
 }

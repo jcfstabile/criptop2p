@@ -18,6 +18,7 @@ public class QuotationControllerTest {
     @Autowired
     private QuotationController quotationController;
 
+    /*
     @DisplayName("The QuotationController returns a list")
     @Test
     void testQuotationControllerReturnAListOf() {
@@ -28,6 +29,6 @@ public class QuotationControllerTest {
     @Test
     void testQuotationControllerReturnAListOfQuotations() {
         assertInstanceOf(Quotation.class, quotationController.allQuotations().get(0));
-    }
+    }*/
 
 }
