@@ -1,19 +1,17 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
-
-import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.BinanceQueryErrorException;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Binance Integration tests")
 @SpringBootTest
-public class BinanceIntegrationTest {
+class BinanceIntegrationTest {
 
     BinanceIntegration binanceIntegrator;
 
@@ -25,7 +23,9 @@ public class BinanceIntegrationTest {
     @DisplayName("Check connectivity with the Binance API")
     @Test
     void testCheck(){
-        Assertions.assertEquals("", binanceIntegrator.check());
+         assertEquals("", binanceIntegrator.check());
+
+//        assertThrows( HttpServerErrorException.class , () -> binanceIntegrator.check());
     }
 
     @DisplayName("The price of BNBUSDT is the expected")
@@ -35,6 +35,16 @@ public class BinanceIntegrationTest {
         assertNotNull(result);
         assertInstanceOf(String.class, result);
         assertNotSame("", result);
+//        assertThrows( HttpServerErrorException.class , () -> binanceIntegrator.priceOf(CryptoName.BNBUSDT));
+    }
+
+    @DisplayName("When a binance query fail a Custom exception can be raised")
+    @Test
+    void existABinanceQueryErrorException(){
+        BinanceQueryErrorException binanceQueryErrorException = new BinanceQueryErrorException(new IOException());
+
+        assertNotNull(binanceQueryErrorException);
+        assertNull(binanceQueryErrorException.getError());
     }
 
 
