@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BinanceIntegration extends Integrator {
     public BinanceIntegration() {
         super("https://testnet.binance.vision/api/v3/");
