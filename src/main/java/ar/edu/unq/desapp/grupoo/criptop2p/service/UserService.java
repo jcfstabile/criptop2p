@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
@@ -38,7 +39,8 @@ public class UserService implements UserServiceInterface {
     private UserMapper mapper;
     @Override
     @Transactional
-    public void addUser(User user) {
+    public Long addUser(UserCreationDTO userCreationDTO) {
+        User user = mapper.toUser(userCreationDTO);
         Set<ConstraintViolation<User>> userConstraintViolations = validator.validate(user);
         if ( ! userConstraintViolations.isEmpty() ) {
             List<String> errors = new ArrayList<>();
@@ -48,7 +50,7 @@ public class UserService implements UserServiceInterface {
             throw new UserConstraintViolationException(errors);
         }
         try {
-            this.userRepository.save(user);
+            return this.userRepository.save(user).getId();
         } catch (DataIntegrityViolationException e) {
             throw new DataIncomingConflictException();
         } catch (IllegalStateException e) {
@@ -59,7 +61,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public UserDTO findByID(Long anId) {
         return mapper.toUserDto(this.userRepository.findById(anId)
-                .orElseThrow(() -> new UserNotFoundException(anId))); // TODO discr
+                .orElseThrow(() -> new UserNotFoundException(anId)));
     }
 
     @Override
@@ -84,7 +86,7 @@ public class UserService implements UserServiceInterface {
     @Transactional
     public void deleteUserById(Long anId){
         User user = this.userRepository.findById(anId)
-                .orElseThrow(() -> new UserNotFoundException(anId)); // TODO discr
+                .orElseThrow(() -> new UserNotFoundException(anId));
         this.userRepository.deleteById(user.getId());
     }
 }
