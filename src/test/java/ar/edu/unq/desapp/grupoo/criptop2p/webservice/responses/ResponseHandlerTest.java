@@ -1,8 +1,8 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +77,5 @@ class ResponseHandlerTest {
                 () -> assertEquals("User was already registered", body.getMessage()),
                 () -> assertEquals("The operation can not be completed due to data conflict", body.getError())
         );
-
     }
 }

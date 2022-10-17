@@ -2,15 +2,17 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.ServerCantHandleRequestNowException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,15 +48,17 @@ public class UserService implements UserServiceInterface {
         }
         try {
             return this.userRepository.save(user);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
             throw new DataIncomingConflictException();
+        } catch (IllegalStateException e) {
+            throw new ServerCantHandleRequestNowException();
         }
     }
 
     @Override
     public User findByID(Long anId) {
         return this.userRepository.findById(anId)
-                .orElseThrow(() -> new UserNotFoundException(anId));
+                .orElseThrow(() -> new UserNotFoundException(anId)); // TODO discr
     }
 
     @Override
@@ -79,7 +83,7 @@ public class UserService implements UserServiceInterface {
     @Transactional
     public void deleteUserById(Long anId){
         User user = this.userRepository.findById(anId)
-                .orElseThrow(() -> new UserNotFoundException(anId));
+                .orElseThrow(() -> new UserNotFoundException(anId)); // TODO discr
         this.userRepository.deleteById(user.getId());
     }
 }
