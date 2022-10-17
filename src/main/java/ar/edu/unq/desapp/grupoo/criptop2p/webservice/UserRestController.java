@@ -71,7 +71,7 @@ public class UserRestController {
         User user = mapper.toUser(userCreationDTO);
         this.userService.addUser(user);
         return ResponseEntity.status(201).body(
-                mapper.toUserDto(this.userService.findByID(user.getId()))
+                this.userService.findByID(user.getId())
         );
     }
 
@@ -92,7 +92,7 @@ public class UserRestController {
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok(
-                mapper.toUserDto(this.userService.findByID(id))
+                this.userService.findByID(id)
         );
     }
 
