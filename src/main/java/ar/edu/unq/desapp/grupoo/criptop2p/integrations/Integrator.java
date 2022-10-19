@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.BinanceQueryErrorException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.BinanceQueryErrorException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;

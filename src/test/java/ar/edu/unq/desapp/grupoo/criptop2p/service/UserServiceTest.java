@@ -1,10 +1,10 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserCreationDTOBuilder;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +15,21 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("UserService Tests")
 @SpringBootTest
 class UserServiceTest {
-    static class UserBuilderUnique extends UserBuilder {
-        public UserBuilderUnique() {
+    static class UserCreationDTOBuilderUnique extends UserCreationDTOBuilder {
+        public UserCreationDTOBuilderUnique() {
             super("aaa","bbb","c@d.e","fghijklmno", "Pqrs7$", "12345678","1234567890123456789012");
         }
 
         @Override
-        public UserBuilder withEmail(String email){
+        public UserCreationDTOBuilder withEmail(String email){
             this.withWalletAddress(email.repeat(2).substring(0,8));
             return super.withEmail(email);
         }
     }
 
-    UserBuilder anyUser = new UserBuilderUnique();
-    UserBuilder otherUser = new UserBuilderUnique();
+    UserCreationDTOBuilder anyUser = new UserCreationDTOBuilderUnique();
 
-    User user;
+    UserCreationDTO userCreationDTO;
 
     UserConstraintViolationException userConstraintViolationException;
     @Autowired
@@ -39,20 +38,21 @@ class UserServiceTest {
     @DisplayName("When an User is correctly formed is added")
     @Test
     void addAnUser(){
-        user = anyUser.withEmail("just@add.once").build();
+        userCreationDTO = anyUser.withEmail("just@add.once").build();
 
-        userService.addUser(user);
+        Long userId = userService.addUser(userCreationDTO);
 
-        assertNotNull(user.getId());
+        assertNotNull(userId);
     }
 
     @DisplayName("When an User has a bad formed email throws a UserConstraintException")
     @Test
     void addAnUserWithBadFormedEmailThrowException(){
-        user = anyUser.withEmail("a$b.c").build();
+
+        userCreationDTO = anyUser.withEmail("a$b.c").build();
 
         userConstraintViolationException = assertThrows(
-                UserConstraintViolationException.class, () -> userService.addUser(user));
+                UserConstraintViolationException.class, () -> userService.addUser(userCreationDTO));
 
         assertEquals("Email is not valid", userConstraintViolationException.getErrors().get(0) );
     }
@@ -60,10 +60,10 @@ class UserServiceTest {
     @DisplayName("When an User has a bad formed password throws a UserConstraintException")
     @Test
     void addAnUserWithBadFormedPasswordThrowException(){
-        user = anyUser.withPassword("123456").build();
+        userCreationDTO = anyUser.withPassword("123456").build();
 
         userConstraintViolationException = assertThrows(
-                UserConstraintViolationException.class, () -> userService.addUser(user));
+                UserConstraintViolationException.class, () -> userService.addUser(userCreationDTO));
 
         assertTrue(userConstraintViolationException.getErrors().get(0).contains("Password must contain:") );
     }
@@ -71,10 +71,10 @@ class UserServiceTest {
     @DisplayName("When an User has a bad formed Address throws a UserConstraintException")
     @Test
     void addAnUserWithBadFormedAddressThrowException(){
-        user = anyUser.withAddress("Here 234").build();
+        userCreationDTO = anyUser.withAddress("Here 234").build();
 
         userConstraintViolationException = assertThrows(
-                UserConstraintViolationException.class, () -> userService.addUser(user));
+                UserConstraintViolationException.class, () -> userService.addUser(userCreationDTO));
 
         assertEquals("Address must have between 10 and 30 characters",
                       userConstraintViolationException.getErrors().get(0) );
@@ -83,10 +83,10 @@ class UserServiceTest {
     @DisplayName("When an User has a bad formed WalletAddress throws a UserConstraintException")
     @Test
     void addAnUserWithBadFormedWalletAddressThrowException(){
-        user = anyUser.withWalletAddress("1234567").build();
+        userCreationDTO = anyUser.withWalletAddress("1234567").build();
 
         userConstraintViolationException = assertThrows(
-                UserConstraintViolationException.class, () -> userService.addUser(user));
+                UserConstraintViolationException.class, () -> userService.addUser(userCreationDTO));
 
         assertEquals("Wallet Address must have 8 characters", userConstraintViolationException.getErrors().get(0) );
     }
@@ -94,10 +94,10 @@ class UserServiceTest {
     @DisplayName("When an User has a bad formed CVU throws a UserConstraintException")
     @Test
     void addAnUserWithBadFormedCVUThrowException(){
-        user = anyUser.withCvu("abcdefghijKLMNOPQRST1").build();
+        userCreationDTO = anyUser.withCvu("abcdefghijKLMNOPQRST1").build();
 
         userConstraintViolationException = assertThrows(
-                UserConstraintViolationException.class, () -> userService.addUser(user));
+                UserConstraintViolationException.class, () -> userService.addUser(userCreationDTO));
 
         assertEquals("CVU must have 22 characters", userConstraintViolationException.getErrors().get(0) );
     }
@@ -106,10 +106,13 @@ class UserServiceTest {
     @Test
     void findExistentUser(){
         String name = "Pete";
-        user = anyUser.withEmail("pete@here.dom").withName(name).build();
-        userService.addUser(user);
+        String surname = "Townshend";
+        userCreationDTO = anyUser.withEmail("pete@here.dom").withName(name).withSurname(surname).build();
 
-        assertEquals(name, userService.findByID(user.getId()).getName());
+        Long userId = userService.addUser(userCreationDTO);
+
+        assertEquals(name, userService.findByID(userId).getName());
+        assertEquals(surname, userService.findByID(userId).getSurname());
     }
 
     @DisplayName("Finding a  not existent User throws a UserNotFoundException")
@@ -123,22 +126,19 @@ class UserServiceTest {
     @DisplayName("Adding an User with a email already registered throw a DataIncomingConflictException")
     @Test
     void addingAnUserWithAUsedEmailThrowException(){
-        User registeredUser = anyUser.withEmail("me@here.throw").withWalletAddress("aaaaaaaa").build();
+        UserCreationDTO registeredUser = anyUser.withEmail("me@here.throw").withWalletAddress("aaaaaaaa").build();
         userService.addUser(registeredUser);
-        User otherUser = anyUser.withEmail("me@here.throw").withWalletAddress("xxxxxxxx").build();
+        UserCreationDTO otherUser = anyUser.withEmail("me@here.throw").withWalletAddress("xxxxxxxx").build();
         DataIncomingConflictException dataIncomingConflictException =
-                assertThrows(DataIncomingConflictException.class , () -> {
-                    userService.addUser(otherUser);
-                });
+                assertThrows(DataIncomingConflictException.class , () -> userService.addUser(otherUser));
         assertEquals("The operation can not be completed due to data conflict",
                 dataIncomingConflictException.getError());
     }
     @DisplayName("Delete an User by id")
     @Test
     void deleteUserById(){
-        user = anyUser.withEmail("tobe@delete.soon").withWalletAddress("00000000").withCvu("0000 0000 0000 0000 00").build();
-        userService.addUser(user);
-        Long id = user.getId();
+        userCreationDTO = anyUser.withEmail("tobe@delete.soon").withWalletAddress("00000000").withCvu("0000 0000 0000 0000 00").build();
+        Long id = userService.addUser(userCreationDTO);
 
         userService.deleteUserById(id);
 

@@ -1,8 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.ServerCantHandleRequestNowException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,5 +28,9 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ResponseErrorSimple("003", "User was already registered", exception.getError()), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler({ServerCantHandleRequestNowException.class})
+    public ResponseEntity<Object> handleServerCantHandleRequestException(ServerCantHandleRequestNowException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("004", "A major error had occurred", exception.getError()), HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
 }

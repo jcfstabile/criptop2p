@@ -1,13 +1,11 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
-import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorList;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorSimple;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,8 +32,6 @@ public class UserRestController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserMapper mapper;
 
 
 
@@ -68,10 +64,9 @@ public class UserRestController {
     )
     @PostMapping("/users")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserCreationDTO userCreationDTO) {
-        User user = mapper.toUser(userCreationDTO);
-        this.userService.addUser(user);
+        Long id = this.userService.addUser(userCreationDTO);
         return ResponseEntity.status(201).body(
-                mapper.toUserDto(this.userService.findByID(user.getId()))
+                this.userService.findByID(id)
         );
     }
 
@@ -92,7 +87,7 @@ public class UserRestController {
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok(
-                mapper.toUserDto(this.userService.findByID(id))
+                this.userService.findByID(id)
         );
     }
 
