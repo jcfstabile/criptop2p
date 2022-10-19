@@ -1,12 +1,12 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserInfoDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.ServerCantHandleRequestNowException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;

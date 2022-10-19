@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.model.dto;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;

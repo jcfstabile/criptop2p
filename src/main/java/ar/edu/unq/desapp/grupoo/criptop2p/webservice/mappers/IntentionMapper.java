@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import org.springframework.stereotype.Component;
 
 @Component
