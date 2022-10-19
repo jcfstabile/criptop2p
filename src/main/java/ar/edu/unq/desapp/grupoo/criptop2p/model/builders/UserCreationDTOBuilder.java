@@ -27,10 +27,10 @@ public class UserCreationDTOBuilder {
         return this;
     }
 
-//    public UserCreationDTOBuilder withSurname(String aSurname) {
-//        this.surname = aSurname;
-//        return this;
-//    }
+    public UserCreationDTOBuilder withSurname(String aSurname) {
+        this.surname = aSurname;
+        return this;
+    }
 
     public UserCreationDTOBuilder withEmail(String aEmail) {
         this.email = aEmail;

@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions;
 
 public class ServerCantHandleRequestNowException extends RuntimeException {
 
-    public String error;
+    private final String error;
 
     public ServerCantHandleRequestNowException() {
         this.error = "The server can't handle the request now";

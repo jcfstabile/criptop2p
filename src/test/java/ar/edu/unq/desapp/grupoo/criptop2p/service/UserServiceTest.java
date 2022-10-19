@@ -106,11 +106,13 @@ class UserServiceTest {
     @Test
     void findExistentUser(){
         String name = "Pete";
-        userCreationDTO = anyUser.withEmail("pete@here.dom").withName(name).build();
+        String surname = "Townshend";
+        userCreationDTO = anyUser.withEmail("pete@here.dom").withName(name).withSurname(surname).build();
 
         Long userId = userService.addUser(userCreationDTO);
 
         assertEquals(name, userService.findByID(userId).getName());
+        assertEquals(surname, userService.findByID(userId).getSurname());
     }
 
     @DisplayName("Finding a  not existent User throws a UserNotFoundException")
