@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.model.dto;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
 public class UserInfoDTO {
     private final Long id;

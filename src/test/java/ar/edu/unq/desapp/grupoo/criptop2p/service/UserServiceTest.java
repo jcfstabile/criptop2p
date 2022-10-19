@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserCreationDTOBuilder;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;

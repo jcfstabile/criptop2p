@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model.builders;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
 
 public class UserCreationDTOBuilder {
     protected String name;
