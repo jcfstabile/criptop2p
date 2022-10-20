@@ -117,9 +117,7 @@ public class User{
         this.cvu = aCVU;
     }
     public int getPoints(){ return this.points; }
-    public void setPoints(int newPoints){
-        this.points = newPoints;
-    }
+
     public List<Intention> getOffers() { return this.offers;}
 
     public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice){
