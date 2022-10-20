@@ -136,7 +136,7 @@ public class User{
         intention.cancel(this);
     }
 
-    public int quantityIntentions() { return ((int) this.offers.stream().filter(intention -> intention.hasStatus(Status.SOLD)).count());}
+    public int quantityIntentions() { return ((int) this.intentionWithStatus(Status.SOLD).count());}
 
     public int getReputation() {
         try{
@@ -166,6 +166,10 @@ public class User{
     }
 
     public Stream<Intention> activatedIntentions() {
-        return this.offers.stream().filter(intention -> intention.hasStatus(Status.OFFERED));
+        return this.intentionWithStatus(Status.OFFERED);
+    }
+
+    private Stream<Intention> intentionWithStatus(Status aStatus){
+        return this.offers.stream().filter(intention -> intention.hasStatus(aStatus));
     }
 }
