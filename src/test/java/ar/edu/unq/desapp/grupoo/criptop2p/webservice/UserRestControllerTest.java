@@ -148,13 +148,23 @@ class UserRestControllerTest {
     @DisplayName("An user recently has only one activated intention when only offers one time")
     @Test
     void testAnUserRecentlyHasOnlyActivatedIntentions(){
-
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal(10), "SELL", CryptoName.ALICEUSDT);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO);
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        assertEquals(1, activatedIntentions.size());
     }
 
     @DisplayName("An user has two activated intention when offers twice")
     @Test
     void testAnUseryHasTwoActivatedIntentions(){
-
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, new BigDecimal(10), "SELL", CryptoName.ALICEUSDT);
+        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, new BigDecimal(10), "BUY", CryptoName.ALICEUSDT);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO0);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO1);
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        assertEquals(2, activatedIntentions.size());
     }
 
 }
