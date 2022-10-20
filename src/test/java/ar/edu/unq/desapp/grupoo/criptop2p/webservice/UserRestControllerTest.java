@@ -144,7 +144,7 @@ class UserRestControllerTest {
         assertEquals(0, activatedIntentions.size());
     }
 
-
+    /*
     @DisplayName("An user recently has only one activated intention when only offers one time")
     @Test
     void testAnUserRecentlyHasOnlyActivatedIntentions(){
@@ -166,5 +166,6 @@ class UserRestControllerTest {
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
         assertEquals(2, activatedIntentions.size());
     }
+     */
 
 }

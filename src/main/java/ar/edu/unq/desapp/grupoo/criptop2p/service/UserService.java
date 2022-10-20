@@ -76,7 +76,7 @@ public class UserService implements UserServiceInterface {
         Intention anIntention = this.intentionMapper.toIntention(getUser, anIntentionDTO);
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
         Quotation quotation = new BinanceIntegration().priceOf(intentionDTO.getCryptoName());
-        BigDecimal aCurrentPrice = new BigDecimal(Long.parseLong(quotation.getPrice()));
+        BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
         getUser.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), anIntentionDTO.getType(),anIntentionDTO.getCryptoName(), aCurrentPrice);
         this.userRepository.save(getUser);
         return intentionDTO;
