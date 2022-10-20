@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -120,5 +121,9 @@ public class UserRestController {
     public ResponseEntity<Void> unregister(@PathVariable Long id) {
         this.userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    public List<IntentionDTO> activatedIntentionsOf(Long id) {
+        return this.userService.activatedIntentionsOf(id);
     }
 }

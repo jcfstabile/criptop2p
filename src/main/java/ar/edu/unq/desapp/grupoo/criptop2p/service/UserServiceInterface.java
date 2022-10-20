@@ -16,4 +16,6 @@ public interface UserServiceInterface {
     List<UserInfoDTO> findAll();
 
     void deleteUserById(Long anId);
+
+    List<IntentionDTO> activatedIntentionsOf(Long id);
 }

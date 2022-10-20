@@ -135,5 +135,26 @@ class UserRestControllerTest {
 
         assertEquals("Could not find user 0", exception.getMessage());
     }
-}
 
+    @DisplayName("An user recently created hasn't activated intentions")
+    @Test
+    void testAnUserRecentlyHasNotActivatedIntentions(){
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId());
+        assertEquals(0, activatedIntentions.size());
+    }
+
+
+    @DisplayName("An user recently has only one activated intention when only offers one time")
+    @Test
+    void testAnUserRecentlyHasOnlyActivatedIntentions(){
+
+    }
+
+    @DisplayName("An user has two activated intention when offers twice")
+    @Test
+    void testAnUseryHasTwoActivatedIntentions(){
+
+    }
+
+}

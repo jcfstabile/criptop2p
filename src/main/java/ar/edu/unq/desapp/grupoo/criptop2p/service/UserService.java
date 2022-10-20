@@ -90,4 +90,9 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(() -> new UserNotFoundException(anId));
         this.userRepository.deleteById(user.getId());
     }
+
+    @Override
+    public List<IntentionDTO> activatedIntentionsOf(Long id) {
+        return new ArrayList<>();
+    }
 }
