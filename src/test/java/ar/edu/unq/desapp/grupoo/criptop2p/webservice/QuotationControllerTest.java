@@ -33,7 +33,7 @@ public class QuotationControllerTest {
         assertInstanceOf(Quotation.class, quotationController.allQuotations().get(0));
     }
 
-    @DisplayName("")
+    @DisplayName("All quotations returns the same cant of quatations that the app has cryptos name")
     @Test
     void testAllQuotationsGetsTheSameCountOfQuatantionThatCryptosNames(){
        assertEquals(Arrays.asList(CryptoName.values()).size(), quotationController.allQuotations().size());
