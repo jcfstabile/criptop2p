@@ -2,7 +2,6 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 

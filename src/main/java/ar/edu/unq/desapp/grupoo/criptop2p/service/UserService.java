@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
@@ -9,18 +10,18 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViola
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.Quotation;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -73,7 +74,12 @@ public class UserService implements UserServiceInterface {
         User getUser = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
         Intention anIntention = this.intentionMapper.toIntention(getUser, anIntentionDTO);
-        return intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
+        IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
+        Quotation quotation = new BinanceIntegration().priceOf(intentionDTO.getCryptoName());
+        BigDecimal aCurrentPrice = new BigDecimal(Long.parseLong(quotation.getPrice()));
+        getUser.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), anIntentionDTO.getType(),anIntentionDTO.getCryptoName(), aCurrentPrice);
+        this.userRepository.save(getUser);
+        return intentionDTO;
     }
 
     @Override

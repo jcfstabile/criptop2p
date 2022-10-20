@@ -119,7 +119,7 @@ public class Intention {
     }
 
     public boolean hasStatus(Status aStatus) {
-        return this.status == aStatus;
+        return this.status.equals(aStatus);
     }
 
     public int reward(Timestamp anAceptationTimeSt) {
