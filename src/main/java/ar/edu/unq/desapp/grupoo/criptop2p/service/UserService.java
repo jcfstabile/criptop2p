@@ -94,6 +94,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
+    @Transactional
     public List<IntentionDTO> activatedIntentionsOf(Long anId) {
         User getUser = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
