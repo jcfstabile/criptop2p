@@ -1,21 +1,38 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeName;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 
 public class IntentionDTO {
+    @Schema(example = "1")
     private final int count;
+    @Schema(example = "102")
     private final BigDecimal price;
 
-    private final TypeIntention type;
+    @Schema(example = "SELL")
+    private final TypeName type;
+
+    @Schema(example = "ALICEUSDT")
     private final CryptoName cryptoName;
-    public IntentionDTO(int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName) {
+
+    @Schema(example = "1")
+    private final Long offeredId;
+
+    @Schema(example = "OFFERED")
+    private final Status status;
+
+    public IntentionDTO(int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, Long offeredId, Status status) {
         this.count = aCount;
         this.price= aPrice;
-        this.type = aType;
+        this.type = aType.getName();
+        this.offeredId = offeredId;
         this.cryptoName = aCryptoName;
+        this.status = status;
     }
 
     public int getCount(){
@@ -26,13 +43,17 @@ public class IntentionDTO {
         return this.price;
     }
 
-    public TypeIntention getType(){
+    public TypeName getType(){
         return this.type;
     }
 
     public CryptoName getCryptoName(){
         return this.cryptoName;
     }
+
+    public Long getOfferedId() { return this.offeredId; }
+
+    public Status getStatus() { return this.status; }
 }
 
 
