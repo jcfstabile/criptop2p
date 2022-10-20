@@ -117,6 +117,9 @@ public class UserRestController {
             summary = "List of activated intentions from a given user",
             responses = {
                     @ApiResponse( responseCode = "200", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = IntentionDTO.class)))),
+                    @ApiResponse( description = "User not found", responseCode = "404",
+                            content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
     public List<IntentionDTO> activatedIntentionsOf(@PathVariable Long id) {
