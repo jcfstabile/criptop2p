@@ -123,7 +123,9 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    public List<IntentionDTO> activatedIntentionsOf(Long id) {
+    @Parameter(name = "id", description = "Id of the user to retrieve activated intentions")
+    @GetMapping("/users/activated-intentions/{id}")
+    public List<IntentionDTO> activatedIntentionsOf(@PathVariable Long id) {
         return this.userService.activatedIntentionsOf(id);
     }
 }
