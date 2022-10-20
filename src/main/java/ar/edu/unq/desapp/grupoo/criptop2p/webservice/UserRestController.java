@@ -122,7 +122,7 @@ public class UserRestController {
                             schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
-    public List<IntentionDTO> activatedIntentionsOf(@PathVariable Long id) {
-        return this.userService.activatedIntentionsOf(id);
+    public ResponseEntity<List<IntentionDTO>> activatedIntentionsOf(@PathVariable Long id) {
+        return ResponseEntity.ok(this.userService.activatedIntentionsOf(id));
     }
 }

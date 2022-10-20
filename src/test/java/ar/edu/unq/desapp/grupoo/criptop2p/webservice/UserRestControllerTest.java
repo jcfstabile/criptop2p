@@ -140,7 +140,7 @@ class UserRestControllerTest {
     @Test
     void testAnUserRecentlyHasNotActivatedIntentions(){
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
-        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId());
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
         assertEquals(0, activatedIntentions.size());
     }
 
