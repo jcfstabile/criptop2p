@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class BinanceIntegration extends Integrator {
     public BinanceIntegration() {
-        super("https://testnet.binance.vision/api/v3/");
+        super("https://api1.binance.com/api/v3/");
     }
 
     public String priceOf(CryptoName aCryptoName) {
-        String resource = "avgPrice?symbol=" + aCryptoName.name();
+        String resource = "ticker/price?symbol=" + aCryptoName.name();
         return this.query(this.completeUrl(resource), "price");
     }
 
