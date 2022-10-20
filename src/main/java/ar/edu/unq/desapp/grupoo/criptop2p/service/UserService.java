@@ -20,7 +20,9 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -92,7 +94,9 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public List<IntentionDTO> activatedIntentionsOf(Long id) {
-        return new ArrayList<>();
+    public List<IntentionDTO> activatedIntentionsOf(Long anId) {
+        User getUser = this.userRepository.findById(anId)
+                .orElseThrow(() -> new UserNotFoundException(anId));
+        return getUser.activatedIntentions().map(intention -> intentionMapper.toIntentionDto(intention)).collect(Collectors.toList());
     }
 }

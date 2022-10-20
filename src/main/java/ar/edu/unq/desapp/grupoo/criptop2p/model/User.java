@@ -7,6 +7,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name="users")
@@ -162,5 +163,9 @@ public class User{
 
     public void addIntention(Intention intention) {
         this.offers.add(intention);
+    }
+
+    public Stream<Intention> activatedIntentions() {
+        return this.offers.stream().filter(intention -> intention.hasStatus(Status.OFFERED));
     }
 }
