@@ -1,13 +1,8 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserInfoDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -70,14 +65,14 @@ class UserRestControllerTest {
     void anUserCanMakeANewOfter(){
         UserDTO userDTO = anUserRestController.register(anUser).getBody();
         assertNotNull(userDTO);
-        IntentionDTO intentionDTO = new IntentionDTO(10,new BigDecimal(10), new Sell(), CryptoName.ALICEUSDT);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal(10), "SELL", CryptoName.ALICEUSDT);
         assertNotNull(userDTO.getId());
 
-        Intention intention = anUserRestController.offer(userDTO.getId(), intentionDTO);
+        IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();
 
-        assertNotNull(intention);
-        assertEquals(Status.OFFERED, intention.getStatus() );
-        assertEquals(anUser.getEmail(), intention.getOffered().getEmail());
+        assertNotNull(intentionCreationDTO);
+        assertEquals(Status.OFFERED, intentionDTO.getStatus() );
+        assertEquals(userDTO.getId(), intentionDTO.getOfferedId());
     }
 
     void eraseAllUsers() {

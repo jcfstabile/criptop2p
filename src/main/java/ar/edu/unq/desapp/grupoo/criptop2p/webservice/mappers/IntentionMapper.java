@@ -1,17 +1,18 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import org.springframework.stereotype.Component;
 
 @Component
 //TO DO: Finish toIntention and make an interface or abstract class
 public class IntentionMapper {
-    public IntentionDTO toDto(Intention anIntention) {
-        return new IntentionDTO( anIntention.getCount(), anIntention.getPrice(), anIntention.getType(), anIntention.getCrypto());
+    public IntentionDTO toIntentionDto(Intention intention) {
+        return new IntentionDTO(intention.getCount(), intention.getPrice(), intention.getType(), intention.getCrypto(), intention.getOffered().getId(), intention.getStatus());
     }
-
-    public Intention toIntention(){
-        return new Intention();
+    public Intention toIntention(User user, IntentionCreationDTO intentionCreationDTO){
+        return new Intention(user, intentionCreationDTO.getCount(), intentionCreationDTO.getPrice(), intentionCreationDTO.getType(), intentionCreationDTO.getCryptoName());
     }
 }

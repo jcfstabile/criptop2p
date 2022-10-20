@@ -1,10 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserInfoDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorList;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorSimple;
@@ -14,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -96,19 +91,18 @@ public class UserRestController {
     @Operation(
             summary = "Add an intention of buy or sell a crypto",
             responses = {
-                    @ApiResponse( description = "Intention registered", responseCode = "200",
+                    @ApiResponse( description = "Intention registered", responseCode = "201",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Intention.class))),
+                                    schema = @Schema(implementation = IntentionDTO.class))),
                     @ApiResponse( description = "User not found", responseCode = "404",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
     @Parameter(name = "id", description = "Id of the user adding the intention")
-    @SecurityRequirement(name = "JWT")
     @PostMapping("/users/{id}/intentions")
-    public Intention offer(@PathVariable Long id, @RequestBody IntentionDTO anIntentionDTO) {
-        return this.userService.offer(id, anIntentionDTO);
+    public ResponseEntity<IntentionDTO> offer(@PathVariable Long id, @RequestBody IntentionCreationDTO anIntentionDTO) {
+        return ResponseEntity.status(201).body(this.userService.offer(id, anIntentionDTO));
     }
 
 
