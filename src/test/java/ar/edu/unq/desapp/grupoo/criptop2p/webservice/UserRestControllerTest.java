@@ -65,7 +65,7 @@ class UserRestControllerTest {
     void anUserCanMakeANewOfter(){
         UserDTO userDTO = anUserRestController.register(anUser).getBody();
         assertNotNull(userDTO);
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal(10), "SELL", CryptoName.ALICEUSDT);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal("1.47"), "SELL", CryptoName.ALICEUSDT);
         assertNotNull(userDTO.getId());
 
         IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();

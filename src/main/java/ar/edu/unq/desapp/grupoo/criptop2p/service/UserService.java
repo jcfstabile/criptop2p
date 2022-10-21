@@ -2,12 +2,10 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.ServerCantHandleRequestNowException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.Quotation;
@@ -79,6 +77,9 @@ public class UserService implements UserServiceInterface {
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
         getUser.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), anIntentionDTO.getType(),anIntentionDTO.getCryptoName(), aCurrentPrice);
         this.userRepository.save(getUser);
+        if(anIntention.hasStatus(Status.CANCELEDBYSYSTEM)){
+            throw new DifferenceWithCurrentPriceException(anIntention.getPrice(), aCurrentPrice);
+        }
         return intentionDTO;
     }
 
