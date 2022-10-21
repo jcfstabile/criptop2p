@@ -15,8 +15,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -28,8 +26,6 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
-
-
     @Operation(
             summary = "List of registered users",
             responses = {
@@ -40,9 +36,6 @@ public class UserRestController {
     public ResponseEntity<List<UserInfoDTO>> allUsers() {
         return ResponseEntity.ok(this.userService.findAll());
     }
-
-
-
     @Operation(
             summary = "Register an user",
             responses = {
@@ -57,6 +50,7 @@ public class UserRestController {
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
+
     @PostMapping("/users")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         Long id = this.userService.addUser(userCreationDTO);
@@ -64,8 +58,6 @@ public class UserRestController {
                 this.userService.findByID(id)
         );
     }
-
-
 
     @Operation(
             summary = "Get user information",
@@ -86,8 +78,6 @@ public class UserRestController {
         );
     }
 
-
-
     @Operation(
             summary = "Add an intention of buy or sell a crypto",
             responses = {
@@ -99,13 +89,12 @@ public class UserRestController {
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
+
     @Parameter(name = "id", description = "Id of the user adding the intention")
     @PostMapping("/users/{id}/intentions")
     public ResponseEntity<IntentionDTO> offer(@PathVariable Long id, @RequestBody IntentionCreationDTO anIntentionDTO) {
         return ResponseEntity.status(201).body(this.userService.offer(id, anIntentionDTO));
     }
-
-
 
     @Operation( summary = "Remove user by id",
     responses = {
@@ -120,5 +109,20 @@ public class UserRestController {
     public ResponseEntity<Void> unregister(@PathVariable Long id) {
         this.userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Parameter(name = "id", description = "Id of the user to retrieve activated intentions")
+    @GetMapping("/users/activated-intentions/{id}")
+    @Operation(
+            summary = "List of activated intentions from a given user",
+            responses = {
+                    @ApiResponse( responseCode = "200", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = IntentionDTO.class)))),
+                    @ApiResponse( description = "User not found", responseCode = "404",
+                            content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseErrorSimple.class))),
+            }
+    )
+    public ResponseEntity<List<IntentionDTO>> activatedIntentionsOf(@PathVariable Long id) {
+        return ResponseEntity.ok(this.userService.activatedIntentionsOf(id));
     }
 }

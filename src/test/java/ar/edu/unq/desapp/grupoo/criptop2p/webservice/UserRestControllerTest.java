@@ -65,7 +65,7 @@ class UserRestControllerTest {
     void anUserCanMakeANewOfter(){
         UserDTO userDTO = anUserRestController.register(anUser).getBody();
         assertNotNull(userDTO);
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal(10), "SELL", CryptoName.ALICEUSDT);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal("1.47"), "SELL", CryptoName.ALICEUSDT);
         assertNotNull(userDTO.getId());
 
         IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();
@@ -135,5 +135,34 @@ class UserRestControllerTest {
 
         assertEquals("Could not find user 0", exception.getMessage());
     }
-}
 
+    @DisplayName("An user recently created hasn't activated intentions")
+    @Test
+    void testAnUserRecentlyHasNotActivatedIntentions(){
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        assertEquals(0, activatedIntentions.size());
+    }
+
+    @DisplayName("An user recently has only one activated intention when only offers one time")
+    @Test
+    void testAnUserRecentlyHasOnlyActivatedIntentions(){
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal("1.47"), "SELL", CryptoName.ALICEUSDT);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO);
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        assertEquals(1, activatedIntentions.size());
+    }
+
+    @DisplayName("An user has two activated intention when offers twice")
+    @Test
+    void testAnUseryHasTwoActivatedIntentions(){
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, new BigDecimal("1.47"), "SELL", CryptoName.ALICEUSDT);
+        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, new BigDecimal("1.48"), "BUY", CryptoName.ALICEUSDT);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO0);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO1);
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        assertEquals(2, activatedIntentions.size());
+    }
+}
