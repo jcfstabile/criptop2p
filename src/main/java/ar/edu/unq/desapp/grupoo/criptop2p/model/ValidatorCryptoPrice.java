@@ -18,6 +18,7 @@ public class ValidatorCryptoPrice {
         Intention intention = new Intention(anUser, aCount, aPrice, aType, aCryptoName);
         if(!this.isCorrectPrice(aPrice, currentPrice)){
             intention.canceledBySystem();
+            throw new DifferenceWithCurrentPriceException(aPrice, currentPrice);
         }
         return intention;
     }
