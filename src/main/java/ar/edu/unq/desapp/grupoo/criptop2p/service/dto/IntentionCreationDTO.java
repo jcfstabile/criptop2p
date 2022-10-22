@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
-import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
 
 import java.math.BigDecimal;
 
@@ -10,12 +8,12 @@ public class IntentionCreationDTO {
     private final int count;
     private final BigDecimal price;
 
-    private final TypeIntention type;
+    private final String type;
     private final CryptoName cryptoName;
     public IntentionCreationDTO(int aCount, BigDecimal aPrice, String aType, CryptoName aCryptoName) {
         this.count = aCount;
         this.price= aPrice;
-        this.type = new TypeIntentionDelivery().get(aType);
+        this.type = aType;
         this.cryptoName = aCryptoName;
     }
 
@@ -27,7 +25,7 @@ public class IntentionCreationDTO {
         return this.price;
     }
 
-    public TypeIntention getType(){
+    public String getType(){
         return this.type;
     }
 
