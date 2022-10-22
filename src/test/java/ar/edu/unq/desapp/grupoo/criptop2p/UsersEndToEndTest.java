@@ -33,13 +33,13 @@ class UsersEndToEndTest {
 
     @DisplayName("UserRestController is up")
     @Test
-    public void contextLoads() {
+    void contextLoads() {
         assertThat(controller).isNotNull();
     }
 
     @DisplayName("Server has a user just registered")
     @Test
-    public void getUsersTest() throws Exception {
+    void getUsersTest() throws Exception {
 
         JSONObject newUserJson = new JSONObject();
         newUserJson.put("name", "Bert");
