@@ -8,6 +8,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
+import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.Quotation;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
@@ -69,14 +70,14 @@ public class UserService implements UserServiceInterface {
     @Override
     @Transactional
     public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO){
-        User getUser = this.userRepository.findById(anId)
+        User user = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
-        Intention anIntention = this.intentionMapper.toIntention(getUser, anIntentionDTO);
+        Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
-        Quotation quotation = new BinanceIntegration().priceOf(intentionDTO.getCryptoName());
+        Quotation quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
-        getUser.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), anIntentionDTO.getType(),anIntentionDTO.getCryptoName(), aCurrentPrice);
-        this.userRepository.save(getUser);
+        user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
+        this.userRepository.save(user);
         if(anIntention.hasStatus(Status.CANCELEDBYSYSTEM)){
             throw new DifferenceWithCurrentPriceException(anIntention.getPrice(), aCurrentPrice);
         }
