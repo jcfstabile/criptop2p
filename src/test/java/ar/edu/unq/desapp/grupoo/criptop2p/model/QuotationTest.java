@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("Quotation Tests")
 @SpringBootTest
 @Transactional
-public class QuotationTest {
+class QuotationTest {
     Quotation quotationSUT;
 
     @BeforeEach
