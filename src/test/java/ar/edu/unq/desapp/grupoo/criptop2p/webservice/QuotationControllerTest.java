@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 @DisplayName("Quotation Controller Tests")
 @SpringBootTest
 @Transactional
-public class QuotationControllerTest {
+class QuotationControllerTest {
 
     @Autowired
     private QuotationController quotationController;
