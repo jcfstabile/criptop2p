@@ -14,7 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-
+@DisplayName("User end-to_end Test")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class UsersEndToEndTest {
 
