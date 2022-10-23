@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -106,6 +105,6 @@ public class UserService implements UserServiceInterface {
     public List<IntentionDTO> activatedIntentionsOf(Long anId) {
         User getUser = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
-        return getUser.activatedIntentions().map(intention -> intentionMapper.toIntentionDto(intention)).collect(Collectors.toList());
+        return getUser.activatedIntentions().map(intention -> intentionMapper.toIntentionDto(intention)).toList();
     }
 }
