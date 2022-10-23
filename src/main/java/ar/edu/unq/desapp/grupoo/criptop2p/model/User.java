@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DifferenceWithCurrentPriceException;
 import org.springframework.validation.annotation.Validated;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
