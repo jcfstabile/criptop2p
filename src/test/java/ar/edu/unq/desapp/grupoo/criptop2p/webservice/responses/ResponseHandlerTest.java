@@ -7,9 +7,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundExcepti
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class ResponseHandlerTest {

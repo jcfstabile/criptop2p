@@ -12,7 +12,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -564,8 +563,6 @@ class UserTest {
     @Test
     void testAnUserHasNoOneMadeOperationWhenOfferOne(){
         User anUser = anyUser.build();
-        Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
-
         assertEquals(0, anUser.quantityIntentions());
     }
 

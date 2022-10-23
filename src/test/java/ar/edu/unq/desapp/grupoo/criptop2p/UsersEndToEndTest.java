@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.UserRestController;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
