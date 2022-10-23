@@ -19,6 +19,6 @@ public class QuotationService {
         List<CryptoName> cryptos = Arrays.asList(CryptoName.values());
         return cryptos.stream().map(crypto ->
             binanceIntegrator.priceOf(crypto)
-        ).collect(Collectors.toList());
+        ).toList();
     }
 }
