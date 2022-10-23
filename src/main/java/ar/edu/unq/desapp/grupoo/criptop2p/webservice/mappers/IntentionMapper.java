@@ -8,7 +8,6 @@ import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
 import org.springframework.stereotype.Component;
 
 @Component
-//TO DO: Finish toIntention and make an interface or abstract class
 public class IntentionMapper {
     public IntentionDTO toIntentionDto(Intention intention) {
         return new IntentionDTO(intention.getCount(), intention.getPrice(), intention.getType(), intention.getCrypto(), intention.getOffered().getId(), intention.getStatus());

@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-
 import java.math.BigDecimal;
 
 public class IntentionCreationDTO {
