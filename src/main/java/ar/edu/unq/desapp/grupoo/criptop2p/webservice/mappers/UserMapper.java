@@ -1,9 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserInfoDTO;
 import org.springframework.stereotype.Component;
 
 @Component

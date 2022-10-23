@@ -1,14 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserCreationDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.UserInfoDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,14 +65,14 @@ class UserRestControllerTest {
     void anUserCanMakeANewOfter(){
         UserDTO userDTO = anUserRestController.register(anUser).getBody();
         assertNotNull(userDTO);
-        IntentionDTO intentionDTO = new IntentionDTO(10,new BigDecimal(10), new Sell(), CryptoName.ALICEUSDT);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal("1.47"), "SELL", CryptoName.ALICEUSDT);
         assertNotNull(userDTO.getId());
 
-        Intention intention = anUserRestController.offer(userDTO.getId(), intentionDTO);
+        IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();
 
-        assertNotNull(intention);
-        assertEquals(Status.OFFERED, intention.getStatus() );
-        assertEquals(anUser.getEmail(), intention.getOffered().getEmail());
+        assertNotNull(intentionCreationDTO);
+        assertEquals(Status.OFFERED, intentionDTO.getStatus() );
+        assertEquals(userDTO.getId(), intentionDTO.getOfferedId());
     }
 
     void eraseAllUsers() {
@@ -140,5 +135,34 @@ class UserRestControllerTest {
 
         assertEquals("Could not find user 0", exception.getMessage());
     }
-}
 
+    @DisplayName("An user recently created hasn't activated intentions")
+    @Test
+    void testAnUserRecentlyHasNotActivatedIntentions(){
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        assertEquals(0, activatedIntentions.size());
+    }
+
+    @DisplayName("An user recently has only one activated intention when only offers one time")
+    @Test
+    void testAnUserRecentlyHasOnlyActivatedIntentions(){
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal("1.47"), "SELL", CryptoName.ALICEUSDT);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO);
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        assertEquals(1, activatedIntentions.size());
+    }
+
+    @DisplayName("An user has two activated intention when offers twice")
+    @Test
+    void testAnUseryHasTwoActivatedIntentions(){
+        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, new BigDecimal("1.47"), "SELL", CryptoName.ALICEUSDT);
+        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, new BigDecimal("1.48"), "BUY", CryptoName.ALICEUSDT);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO0);
+        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO1);
+        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        assertEquals(2, activatedIntentions.size());
+    }
+}

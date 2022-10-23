@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions;
 
 import java.util.List;
 

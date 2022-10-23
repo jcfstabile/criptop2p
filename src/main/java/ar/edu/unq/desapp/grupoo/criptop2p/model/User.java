@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DifferenceWithCurrentPriceException;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name="users")
@@ -116,9 +118,7 @@ public class User{
         this.cvu = aCVU;
     }
     public int getPoints(){ return this.points; }
-    public void setPoints(int newPoints){
-        this.points = newPoints;
-    }
+
     public List<Intention> getOffers() { return this.offers;}
 
     public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice){
@@ -135,7 +135,7 @@ public class User{
         intention.cancel(this);
     }
 
-    public int quantityIntentions() { return ((int) this.offers.stream().filter(intention -> intention.hasStatus(Status.SOLD)).count());}
+    public int quantityIntentions() { return ((int) this.intentionWithStatus(Status.SOLD).count());}
 
     public int getReputation() {
         try{
@@ -162,5 +162,13 @@ public class User{
 
     public void addIntention(Intention intention) {
         this.offers.add(intention);
+    }
+
+    public Stream<Intention> activatedIntentions() {
+        return this.intentionWithStatus(Status.OFFERED);
+    }
+
+    private Stream<Intention> intentionWithStatus(Status aStatus){
+        return this.offers.stream().filter(intention -> intention.hasStatus(aStatus));
     }
 }

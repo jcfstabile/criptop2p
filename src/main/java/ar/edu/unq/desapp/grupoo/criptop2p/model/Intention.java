@@ -102,6 +102,8 @@ public class Intention {
         return this.offered.isSameUser(anUser);
     }
 
+    //[U1I, U2A,U3]
+
     public void cancel(User user) {
         if(this.isItsOfferer(user)){
             this.canceled();
@@ -117,7 +119,7 @@ public class Intention {
     }
 
     public boolean hasStatus(Status aStatus) {
-        return this.status == aStatus;
+        return this.status.equals(aStatus);
     }
 
     public int reward(Timestamp anAceptationTimeSt) {

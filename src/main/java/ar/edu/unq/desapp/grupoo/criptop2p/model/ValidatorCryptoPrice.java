@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DifferenceWithCurrentPriceException;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 

@@ -1,8 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.DataIncomingConflictException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.ServerCantHandleRequestNowException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +78,25 @@ class ResponseHandlerTest {
                 () -> assertEquals("User was already registered", body.getMessage()),
                 () -> assertEquals("The operation can not be completed due to data conflict", body.getError())
         );
+    }
+    @DisplayName("When the server cant handle request the response is a error body and a 503")
+    @Test
+    void handleServerException() {
+        ServerCantHandleRequestNowException serverCantHandleRequestNowException= new ServerCantHandleRequestNowException();
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleServerCantHandleRequestException(serverCantHandleRequestNowException);
 
+        assertNotNull(responseEntity);
+        assertEquals("503 SERVICE_UNAVAILABLE", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("004", body.getErrorCode()),
+                () -> assertEquals("A major error had occurred", body.getMessage()),
+                () -> assertEquals("The server can't handle the request now", body.getError())
+        );
     }
 }

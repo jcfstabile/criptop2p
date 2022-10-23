@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.dto.IntentionDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -53,10 +53,11 @@ class IntentionTest {
     @DisplayName("An IntentionDTO exist")
     @Test
     void testAnIntentionDTOExist() {
-        IntentionDTO intentionDTO = new IntentionDTO(1, new BigDecimal(2), new Sell(), CryptoName.ATOMUSDT);
+        IntentionCreationDTO intentionDTO = new IntentionCreationDTO(1, new BigDecimal(2), "SELL", CryptoName.ATOMUSDT);
+
         assertEquals(1, intentionDTO.getCount());
         assertEquals(new BigDecimal(2), intentionDTO.getPrice());
-        assertEquals(new Sell().getName(), intentionDTO.getType().getName());
+        assertEquals("SELL", intentionDTO.getType());
         assertEquals(CryptoName.ATOMUSDT, intentionDTO.getCryptoName());
     }
 
