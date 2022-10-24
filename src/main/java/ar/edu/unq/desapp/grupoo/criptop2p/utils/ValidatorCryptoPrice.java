@@ -1,4 +1,9 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.model;
+package ar.edu.unq.desapp.grupoo.criptop2p.utils;
+
+import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

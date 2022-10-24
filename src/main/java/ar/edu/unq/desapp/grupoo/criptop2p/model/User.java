@@ -1,10 +1,12 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.utils.ValidatorCryptoPrice;
 import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -168,5 +170,9 @@ public class User{
 
     private Stream<Intention> intentionWithStatus(Status aStatus){
         return this.offers.stream().filter(intention -> intention.hasStatus(aStatus));
+    }
+
+    public List<Intention> offersBetween(Date init, Date end) {
+        return new ArrayList<Intention>();
     }
 }

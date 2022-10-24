@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.UserRestController;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-
+@DisplayName("User end-to_end Test")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class UsersEndToEndTest {
 
