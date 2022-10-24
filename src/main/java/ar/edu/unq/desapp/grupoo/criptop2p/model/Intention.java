@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Entity
@@ -148,5 +149,11 @@ public class Intention {
         this.setStatus(Status.WAITINGFORDELIVERY);
     }
 
+    public boolean isAfter(Date when) {
+        return this.timestamp.after(when);
+    }
 
+    public boolean isBefore(Date when) {
+        return this.timestamp.before(when);
+    }
 }
