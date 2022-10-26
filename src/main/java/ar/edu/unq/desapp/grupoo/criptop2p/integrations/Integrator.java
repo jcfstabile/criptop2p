@@ -18,7 +18,7 @@ public abstract class Integrator {
         restTemplate = new RestTemplate();
     }
 
-    protected String query(String anUrl, String field){
+    protected JsonNode query(String anUrl){
         ResponseEntity<String> response = this.response(anUrl);
         JsonNode root;
         try {
@@ -26,8 +26,7 @@ public abstract class Integrator {
         } catch(IOException ex) {
             throw new BinanceQueryErrorException(ex);
         }
-        JsonNode value = root.path(field);
-        return value.asText();
+        return root;
     }
 
     private ResponseEntity<String> response(String anUrl){

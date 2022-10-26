@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.utils;
+package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
