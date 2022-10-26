@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model.builders;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
-
 import java.math.BigDecimal;
 
 public class IntentionBuilder {

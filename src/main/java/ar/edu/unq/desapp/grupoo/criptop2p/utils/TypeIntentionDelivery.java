@@ -3,10 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Buy;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Sell;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
-
 import java.util.*;
-
-
 
 public class TypeIntentionDelivery {
     List<TypeIntention> types;

@@ -5,9 +5,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.BinanceQueryErrorEx
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.Quotation;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Binance Integration tests")

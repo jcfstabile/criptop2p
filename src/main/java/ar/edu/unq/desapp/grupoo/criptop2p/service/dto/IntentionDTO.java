@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.math.BigDecimal;
 
 public class IntentionDTO {
