@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Report;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class InspectUser {
 
-    public Formless offersBetween(User anUser, Date init, Date end) {
-        return new Formless(this.reportsOf(anUser.offersBetween(init, end)));
+    public Report.Formless offersBetween(User anUser, Date init, Date end) {
+        return new Report.Formless(this.reportsOf(anUser.offersBetween(init, end)));
     }
 
     private List<Report> reportsOf(List<Intention> intentions){

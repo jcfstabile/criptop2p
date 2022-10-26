@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Report;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ public class FormlessTest {
     @DisplayName("Form has a date")
     @Test
     void testFormHasADate(){
-        Formless form = new Formless(emptyReports);
+        Report.Formless form = new Report.Formless(emptyReports);
         assertInstanceOf(Date.class, form.getDate());
         assertNotNull(form.getDate());
     }
@@ -46,7 +47,7 @@ public class FormlessTest {
     @DisplayName("Form has a list of reports")
     @Test
     void testFormHasAListOfReports(){
-        Formless form = new Formless(emptyReports);
+        Report.Formless form = new Report.Formless(emptyReports);
         assertInstanceOf(List.class, form.getReports());
         assertNotNull(form.getReports());
     }
@@ -54,7 +55,7 @@ public class FormlessTest {
     @DisplayName("Form hasnt any report")
     @Test
     void testFormHasNotAnyReportWhenGivenAEmptyList(){
-        Formless form = new Formless(emptyReports);
+        Report.Formless form = new Report.Formless(emptyReports);
         List<Report> reports = form.getReports();
         assertEquals(0, reports.size());
     }
@@ -63,7 +64,7 @@ public class FormlessTest {
     @Test
     void testFormHasOneExpectStateWhenGivenAListWithAReport(@Mock Quoter aQuoter){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1.2"));
-        Formless form = new Formless(aListOfAReport);
+        Report.Formless form = new Report.Formless(aListOfAReport);
         List<Report> reports = form.getReports();
         assertEquals(new BigDecimal("50.904"), form.getTotalInPesos(aQuoter));
         assertEquals(new BigDecimal("42.42"), form.getTotalInDollars());
@@ -74,7 +75,7 @@ public class FormlessTest {
     @Test
     void testFormHasAnExpectStateWhenGivenAListWithTwoReport(@Mock Quoter aQuoter){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1.2"));
-        Formless form = new Formless(aListOfTwoReports);
+        Report.Formless form = new Report.Formless(aListOfTwoReports);
         List<Report> reports = form.getReports();
         assertEquals(new BigDecimal("581.808"), form.getTotalInPesos(aQuoter));
         assertEquals(new BigDecimal("484.84"), form.getTotalInDollars());
