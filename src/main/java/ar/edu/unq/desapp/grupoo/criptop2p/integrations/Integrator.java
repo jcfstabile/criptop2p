@@ -14,8 +14,8 @@ public abstract class Integrator {
 
     protected Integrator(String aResourceUrl){
         this.resourceUrl = aResourceUrl;
-        mapper = new ObjectMapper();
-        restTemplate = new RestTemplate();
+        this.mapper = new ObjectMapper();
+        this.restTemplate = new RestTemplate();
     }
 
     protected JsonNode query(String anUrl){

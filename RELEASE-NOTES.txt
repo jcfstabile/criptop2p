@@ -1,4 +1,27 @@
 ---------------------------------------------------------------------
+TAG 2.0
+---------------------------------------------------------------------
+- NEW FEATURES:
+
+<<<Core>>>
+Utilización de H2 para persistir datos
+Documentation de Endpoints (APIs) con Swagger (v3)
+
+<<<Funcionalidad>>>
+Listar cotizacion de criptoactivos
+Construir un listado donde se muestran las intenciones activas de compra/venta
+Procesar la transacción informada por un usuario
+Informar al usuario el volumen operado de cripto activos entre dos fechas
+Testing integral de 2 controllers (end-to-end)
+
+NOTES:
+* Faltantes:
+Crear datos de prueba cuando levanta la aplicación
+Permitir que un usuario exprese su intención de compra/venta
+
+KNOWN ISSUES
+* --
+---------------------------------------------------------------------
 TAG 1.0
 ---------------------------------------------------------------------
 - NEW FEATURES:
