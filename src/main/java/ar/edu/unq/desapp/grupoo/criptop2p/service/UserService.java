@@ -9,7 +9,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
-import ar.edu.unq.desapp.grupoo.criptop2p.webservice.Quotation;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Quotation;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;

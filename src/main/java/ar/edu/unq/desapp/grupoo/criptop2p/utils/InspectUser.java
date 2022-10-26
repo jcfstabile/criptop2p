@@ -5,13 +5,13 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Report;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class InspectUser {
+
     public Formless offersBetween(User anUser, Date init, Date end) {
         return new Formless(this.reportsOf(anUser.offersBetween(init, end)));
     }

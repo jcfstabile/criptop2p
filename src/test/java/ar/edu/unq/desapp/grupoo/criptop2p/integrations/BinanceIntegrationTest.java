@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.BinanceQueryErrorException;
-import ar.edu.unq.desapp.grupoo.criptop2p.webservice.Quotation;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Quotation;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.io.IOException;

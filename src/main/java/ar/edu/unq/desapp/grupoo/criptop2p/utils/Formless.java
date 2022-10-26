@@ -29,8 +29,8 @@ public class Formless {
         return this.reports.stream().map(Report::getTotalInDollars).reduce(new BigDecimal(0), BigDecimal::add);
     }
 
-    public BigDecimal getTotalInPesos() {
-        return this.getTotalInDollars().multiply(new Quoter().quotationOfUsd());
+    public BigDecimal getTotalInPesos(Quoter aQuoter) {
+        return this.getTotalInDollars().multiply(aQuoter.quotationOfUsd());
     }
 
 }

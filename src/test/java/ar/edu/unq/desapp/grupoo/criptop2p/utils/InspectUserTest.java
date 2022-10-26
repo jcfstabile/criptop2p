@@ -1,10 +1,14 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,6 +21,7 @@ import static org.mockito.Mockito.mock;
 @DisplayName("InspectUser tests")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
+@RunWith(JUnitParamsRunner.class)
 public class InspectUserTest {
 
     InspectUser inspector;
@@ -29,6 +34,8 @@ public class InspectUserTest {
     List<Intention> offersSellATOMUSDTAndBuyBNBUSDT;
     Date init;
     Date end;
+    BigDecimal quotationUSD;
+
     @BeforeEach
     void setUp(@Mock User anUser){
         inspector = new InspectUser();
@@ -41,6 +48,7 @@ public class InspectUserTest {
         offersSellATOMUSDTAndBuyBNBUSDT = new ArrayList<>(Arrays.asList(intention1, intention2));
         init = mock(Date.class);
         end = mock(Date.class);
+        quotationUSD = BigDecimal.valueOf(Double.parseDouble("154.10"));
     }
 
     @DisplayName("InspectUser returns a formless")
@@ -110,51 +118,55 @@ public class InspectUserTest {
         assertEquals(new BigDecimal("498.96"), form.getTotalInDollars());
     }
 
+    @Parameters()
     @DisplayName("Inspect returns a form with total in $ 0 when there are not offers between dates")
     @Test
-    void testInspectAUserReturnsFormWith0PesosWhenThrereAreNotOffersBetweenDates(@Mock User anUser){
+    void testInspectAUserReturnsFormWith0PesosWhenThrereAreNotOffersBetweenDates(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(new ArrayList<>(0));
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertTrue(form.getTotalInPesos().compareTo(new BigDecimal(0.0)) == 0);
+        assertEquals(0, form.getTotalInPesos(aQuoter).compareTo(new BigDecimal(0)));
     }
 
     @DisplayName("Inspect returns a form with  correct total in $ when there is an only intention between init and final date")
     @Test
-    void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereIsAnOnlyIntentionBetweenInitAndFinalDate(@Mock User anUser){
+    void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereIsAnOnlyIntentionBetweenInitAndFinalDate(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerBuyATOMUSDT);
+        Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(new BigDecimal("224.8712"), form.getTotalInPesos());
+        assertEquals(new BigDecimal("228.068"), form.getTotalInPesos(aQuoter));
     }
 
     @DisplayName("Inspect returns a form with  correct total in $ when there is two intentions, each different crypto, between init and final date")
     @Test
-    void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereAre2IntentionOfDifferentCryptoBetweenInitAndFinalDate(@Mock User anUser){
+    void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereAre2IntentionOfDifferentCryptoBetweenInitAndFinalDate(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersSellATOMUSDTAndBuyBNBUSDT);
+        Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(new BigDecimal("37905.9912"), form.getTotalInPesos());
+        assertEquals(new BigDecimal("38444.868"), form.getTotalInPesos(aQuoter));
     }
 
     @DisplayName("Inspect returns a form with  correct total in $ when there is two intentions of same crypto, between init and final date")
     @Test
-    void testInspectAUserReturnsAFormWithCorrectTotalIn$WhenThereAre2IntentionOfSameCryptoBetweenInitAndFinalDate(@Mock User anUser){
+    void testInspectAUserReturnsAFormWithCorrectTotalIn$WhenThereAre2IntentionOfSameCryptoBetweenInitAndFinalDate(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersBuyAndSellATOMUSDT);
+        Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(new BigDecimal("449.7424"), form.getTotalInPesos());
+        assertEquals(new BigDecimal("456.136"), form.getTotalInPesos(aQuoter));
     }
 
     @DisplayName("Inspect returns a form with correct total in $ when there are four intentions, each pair of different crypto, between init and final date")
     @Test
-    void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereAre4IntentionOfEachPairSameCryptoBetweenInitAndFinalDate(@Mock User anUser){
+    void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereAre4IntentionOfEachPairSameCryptoBetweenInitAndFinalDate(@Mock User anUser, @Mock Quoter aQuoter){
         Intention intention3 = new Intention(anUser, 1, BigDecimal.valueOf(Long.parseLong("248")), new Sell(), CryptoName.BNBUSDT);
         offersBuyAndSellATOMUSDT.add(intention2);
         offersBuyAndSellATOMUSDT.add(intention3);
         List<Intention> offers = offersBuyAndSellATOMUSDT;
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offers);
+        Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(new BigDecimal("75811.9824"), form.getTotalInPesos());
+        assertEquals(new BigDecimal("76889.736"), form.getTotalInPesos(aQuoter));
     }
 
-    //
     @DisplayName("Inspect returns a list with an only report when there is an only intention between init and final date")
     @Test
     void testInspectAUserReturnsAListWithOneReport(@Mock User anUser){
