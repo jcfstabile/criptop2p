@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.webservice.Quotation;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Quotation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

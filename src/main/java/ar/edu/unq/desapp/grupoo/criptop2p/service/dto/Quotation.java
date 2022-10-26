@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
 public class Quotation {
 
