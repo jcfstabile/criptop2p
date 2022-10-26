@@ -1,9 +1,12 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.BinanceQueryErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.Quotation;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 public class BinanceIntegration extends Integrator {
@@ -20,5 +23,10 @@ public class BinanceIntegration extends Integrator {
 
     public String check() {
         return this.query(this.completeUrl("ping")).path("result").asText();
+    }
+
+    @Override
+    protected RuntimeException myException(IOException ex) {
+        return new BinanceQueryErrorException(ex);
     }
 }
