@@ -1,10 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.Report;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -17,11 +16,14 @@ public class InspectUser {
     }
 
     private List<Report> reportsOf(List<Intention> intentions){
-        return this.intentionsClasifficatedBySymbol(intentions).stream().map(listOfIntention ->
-                new Report(this.crypto(listOfIntention),
+        return this.intentionsClasifficatedBySymbol(intentions).stream().map(listOfIntention -> {
+                BigDecimal price = BigDecimal.valueOf(Double.parseDouble(new BinanceIntegration().priceOf(listOfIntention.get(0).getCrypto()).getPrice()));
+                return new Report(this.crypto(listOfIntention),
                            this.costInDollars(listOfIntention),
                            this.amount(listOfIntention),
-                           BigDecimal.valueOf(Double.parseDouble(new BinanceIntegration().priceOf(listOfIntention.get(0).getCrypto()).getPrice())))).toList();
+                           price,
+                           new Quoter().quotationOfUsd().multiply(price));
+                }).toList();
     }
 
     private CryptoName crypto(List<Intention> intentions){

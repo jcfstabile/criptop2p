@@ -2,13 +2,10 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,7 +18,6 @@ import static org.mockito.Mockito.mock;
 @DisplayName("InspectUser tests")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@RunWith(JUnitParamsRunner.class)
 public class InspectUserTest {
 
     InspectUser inspector;
@@ -118,11 +114,11 @@ public class InspectUserTest {
         assertEquals(new BigDecimal("498.96"), form.getTotalInDollars());
     }
 
-    @Parameters()
     @DisplayName("Inspect returns a form with total in $ 0 when there are not offers between dates")
     @Test
     void testInspectAUserReturnsFormWith0PesosWhenThrereAreNotOffersBetweenDates(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(new ArrayList<>(0));
+        Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
         Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(0, form.getTotalInPesos(aQuoter).compareTo(new BigDecimal(0)));
     }

@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.utils;
+package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
@@ -32,5 +32,4 @@ public class Formless {
     public BigDecimal getTotalInPesos(Quoter aQuoter) {
         return this.getTotalInDollars().multiply(aQuoter.quotationOfUsd());
     }
-
 }

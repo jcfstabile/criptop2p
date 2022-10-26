@@ -51,7 +51,6 @@ dependencies {
 		exclude group: 'junit'
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	implementation 'pl.pragmatists:JUnitParams:1.1.1'
 }
 
 configurations.compileOnly.setCanBeResolved(true)
