@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Report;
@@ -11,15 +12,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class InspectUser {
-    public List<Report> offersBetween(User anUser, Date init, Date end) {
-        return this.reportsOf(anUser.offersBetween(init, end));
+    public Formless offersBetween(User anUser, Date init, Date end) {
+        return new Formless(this.reportsOf(anUser.offersBetween(init, end)));
     }
 
     private List<Report> reportsOf(List<Intention> intentions){
         return this.intentionsClasifficatedBySymbol(intentions).stream().map(listOfIntention ->
                 new Report(this.crypto(listOfIntention),
                            this.costInDollars(listOfIntention),
-                           this.amount(listOfIntention))).toList();
+                           this.amount(listOfIntention),
+                           BigDecimal.valueOf(Double.parseDouble(new BinanceIntegration().priceOf(listOfIntention.get(0).getCrypto()).getPrice())))).toList();
     }
 
     private CryptoName crypto(List<Intention> intentions){
