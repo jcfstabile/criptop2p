@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.BinanceQueryErrorException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +35,5 @@ public abstract class Integrator {
         return this.resourceUrl + parameters;
     }
 
-    abstract protected RuntimeException myException(IOException ex);
+    protected abstract RuntimeException myException(IOException ex);
 }

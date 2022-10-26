@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Quoter tests")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class QuoterTest {
+class QuoterTest {
     Quoter quoter;
 
     @BeforeEach
