@@ -23,4 +23,8 @@ public class Quoter extends Integrator{
         return new BigDecimal(quotation);
     }
 
+    @Override
+    protected RuntimeException myException(IOException ex) {
+        return new RuntimeException(ex);
+    }
 }

@@ -24,7 +24,7 @@ public abstract class Integrator {
         try {
             root = mapper.readTree(response.getBody());
         } catch(IOException ex) {
-            throw new BinanceQueryErrorException(ex);
+            throw this.myException(ex);
         }
         return root;
     }
@@ -35,4 +35,6 @@ public abstract class Integrator {
     protected String completeUrl(String parameters){
         return this.resourceUrl + parameters;
     }
+
+    abstract protected RuntimeException myException(IOException ex);
 }
