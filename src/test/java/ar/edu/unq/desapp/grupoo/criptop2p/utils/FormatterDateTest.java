@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("FormatterDate Tests")
 @SpringBootTest
-public class FormatterDateTest {
+class FormatterDateTest {
     @DisplayName("FormatterTest return a Date when receive  especific number")
     @Test
     void testFormatterTestReturnADateWhenReceiveANumber(){

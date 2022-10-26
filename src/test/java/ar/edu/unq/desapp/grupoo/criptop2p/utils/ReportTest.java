@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Report Tests")
 @SpringBootTest
-public class ReportTest {
+class ReportTest {
     @DisplayName("A report exists")
     @Test
     void testReportExist(){

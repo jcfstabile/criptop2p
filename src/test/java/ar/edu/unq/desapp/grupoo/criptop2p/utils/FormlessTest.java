@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Formless Tests")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class FormlessTest {
+class FormlessTest {
 
     List<Report> emptyReports;
     List<Report> aListOfAReport;
