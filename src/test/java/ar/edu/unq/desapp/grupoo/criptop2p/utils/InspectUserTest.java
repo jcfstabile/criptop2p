@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 @DisplayName("InspectUser tests")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class InspectUserTest {
+class InspectUserTest {
 
     InspectUser inspector;
     Intention intention0;
