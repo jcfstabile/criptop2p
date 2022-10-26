@@ -33,4 +33,7 @@ public abstract class Integrator {
     private ResponseEntity<String> response(String anUrl){
         return restTemplate.getForEntity(anUrl, String.class);
     }
+    protected String completeUrl(String parameters){
+        return this.resourceUrl + parameters;
+    }
 }

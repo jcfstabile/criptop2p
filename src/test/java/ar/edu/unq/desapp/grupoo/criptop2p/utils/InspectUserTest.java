@@ -115,7 +115,7 @@ public class InspectUserTest {
     void testInspectAUserReturnsFormWith0PesosWhenThrereAreNotOffersBetweenDates(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(new ArrayList<>(0));
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(BigDecimal.ZERO, form.getTotalInPesos());
+        assertTrue(form.getTotalInPesos().compareTo(new BigDecimal(0.0)) == 0);
     }
 
     @DisplayName("Inspect returns a form with  correct total in $ when there is an only intention between init and final date")
@@ -123,7 +123,7 @@ public class InspectUserTest {
     void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereIsAnOnlyIntentionBetweenInitAndFinalDate(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerBuyATOMUSDT);
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(new BigDecimal("1.48"), form.getTotalInPesos());
+        assertEquals(new BigDecimal("224.8712"), form.getTotalInPesos());
     }
 
     @DisplayName("Inspect returns a form with  correct total in $ when there is two intentions, each different crypto, between init and final date")
@@ -131,7 +131,7 @@ public class InspectUserTest {
     void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereAre2IntentionOfDifferentCryptoBetweenInitAndFinalDate(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersSellATOMUSDTAndBuyBNBUSDT);
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(new BigDecimal("249.48"), form.getTotalInPesos());
+        assertEquals(new BigDecimal("37905.9912"), form.getTotalInPesos());
     }
 
     @DisplayName("Inspect returns a form with  correct total in $ when there is two intentions of same crypto, between init and final date")
@@ -139,7 +139,7 @@ public class InspectUserTest {
     void testInspectAUserReturnsAFormWithCorrectTotalIn$WhenThereAre2IntentionOfSameCryptoBetweenInitAndFinalDate(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersBuyAndSellATOMUSDT);
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(new BigDecimal("2.96"), form.getTotalInPesos());
+        assertEquals(new BigDecimal("449.7424"), form.getTotalInPesos());
     }
 
     @DisplayName("Inspect returns a form with correct total in $ when there are four intentions, each pair of different crypto, between init and final date")
@@ -151,7 +151,7 @@ public class InspectUserTest {
         List<Intention> offers = offersBuyAndSellATOMUSDT;
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offers);
         Formless form = inspector.offersBetween(anUser, init, end);
-        assertEquals(new BigDecimal("498.96"), form.getTotalInPesos());
+        assertEquals(new BigDecimal("75811.9824"), form.getTotalInPesos());
     }
 
     //

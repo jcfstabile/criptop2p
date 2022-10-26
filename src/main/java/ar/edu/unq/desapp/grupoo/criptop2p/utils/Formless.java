@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Report;
+import lombok.SneakyThrows;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class Formless {
     }
 
     public BigDecimal getTotalInDollars() {
-        return this.reports.stream().map(Report::getTotalInDollars).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return this.reports.stream().map(Report::getTotalInDollars).reduce(new BigDecimal(0), BigDecimal::add);
     }
 
     public BigDecimal getTotalInPesos() {

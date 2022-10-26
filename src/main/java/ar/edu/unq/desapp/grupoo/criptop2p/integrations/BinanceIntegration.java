@@ -18,8 +18,4 @@ public class BinanceIntegration extends Integrator {
     public String check() {
         return this.query(this.completeUrl("ping"), "result");
     }
-
-    private String completeUrl(String parameters){
-        return this.resourceUrl + parameters;
-    }
 }
