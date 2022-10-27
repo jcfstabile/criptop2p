@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Quotation;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ class QuotationControllerTest {
     @DisplayName("The QuotationController returns a list of quotations")
     @Test
     void testQuotationControllerReturnAListOfQuotations() {
-        assertInstanceOf(Quotation.class, quotationController.allQuotations().get(0));
+        assertInstanceOf(QuotationDTO.class, quotationController.allQuotations().get(0));
     }
 
     @DisplayName("All quotations returns the same cant of quatations that the app has cryptos name")

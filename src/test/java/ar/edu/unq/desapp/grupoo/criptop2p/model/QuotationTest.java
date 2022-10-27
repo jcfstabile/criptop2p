@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Quotation;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,17 +12,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Transactional
 class QuotationTest {
-    Quotation quotationSUT;
+    QuotationDTO quotationSUT;
 
     @BeforeEach
     void setUp(){
-        quotationSUT = new Quotation(CryptoName.BNBUSDT.name(),"123");
+        quotationSUT = new QuotationDTO(CryptoName.BNBUSDT.name(),"123");
     }
 
     @DisplayName("The price of Quotation is the expected")
     @Test
     void testNameOfAQuotationIsTheExpected() {
-        assertEquals("BNBUSDT", quotationSUT.getCrypto());
+        assertEquals("BNBUSDT", quotationSUT.getCryptoName());
     }
 
 

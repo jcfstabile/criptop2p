@@ -1,11 +1,11 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
-public class Quotation {
+public class QuotationDTO {
 
-    private String name;
-    private String price;
+    private final String name;
+    private final String price;
 
-    public Quotation(String aName, String aPrice){
+    public QuotationDTO(String aName, String aPrice){
         this.name = aName;
         this.price = aPrice;
     }
@@ -15,7 +15,7 @@ public class Quotation {
     }
 
 
-    public String getCrypto() {
+    public String getCryptoName() {
         return this.name;
     }
 }

@@ -9,13 +9,14 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Quotation;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
@@ -73,7 +74,7 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(() -> new UserNotFoundException(anId));
         Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
-        Quotation quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
+        QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
         user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
         this.userRepository.save(user);
