@@ -112,7 +112,7 @@ public class UserRestController {
     }
 
     @Parameter(name = "id", description = "Id of the user to retrieve activated intentions")
-    @GetMapping("/users/activated-intentions/{id}")
+    @GetMapping("/users/{id}/intentions")
     @Operation(
             summary = "List of activated intentions from a given user",
             responses = {
