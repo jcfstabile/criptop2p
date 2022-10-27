@@ -21,16 +21,6 @@ public class UserBuilder {
         this.cvu = aCvu;
     }
 
-    public UserBuilder(){
-        this.name = "any";
-        this.surname = "any";
-        this.email = "any@here.build";
-        this.address = "always here";
-        this.password = "1234Aa!#";
-        this.walletAddress = this.email.repeat(2).substring(0,8);
-        this.cvu = "random cvu number here";
-    }
-
      public UserBuilder withName(String aName) {
         this.name = aName;
         return this;
