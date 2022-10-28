@@ -22,19 +22,19 @@ class QuotationControllerTest {
 
     @DisplayName("The QuotationController returns a list")
     @Test
-    void testQuotationControllerReturnAListOf() {
+    void testQuotationControllerReturnAListOf() throws InterruptedException {
         assertInstanceOf(List.class, quotationController.allQuotations());
     }
 
     @DisplayName("The QuotationController returns a list of quotations")
     @Test
-    void testQuotationControllerReturnAListOfQuotations() {
+    void testQuotationControllerReturnAListOfQuotations() throws InterruptedException {
         assertInstanceOf(QuotationDTO.class, quotationController.allQuotations().get(0));
     }
 
     @DisplayName("All quotations returns the same cant of quatations that the app has cryptos name")
     @Test
-    void testAllQuotationsGetsTheSameCountOfQuatantionThatCryptosNames(){
+    void testAllQuotationsGetsTheSameCountOfQuatantionThatCryptosNames() throws InterruptedException {
        assertEquals(Arrays.asList(CryptoName.values()).size(), quotationController.allQuotations().size());
     }
 }

@@ -17,7 +17,7 @@ public class QuotationController {
     private QuotationService quotationService;
 
     @GetMapping("/quotations")
-    public List<QuotationDTO> allQuotations() {
+    public List<QuotationDTO> allQuotations() throws InterruptedException {
         return quotationService.allQuotations();
     }
 }
