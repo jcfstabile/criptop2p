@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
-import lombok.SneakyThrows;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
