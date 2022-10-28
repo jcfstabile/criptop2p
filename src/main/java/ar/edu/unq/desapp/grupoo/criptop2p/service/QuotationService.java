@@ -15,26 +15,27 @@ public class QuotationService {
     BinanceIntegration binanceIntegrator;
 
     protected boolean busy = false;
-    protected boolean validCache = false;
+    protected boolean invalidCache = true;
     protected List<QuotationDTO> cachedQuotations;
 
     private void setBusy(){ busy = true; }
 
     private void clearBusy(){ busy = false; }
 
-    private void setValidCache() { validCache = true; }
+    private void clearInvalidCache() { invalidCache = false; }
+
 
     public synchronized void setCachedQuotations() throws InterruptedException {
         while(busy) { wait(); }
         setBusy();
         cachedQuotations = grabAllQuotations();
         clearBusy();
-        setValidCache();
+        clearInvalidCache();
         notifyAll();
     }
 
     public synchronized List<QuotationDTO> allQuotations() throws InterruptedException {
-        while(busy && validCache) { wait(); }
+        while(busy || invalidCache) { wait(); }
         setBusy();
         List<QuotationDTO> quotations = cachedQuotations;
         clearBusy();
