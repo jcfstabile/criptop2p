@@ -18,6 +18,7 @@ public class Cache implements Runnable {
     QuotationService quotationService;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     @PostConstruct
     void startCacherOfQuotations(){
         scheduler.scheduleAtFixedRate(this , 0, 10, TimeUnit.MINUTES);
@@ -30,7 +31,7 @@ public class Cache implements Runnable {
         try {
             quotationService.setCachedQuotations();
         } catch (InterruptedException e) {
-            e.printStackTrace(); // TODO Handling
+            Thread.currentThread().interrupt();
         }
         logger.info("All quotations cached" );
     }
