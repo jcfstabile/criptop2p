@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ public class QuotationController {
     private QuotationService quotationService;
 
     @GetMapping("/quotations")
-    public List<QuotationDTO> allQuotations() {
+    public List<QuotationDTO> allQuotations() throws InterruptedException {
         return quotationService.allQuotations();
     }
 }

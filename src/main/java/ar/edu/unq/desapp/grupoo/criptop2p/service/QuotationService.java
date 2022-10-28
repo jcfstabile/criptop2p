@@ -14,7 +14,35 @@ public class QuotationService {
     @Autowired
     BinanceIntegration binanceIntegrator;
 
-    public List<QuotationDTO> allQuotations() {
+    protected boolean busy = false;
+    protected boolean validCache = false;
+    protected List<QuotationDTO> cachedQuotations;
+
+    private void setBusy(){ busy = true; }
+
+    private void clearBusy(){ busy = false; }
+
+    private void setValidCache() { validCache = true; }
+
+    public synchronized void setCachedQuotations() throws InterruptedException {
+        while(busy) { wait(); }
+        setBusy();
+        cachedQuotations = grabAllQuotations();
+        clearBusy();
+        setValidCache();
+        notifyAll();
+    }
+
+    public synchronized List<QuotationDTO> allQuotations() throws InterruptedException {
+        while(busy && validCache) { wait(); }
+        setBusy();
+        List<QuotationDTO> quotations = cachedQuotations;
+        clearBusy();
+        notifyAll();
+        return quotations;
+    }
+
+    private List<QuotationDTO> grabAllQuotations() {
         List<CryptoName> cryptos = Arrays.asList(CryptoName.values());
         return cryptos.stream().map(crypto ->
             binanceIntegrator.priceOf(crypto)
