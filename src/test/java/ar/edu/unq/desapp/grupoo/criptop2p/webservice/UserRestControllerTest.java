@@ -84,6 +84,7 @@ class UserRestControllerTest {
         IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();
 
         assertNotNull(intentionCreationDTO);
+        assertNotNull(intentionDTO);
         assertEquals(Status.OFFERED, intentionDTO.getStatus() );
         assertEquals(userDTO.getId(), intentionDTO.getOfferedId());
     }
@@ -153,7 +154,11 @@ class UserRestControllerTest {
     @Test
     void testAnUserRecentlyHasNotActivatedIntentions(){
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        assertNotNull(registeredUser);
+
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+
+        assertNotNull(activatedIntentions);
         assertEquals(0, activatedIntentions.size());
     }
 
@@ -161,10 +166,14 @@ class UserRestControllerTest {
     @Test
     void testAnUserRecentlyHasOnlyActivatedIntentions() throws InterruptedException {
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        assertNotNull(registeredUser);
         CryptoName cryptoName = CryptoName.ALICEUSDT;
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,priceOf(cryptoName), "SELL", cryptoName);
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO);
+
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+
+        assertNotNull(activatedIntentions);
         assertEquals(1, activatedIntentions.size());
     }
 
@@ -172,6 +181,7 @@ class UserRestControllerTest {
     @Test
     void testAnUserHasTwoActivatedIntentions() throws InterruptedException {
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        assertNotNull(registeredUser);
         CryptoName cryptoName = CryptoName.ALICEUSDT;
         IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, priceOf(cryptoName), "SELL", cryptoName);
         IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, priceOf(cryptoName), "BUY", cryptoName);
@@ -180,6 +190,7 @@ class UserRestControllerTest {
 
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
 
+        assertNotNull(activatedIntentions);
         assertEquals(2, activatedIntentions.size());
     }
 }
