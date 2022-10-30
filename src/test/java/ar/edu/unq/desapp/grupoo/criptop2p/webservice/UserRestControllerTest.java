@@ -29,18 +29,6 @@ class UserRestControllerTest {
     @Autowired
     private QuotationService quotationService;
 
-    private BigDecimal priceOf(CryptoName cryptoName) throws InterruptedException {
-        return new BigDecimal(
-                quotationService.allQuotations()
-                .stream()
-                .filter(crypto -> cryptoName.name().equals(crypto.getCryptoName()))
-                .findFirst()
-                .orElse(new QuotationDTO("", "0.0"))
-                .getPrice()
-        );
-    }
-
-
     @BeforeEach
     public void setUp(){
         anUser = new UserCreationDTO("Jom", "Nen", "jk@here.dom", "Fake Street 1234", "Pepito+1234", "12345678", "1234567890123456789012");
@@ -168,7 +156,7 @@ class UserRestControllerTest {
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
         assertNotNull(registeredUser);
         CryptoName cryptoName = CryptoName.ALICEUSDT;
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,priceOf(cryptoName), "SELL", cryptoName);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO);
 
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
@@ -183,8 +171,8 @@ class UserRestControllerTest {
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
         assertNotNull(registeredUser);
         CryptoName cryptoName = CryptoName.ALICEUSDT;
-        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, priceOf(cryptoName), "SELL", cryptoName);
-        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, priceOf(cryptoName), "BUY", cryptoName);
+        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "BUY", cryptoName);
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO0);
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO1);
 
