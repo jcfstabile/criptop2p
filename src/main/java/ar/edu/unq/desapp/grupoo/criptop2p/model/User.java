@@ -173,6 +173,6 @@ public class User{
     }
 
     public List<Intention> offersBetween(Date init, Date end) {
-        return this.offers.stream().filter(intention -> intention.isAfter(init) && intention.isBefore(end)).toList();
+        return this.offers.stream().filter(intention -> intention.isBetween(init, end)).toList();
     }
 }

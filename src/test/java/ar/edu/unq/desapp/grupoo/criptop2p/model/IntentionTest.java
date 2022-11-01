@@ -4,12 +4,17 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.utils.ConvertDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -280,5 +285,15 @@ class IntentionTest {
         assertEquals(0, otherUser.getPoints());
         intention.sold(moment, otherUser);
         assertEquals(5, otherUser.getPoints());
+    }
+
+    @DisplayName("Intention Return True When Belongs Between Two Dates")
+    @Test
+    void testIntentionReturnTrueWhenBelongsBetweenTwoDates() throws ParseException {
+        String dateInitString = "01-01-2022";
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date init = formatter.parse(dateInitString);
+        Date end = new Date();
+        assertTrue(intention.isBetween(init, end));
     }
 }
