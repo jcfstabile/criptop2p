@@ -8,18 +8,24 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
+import ar.edu.unq.desapp.grupoo.criptop2p.utils.ConvertDate;
+import ar.edu.unq.desapp.grupoo.criptop2p.utils.FormatterDate;
+import ar.edu.unq.desapp.grupoo.criptop2p.utils.InspectUser;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Quotation;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +45,10 @@ public class UserService implements UserServiceInterface {
 
     @Autowired
     private IntentionMapper intentionMapper;
+
+    @Autowired
+    private InspectUser inspectUser;
+
     @Override
     @Transactional
     public Long addUser(UserCreationDTO userCreationDTO) {
@@ -73,7 +83,7 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(() -> new UserNotFoundException(anId));
         Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
-        Quotation quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
+        QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
         user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
         this.userRepository.save(user);
@@ -106,5 +116,18 @@ public class UserService implements UserServiceInterface {
         User getUser = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
         return getUser.activatedIntentions().map(intention -> intentionMapper.toIntentionDto(intention)).toList();
+    }
+
+    @Override
+    public Formless intentionsBetween(Long id, String start, String end) {
+        User getUser = this.userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        FormatterDate formatter = new FormatterDate();
+        LocalDate startLocalDate = formatter.stringToDate(start);
+        LocalDate endLocalDate = formatter.stringToDate(end);
+        ConvertDate convert = new ConvertDate();
+        Date startDate = convert.convertToDate(startLocalDate);
+        Date endDate = convert.convertToDate(endLocalDate);
+        return inspectUser.offersBetween(getUser, startDate, endDate);
     }
 }

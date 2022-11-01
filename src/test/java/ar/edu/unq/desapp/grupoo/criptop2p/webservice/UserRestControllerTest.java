@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,8 @@ class UserRestControllerTest {
     @Autowired
     private UserRestController anUserRestController;
 
+    @Autowired
+    private QuotationService quotationService;
 
     @BeforeEach
     public void setUp(){
@@ -69,6 +72,7 @@ class UserRestControllerTest {
         IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();
 
         assertNotNull(intentionCreationDTO);
+        assertNotNull(intentionDTO);
         assertEquals(Status.OFFERED, intentionDTO.getStatus() );
         assertEquals(userDTO.getId(), intentionDTO.getOfferedId());
     }
@@ -138,29 +142,43 @@ class UserRestControllerTest {
     @Test
     void testAnUserRecentlyHasNotActivatedIntentions(){
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        assertNotNull(registeredUser);
+
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+
+        assertNotNull(activatedIntentions);
         assertEquals(0, activatedIntentions.size());
     }
 
     @DisplayName("An user recently has only one activated intention when only offers one time")
     @Test
-    void testAnUserRecentlyHasOnlyActivatedIntentions(){
+    void testAnUserRecentlyHasOnlyActivatedIntentions() throws InterruptedException {
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal("1.55"), "SELL", CryptoName.ALICEUSDT);
+        assertNotNull(registeredUser);
+        CryptoName cryptoName = CryptoName.ALICEUSDT;
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO);
+
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+
+        assertNotNull(activatedIntentions);
         assertEquals(1, activatedIntentions.size());
     }
 
     @DisplayName("An user has two activated intention when offers twice")
     @Test
-    void testAnUseryHasTwoActivatedIntentions(){
+    void testAnUserHasTwoActivatedIntentions() throws InterruptedException {
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
-        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, new BigDecimal("1.55"), "SELL", CryptoName.ALICEUSDT);
-        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, new BigDecimal("1.55"), "BUY", CryptoName.ALICEUSDT);
+        assertNotNull(registeredUser);
+        CryptoName cryptoName = CryptoName.ALICEUSDT;
+        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "BUY", cryptoName);
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO0);
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO1);
+
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+
+        assertNotNull(activatedIntentions);
         assertEquals(2, activatedIntentions.size());
     }
 }

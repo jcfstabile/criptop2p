@@ -112,7 +112,7 @@ public class UserRestController {
     }
 
     @Parameter(name = "id", description = "Id of the user to retrieve activated intentions")
-    @GetMapping("/users/activated-intentions/{id}")
+    @GetMapping("/users/{id}/intentions")
     @Operation(
             summary = "List of activated intentions from a given user",
             responses = {
@@ -125,4 +125,28 @@ public class UserRestController {
     public ResponseEntity<List<IntentionDTO>> activatedIntentionsOf(@PathVariable Long id) {
         return ResponseEntity.ok(this.userService.activatedIntentionsOf(id));
     }
+
+
+    @Parameter(name = "id", description = "Id of the user to retrieveintentions")
+    @Parameter(name = "start", description = "Date to start, with format MM/dd/yyyy")
+    @Parameter(name = "end", description = "Date to end, with format MM/dd/yyyy")
+    @GetMapping("/users/{id}?start={start}&end={end}")
+    @Operation(
+            summary = "Get user form about amount operated between 2 dates",
+            responses = {
+                    @ApiResponse( description = "User information for id", responseCode = "200",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Formless.class))),
+                    @ApiResponse( description = "User not found", responseCode = "404",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseErrorSimple.class))),
+                    @ApiResponse( description = "Date cant be parse", responseCode = "505",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseErrorSimple.class))),
+            }
+    )
+    public ResponseEntity<Formless> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end) {
+        return ResponseEntity.ok(this.userService.intentionsBetween(id, start, end));
+    }
+
 }
