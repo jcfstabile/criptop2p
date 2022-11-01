@@ -149,11 +149,11 @@ public class Intention {
         this.setStatus(Status.WAITINGFORDELIVERY);
     }
 
-    public boolean isAfter(Date when) {
+    private boolean isAfter(Date when) {
         return this.timestamp.after(when);
     }
 
-    public boolean isBefore(Date when) {
+    private boolean isBefore(Date when) {
         return this.timestamp.before(when);
     }
 
