@@ -156,4 +156,8 @@ public class Intention {
     public boolean isBefore(Date when) {
         return this.timestamp.before(when);
     }
+
+    public boolean isBetween(Date init, Date end) {
+        return this.isAfter(init) || this.isBefore(end);
+    }
 }
