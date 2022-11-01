@@ -16,11 +16,11 @@ Testing integral de 2 controllers (end-to-end)
 
 NOTES:
 * Faltantes:
-Crear datos de prueba cuando levanta la aplicación
-Permitir que un usuario exprese su intención de compra/venta
+Un test integral de otro controller (distinto al UserRestController) (end-to-end)
 
 KNOWN ISSUES
-* --
+* Datos repetidos en DB H2
+* La intention no resuelve correctamente si es entre 2 fechas
 ---------------------------------------------------------------------
 TAG 1.0
 ---------------------------------------------------------------------
