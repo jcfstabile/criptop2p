@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.ServerCantHandleRequestNowException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +28,21 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ServerCantHandleRequestNowException.class})
     public ResponseEntity<Object> handleServerCantHandleRequestException(ServerCantHandleRequestNowException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("004", "A major error had occurred", exception.getError()), HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler({InterruptedErrorException.class})
+    public ResponseEntity<Object> handleInterruptedErrorException(InterruptedErrorException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("005", "A major error had occurred", exception.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler({IntentionNotFoundException.class})
+    public ResponseEntity<Object> handleIntentionNotFoundException(IntentionNotFoundException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("006", "Intention not found", exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({NoValidActionErrorException.class})
+    public ResponseEntity<Object> handleNoValidActionErrorException(NoValidActionErrorException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("007", "Not a valid action", exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 }

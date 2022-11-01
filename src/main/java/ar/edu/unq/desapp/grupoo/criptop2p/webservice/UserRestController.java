@@ -126,8 +126,7 @@ public class UserRestController {
         return ResponseEntity.ok(this.userService.activatedIntentionsOf(id));
     }
 
-
-    @Parameter(name = "id", description = "Id of the user to retrieveintentions")
+    @Parameter(name = "id", description = "Id of the user to retrieve intentions")
     @Parameter(name = "start", description = "Date to start, with format MM/dd/yyyy")
     @Parameter(name = "end", description = "Date to end, with format MM/dd/yyyy")
     @GetMapping("/users/{id}?start={start}&end={end}")
@@ -149,4 +148,12 @@ public class UserRestController {
         return ResponseEntity.ok(this.userService.intentionsBetween(id, start, end));
     }
 
+    // U2 acepta intencion 2 u1 venta ->> {{host}}{{port}}/api/users/2/intentions/1?action=accept
+    @PatchMapping("users/{userId}/intentions/{intentionId}")
+    public ResponseEntity<IntentionDTO> processIntention(@PathVariable Long userId, @PathVariable Long intentionId,
+                                                   @RequestParam String action){
+
+        return ResponseEntity.status(200).body(userService.processIntention(userId, intentionId, action));
+
+    }
 }

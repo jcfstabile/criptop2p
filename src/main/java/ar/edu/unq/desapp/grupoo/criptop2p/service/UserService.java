@@ -15,6 +15,8 @@ import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class UserService implements UserServiceInterface {
     @Autowired
@@ -48,6 +51,11 @@ public class UserService implements UserServiceInterface {
 
     @Autowired
     private InspectUser inspectUser;
+
+    @Autowired
+    private QuotationService quotationService;
+
+    protected final Log logger = LogFactory.getLog(getClass());
 
     @Override
     @Transactional
@@ -129,5 +137,32 @@ public class UserService implements UserServiceInterface {
         Date startDate = convert.convertToDate(startLocalDate);
         Date endDate = convert.convertToDate(endLocalDate);
         return inspectUser.offersBetween(getUser, startDate, endDate);
+    }
+
+    @Transactional
+    public IntentionDTO processIntention(Long userId, Long intentionId, String action) {
+        IntentionDTO response = null;
+        logger.info("User " + userId + " do " + action + " for intention " + intentionId);
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        Intention intention = this.intentionRepository.findById(intentionId)
+                .orElseThrow(() -> new IntentionNotFoundException(intentionId));
+
+        switch (action) {
+            case "accept":
+                try {
+                    user.accept(intention, quotationService.priceOf(intention.getCrypto()));
+                    // response = "{\"intentionId\":\""+ intention.getId() + "\"}";
+                    response = intentionMapper.toIntentionDto(intention);
+                } catch (InterruptedException e) {
+                    throw new InterruptedErrorException();
+                }
+                break;
+//            case "delivery": intention.delivery(); break;
+//            case "payment": intention.payment(); break;
+            case "cancel": intention.cancel(user); break;
+            default : throw new NoValidActionErrorException(action);
+        }
+        return response;
     }
 }
