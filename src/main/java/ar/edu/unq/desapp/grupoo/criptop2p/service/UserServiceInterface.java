@@ -16,4 +16,6 @@ public interface UserServiceInterface {
     void deleteUserById(Long anId);
 
     List<IntentionDTO> activatedIntentionsOf(Long id);
+
+    Formless intentionsBetween(Long id, String start, String end);
 }
