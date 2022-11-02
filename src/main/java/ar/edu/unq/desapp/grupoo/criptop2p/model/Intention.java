@@ -15,7 +15,7 @@ public class Intention {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
-    
+
     public Long getId() {
         return id;
     }

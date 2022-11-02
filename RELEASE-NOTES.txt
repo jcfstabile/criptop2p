@@ -4,23 +4,25 @@ TAG 2.0
 - NEW FEATURES:
 
 <<<Core>>>
-Utilización de H2 para persistir datos
-Documentation de Endpoints (APIs) con Swagger (v3)
+- Utilización de H2 para persistir datos
+- Documentation de Endpoints (APIs) con Swagger (v3)
 
 <<<Funcionalidad>>>
-Listar cotizacion de criptoactivos
-Construir un listado donde se muestran las intenciones activas de compra/venta
-Procesar la transacción informada por un usuario
-Informar al usuario el volumen operado de cripto activos entre dos fechas
-Testing integral de 2 controllers (end-to-end)
+- Listar cotizacion de criptoactivos
+- Construir un listado donde se muestran las intenciones activas de compra/venta
+- Procesar la transacción informada por un usuario
+- Informar al usuario el volumen operado de cripto activos entre dos fechas
+- Testing integral de 2 controllers (end-to-end)
 
 NOTES:
 * Faltantes:
-Un test integral de otro controller (distinto al UserRestController) (end-to-end)
+- Un test integral de otro controller (distinto al UserRestController) (end-to-end)
+- Refactorización de los test para hacerlos unitarios y evitar el acoplamiento entre módulos
 
-KNOWN ISSUES
-* Datos repetidos en DB H2
-* La intention no resuelve correctamente si es entre 2 fechas
+
+* KNOWN ISSUES
+- Datos repetidos en DB H2
+
 ---------------------------------------------------------------------
 TAG 1.0
 ---------------------------------------------------------------------
