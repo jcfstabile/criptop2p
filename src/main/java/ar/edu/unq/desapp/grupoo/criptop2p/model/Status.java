@@ -18,11 +18,11 @@ public enum Status implements State{
     WAITINGFORDELIVERY { @Override public boolean allowed(Status next){
         return next == CLOSED || next == WAITINGFORTRANSFER || next == CANCELED ;}
     },
-    CLOSED{}
+    CLOSED             {}
 }
 
 interface State{
-    default boolean allowed(Status s) { return true; }
+    default boolean allowed(Status s) { return false; }
 
     default Status changeTo(Status status) throws StatusChangeErrorException {
         if (! this.allowed(status)) { throw new StatusChangeErrorException(status); }

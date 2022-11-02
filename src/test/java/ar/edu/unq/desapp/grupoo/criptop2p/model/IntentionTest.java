@@ -4,6 +4,8 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeNotAllowedRestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -324,6 +326,46 @@ class IntentionTest {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date init = formatter.parse(dateInitString);
         Date end = new Date();
+
         assertTrue(intention.isBetween(init, end));
     }
+
+    @DisplayName("Status OFFERED can change to SOLD")
+    @Test
+    void testStatusOFFEREDCanChangeToSold(){
+        Status status = Status.OFFERED;
+        status = status.changeTo(Status.SOLD);
+
+        assertEquals(Status.SOLD, status);
+    }
+
+    @DisplayName("Status OFFERED is allowed to change from SOLD")
+    @Test
+    void testStatusOFFEREDIsAllowedToChangeFromSold(){
+        assertTrue(Status.SOLD.allowed(Status.OFFERED));
+    }
+
+    @DisplayName("Status CLOSED is not allowed to change from SOLD")
+    @Test
+    void testStatussNotAllowedToChangeFromSoldToClosed(){
+        assertFalse(Status.SOLD.allowed(Status.CLOSED));
+    }
+
+   @DisplayName("Status WAITINGFORDELIVERY is not allowed to change from CLOSED")
+    @Test
+    void testStatussNotAllowedToChangeFromClosedToWaitingForDelivery(){
+        assertFalse(Status.CLOSED.allowed(Status.WAITINGFORDELIVERY));
+    }
+
+
+    @DisplayName("When change from WAITINGFORTRANSFER to OFFERED a exception is thrown")
+    @Test
+    void testExcepThrownWhenChangingFromWFT2OFFERED(){
+        StatusChangeErrorException exception = assertThrows(StatusChangeErrorException.class, () ->
+                Status.WAITINGFORTRANSFER.changeTo(Status.OFFERED)
+        );
+
+        assertEquals(Status.OFFERED, exception.status);
+    }
+
 }

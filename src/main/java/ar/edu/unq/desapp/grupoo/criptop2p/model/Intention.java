@@ -169,6 +169,6 @@ public class Intention {
     }
 
     public boolean isBetween(Date init, Date end) {
-        return this.isAfter(init) || this.isBefore(end);
+        return this.isAfter(init) && this.isBefore(end);
     }
 }

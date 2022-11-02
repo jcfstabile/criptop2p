@@ -719,5 +719,42 @@ class UserTest {
         assertTrue(intentionsBetween.contains(intention1));
         assertFalse(intentionsBetween.contains(intention2));
     }
+
+    @DisplayName("When an User deliver a crypto on an intention the status change to waiting for transfer")
+    @Test
+    void testUserDeliverOnAnIntentionChangeStatusOfIntention(){
+        User user = anyUser.build();
+        Intention intention = user.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        intention.sold();
+
+        user.delivery(intention);
+
+        assertEquals(Status.WAITINGFORTRANSFER, intention.getStatus());
+    }
+
+    @DisplayName("When an User pay for a interchange on an intention the status change to waiting for delivery")
+    @Test
+    void testUserTransferOnAnIntentionChangeStatusOfIntention(){
+        User user = anyUser.build();
+        Intention intention = user.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        intention.sold();
+
+        user.payment(intention);
+
+        assertEquals(Status.WAITINGFORDELIVERY, intention.getStatus());
+    }
+    @DisplayName("When an User pay for a interchange and the delivery was done on an intention the status change to closed")
+    @Test
+    void testUserTransferOnAnIntentionAlreadyDeliveredChangeStatusOfIntentionToClosed(){
+        User seller = anyUser.build();
+        User buyer = anyUser.build();
+        Intention intention = seller.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
+        intention.sold();
+
+        seller.delivery(intention);
+        buyer.payment(intention);
+
+        assertEquals(Status.CLOSED, intention.getStatus());
+    }
 }
 
