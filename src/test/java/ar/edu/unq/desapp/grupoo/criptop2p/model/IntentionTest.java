@@ -224,7 +224,7 @@ class IntentionTest {
         intention.sold();
         assertEquals(Status.SOLD, intention.getStatus());
 
-        intention.waitingForTransfer();
+        intention.deliveryDone();
 
         assertEquals(Status.WAITINGFORTRANSFER, intention.getStatus());
     }
@@ -236,9 +236,39 @@ class IntentionTest {
         intention.sold();
         assertEquals(Status.SOLD, intention.getStatus());
 
-        intention.waitingForDelivery();
+        intention.transferDone();
 
         assertEquals(Status.WAITINGFORDELIVERY, intention.getStatus());
+    }
+
+    @DisplayName("When a transfer has been done and get the delivery the intention is closed")
+    @Test
+    void testAnIntentionChangeItsStatusToCloseIfTransferWasAlreadyDoneAndGetdelivery(){
+        intention.sold();
+        assertEquals(Status.SOLD, intention.getStatus());
+
+        intention.transferDone();
+
+        assertEquals(Status.WAITINGFORDELIVERY, intention.getStatus());
+
+        intention.deliveryDone();
+
+        assertEquals(Status.CLOSED, intention.getStatus());
+    }
+
+    @DisplayName("When a delivery has been done and get the transfer the intention is closed")
+    @Test
+    void testAnIntentionChangeItsStatusToCloseIfDeliveryWasAlreadyDoneAndGetTransfer(){
+        intention.sold();
+        assertEquals(Status.SOLD, intention.getStatus());
+
+        intention.deliveryDone();
+
+        assertEquals(Status.WAITINGFORTRANSFER, intention.getStatus());
+
+        intention.transferDone();
+
+        assertEquals(Status.CLOSED, intention.getStatus());
     }
 
     @DisplayName("When an intention was sell, its status changed to SOLD")

@@ -33,6 +33,8 @@ public class Intention {
 
     private Status status;
 
+    private boolean halfDone;
+
     @JoinColumn(name = "offered_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User offered;
@@ -52,6 +54,7 @@ public class Intention {
         this.cryptoName = aCryptoName;
         this.status = Status.OFFERED;
         this.timestamp = new Timestamp(System.currentTimeMillis());
+        this.halfDone = false;
     }
     public User getOffered(){ return this.offered; }
     public int getCount(){ return this.count; }
@@ -59,19 +62,24 @@ public class Intention {
     public TypeIntention getType(){ return this.type; }
     public CryptoName getCrypto(){ return this.cryptoName; }
     public Status getStatus() { return this.status; }
-    public void setStatus(Status aStatus) throws StatusChangeErrorException {
-        this.status = this.status.changeTo(aStatus);
+    public void setStatus(Status aStatus){
+        halfDone = isHalfOfTransaction(aStatus);
+        status = status.changeTo(aStatus);
     }
 
-    public void canceledBySystem() throws StatusChangeErrorException {
+    private boolean isHalfOfTransaction(Status aStatus){
+        return aStatus == Status.WAITINGFORDELIVERY || aStatus == Status.WAITINGFORTRANSFER;
+    }
+
+    public void canceledBySystem(){
         this.setStatus(Status.CANCELEDBYSYSTEM);
     }
 
-    public void canceled() throws StatusChangeErrorException {
+    public void canceled(){
         this.setStatus(Status.CANCELED);
     }
 
-    public void verifyIfIsAcepted(BigDecimal aCurrentPrice) throws StatusChangeErrorException {
+    public void verifyIfIsAcepted(BigDecimal aCurrentPrice){
         this.type.verifyIfIsAccepted(this, aCurrentPrice);
         this.price = aCurrentPrice;
     }
@@ -89,7 +97,7 @@ public class Intention {
         return current.compareTo(this.price) == n;
     }
 
-    public void sold(Timestamp aTimeStamp, User anDemander) throws StatusChangeErrorException {
+    public void sold(Timestamp aTimeStamp, User anDemander){
         Integer reward = this.reward(aTimeStamp);
         this.offered.addPoints(reward);
         anDemander.addPoints(reward);
@@ -97,7 +105,7 @@ public class Intention {
         anDemander.addIntention(this);
     }
 
-    public void sold() throws StatusChangeErrorException {
+    public void sold(){
         this.setStatus(Status.SOLD);
     }
 
@@ -107,7 +115,7 @@ public class Intention {
 
     //[U1I, U2A,U3]
 
-    public void cancel(User user) throws StatusChangeErrorException {
+    public void cancel(User user){
         if(this.isItsOfferer(user)){
             this.canceled();
         }
@@ -117,7 +125,7 @@ public class Intention {
         user.applyPenalty(20);
     }
 
-    public void offered() throws StatusChangeErrorException {
+    public void offered(){
         this.setStatus(Status.OFFERED);
     }
 
@@ -144,12 +152,12 @@ public class Intention {
         return this.timestamp;
     }
 
-    public void waitingForTransfer() throws StatusChangeErrorException {
-        this.setStatus(Status.WAITINGFORTRANSFER);
+    public void deliveryDone(){
+        this.setStatus(halfDone ? Status.CLOSED : Status.WAITINGFORTRANSFER);
     }
 
-    public void waitingForDelivery() throws StatusChangeErrorException {
-        this.setStatus(Status.WAITINGFORDELIVERY);
+    public void transferDone(){
+        this.setStatus(halfDone ? Status.CLOSED : Status.WAITINGFORDELIVERY);
     }
 
     private boolean isAfter(Date when) {

@@ -142,7 +142,6 @@ public class UserService implements UserServiceInterface {
 
     @Transactional
     public IntentionDTO processIntention(Long userId, Long intentionId, String action) {
-        IntentionDTO response = null;
         logger.info("User " + userId + " do " + action + " for intention " + intentionId);
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
@@ -151,20 +150,18 @@ public class UserService implements UserServiceInterface {
 
         try {
             switch (action) {
-                case "accept" -> {
-                    user.accept(intention, quotationService.priceOf(intention.getCrypto()));
-                    response = intentionMapper.toIntentionDto(intention);
-                }
-//            case "delivery": intention.delivery(); break;
-//            case "payment": intention.payment(); break;
-                case "cancel" -> intention.cancel(user);
-                default -> throw new NoValidActionErrorException(action);
+                case "accept"   -> user.accept(intention, quotationService.priceOf(intention.getCrypto()));
+                case "delivery" -> user.delivery(intention);
+                case "payment"  -> user.payment(intention);
+                case "cancel"   -> user.cancel(intention);
+                default         -> throw new NoValidActionErrorException(action);
             }
         } catch (InterruptedException e) {
             throw new InterruptedErrorException();
         } catch (StatusChangeErrorException e) {
             throw new StatusChangeNotAllowedRestException(e.status);
         }
-        return response;
+
+        return intentionMapper.toIntentionDto(intention);
     }
 }

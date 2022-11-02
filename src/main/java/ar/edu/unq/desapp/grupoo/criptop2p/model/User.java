@@ -121,17 +121,17 @@ public class User{
 
     public List<Intention> getOffers() { return this.offers;}
 
-    public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice) throws StatusChangeErrorException {
+    public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice){
         Intention intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);
         this.addIntention(intention);
         return intention;
     }
 
-    public void accept(Intention anIntention, BigDecimal aCurrentPrice) throws StatusChangeErrorException {
+    public void accept(Intention anIntention, BigDecimal aCurrentPrice){
         anIntention.verifyIfIsAcepted(aCurrentPrice);
     }
 
-    public void cancel(Intention intention) throws StatusChangeErrorException {
+    public void cancel(Intention intention) {
         intention.cancel(this);
     }
 
@@ -174,5 +174,13 @@ public class User{
 
     public List<Intention> offersBetween(Date init, Date end) {
         return this.offers.stream().filter(intention -> intention.isBetween(init, end)).toList();
+    }
+
+    public void delivery(Intention intention) {
+        intention.deliveryDone();
+    }
+
+    public void payment(Intention intention) {
+        intention.transferDone();
     }
 }
