@@ -41,6 +41,7 @@ public class Intention {
     Timestamp timestamp;
 
     public Intention() {
+        this.status = Status.OFFERED;
     }
 
     public Intention(User anUser, int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName) {
@@ -58,17 +59,19 @@ public class Intention {
     public TypeIntention getType(){ return this.type; }
     public CryptoName getCrypto(){ return this.cryptoName; }
     public Status getStatus() { return this.status; }
-    public void setStatus(Status aStatus){ this.status = aStatus; }
+    public void setStatus(Status aStatus) throws StatusChangeErrorException {
+        this.status = this.status.changeTo(aStatus);
+    }
 
-    public void canceledBySystem() {
+    public void canceledBySystem() throws StatusChangeErrorException {
         this.setStatus(Status.CANCELEDBYSYSTEM);
     }
 
-    public void canceled() {
+    public void canceled() throws StatusChangeErrorException {
         this.setStatus(Status.CANCELED);
     }
 
-    public void verifyIfIsAcepted(BigDecimal aCurrentPrice) {
+    public void verifyIfIsAcepted(BigDecimal aCurrentPrice) throws StatusChangeErrorException {
         this.type.verifyIfIsAccepted(this, aCurrentPrice);
         this.price = aCurrentPrice;
     }
@@ -86,7 +89,7 @@ public class Intention {
         return current.compareTo(this.price) == n;
     }
 
-    public void sold(Timestamp aTimeStamp, User anDemander){
+    public void sold(Timestamp aTimeStamp, User anDemander) throws StatusChangeErrorException {
         Integer reward = this.reward(aTimeStamp);
         this.offered.addPoints(reward);
         anDemander.addPoints(reward);
@@ -94,7 +97,7 @@ public class Intention {
         anDemander.addIntention(this);
     }
 
-    public void sold() {
+    public void sold() throws StatusChangeErrorException {
         this.setStatus(Status.SOLD);
     }
 
@@ -104,7 +107,7 @@ public class Intention {
 
     //[U1I, U2A,U3]
 
-    public void cancel(User user) {
+    public void cancel(User user) throws StatusChangeErrorException {
         if(this.isItsOfferer(user)){
             this.canceled();
         }
@@ -114,7 +117,7 @@ public class Intention {
         user.applyPenalty(20);
     }
 
-    public void offered() {
+    public void offered() throws StatusChangeErrorException {
         this.setStatus(Status.OFFERED);
     }
 
@@ -141,11 +144,11 @@ public class Intention {
         return this.timestamp;
     }
 
-    public void waitingForTransfer(){
+    public void waitingForTransfer() throws StatusChangeErrorException {
         this.setStatus(Status.WAITINGFORTRANSFER);
     }
 
-    public void waitingForDelivery(){
+    public void waitingForDelivery() throws StatusChangeErrorException {
         this.setStatus(Status.WAITINGFORDELIVERY);
     }
 

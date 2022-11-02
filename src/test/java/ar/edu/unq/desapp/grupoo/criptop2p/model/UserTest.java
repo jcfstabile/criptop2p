@@ -501,7 +501,7 @@ class UserTest {
 
     @DisplayName("When an offerer cancel its intention this is marked with CANCELED status")
     @Test
-    void testWhenAnOffererCancelItsIntentionThisIsMarkedWithCanceledStatus(){
+    void testWhenAnOffererCancelItsIntentionThisIsMarkedWithCanceledStatus() {
 //        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         User anUser = anyUser.withEmail("jk@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
@@ -534,7 +534,10 @@ class UserTest {
         assertEquals(Status.OFFERED, intention.getStatus());
         otherUser.accept(intention, new BigDecimal(2));
         assertEquals(Status.SOLD, intention.getStatus());
+
         otherUser.cancel(intention);
+
+        assertEquals(Status.OFFERED, intention.getStatus());
     }
 
     @DisplayName("When other User cancel the intention nothing change")
@@ -653,7 +656,7 @@ class UserTest {
         assertEquals(1, user.quantityIntentions());
     }
 
-    @DisplayName("An User substract N to its Points")
+    @DisplayName("An User subtract N to its Points")
     @Test
     void testAnUserCanBePenalized(){
         User user = anyUser.build();

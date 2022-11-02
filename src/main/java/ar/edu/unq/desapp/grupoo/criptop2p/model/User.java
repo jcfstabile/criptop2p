@@ -121,17 +121,17 @@ public class User{
 
     public List<Intention> getOffers() { return this.offers;}
 
-    public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice){
+    public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice) throws StatusChangeErrorException {
         Intention intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);
         this.addIntention(intention);
         return intention;
     }
 
-    public void accept(Intention anIntention, BigDecimal aCurrentPrice) {
+    public void accept(Intention anIntention, BigDecimal aCurrentPrice) throws StatusChangeErrorException {
         anIntention.verifyIfIsAcepted(aCurrentPrice);
     }
 
-    public void cancel(Intention intention) {
+    public void cancel(Intention intention) throws StatusChangeErrorException {
         intention.cancel(this);
     }
 

@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.model.StatusChangeErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,10 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     @ExceptionHandler({NoValidActionErrorException.class})
     public ResponseEntity<Object> handleNoValidActionErrorException(NoValidActionErrorException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("007", "Not a valid action", exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler({StatusChangeNotAllowedRestException.class})
+    public ResponseEntity<Object> handleStatusChangeNotAllowedException(StatusChangeNotAllowedRestException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("008", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
     }
 
 }

@@ -4,7 +4,6 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.utils.ConvertDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -53,7 +51,7 @@ class IntentionTest {
         assertEquals(Status.OFFERED, intention.getStatus());
     }
 
-    @DisplayName("An IntentionDTO exist")
+    @DisplayName("An IntentionCreationDTO exist")
     @Test
     void testAnIntentionDTOExist() {
         IntentionCreationDTO intentionDTO = new IntentionCreationDTO(1, new BigDecimal(2), "SELL", CryptoName.ATOMUSDT);
@@ -66,7 +64,7 @@ class IntentionTest {
 
     @DisplayName("An Intention can change Status to CANCELED")
     @Test
-    void testAnIntentionCanChangeStatusToCanceled() {
+    void testAnIntentionCanChangeStatusToCanceled(){
         assertEquals(Status.OFFERED, intention.getStatus());
         intention.canceled();
         assertEquals(Status.CANCELED, intention.getStatus());
@@ -74,7 +72,7 @@ class IntentionTest {
 
     @DisplayName("An Intention can change Status to CANCELEDBYSYSTEM")
     @Test
-    void testAnIntentionCanChangeStatusToCanceledBySystem() {
+    void testAnIntentionCanChangeStatusToCanceledBySystem(){
         assertEquals(Status.OFFERED, intention.getStatus());
         intention.canceledBySystem();
         assertEquals(Status.CANCELEDBYSYSTEM, intention.getStatus());
@@ -162,21 +160,21 @@ class IntentionTest {
 
     @DisplayName("An Intention can identificate if an User is its offerer")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsItsOfferer() {
+    void testAnIntentionCanIdentificateIfAnUserIsItsOfferer(){
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         assertTrue(anIntention.isItsOfferer(anUser));
     }
 
     @DisplayName("An Intention can identificate if an User is not its offerer")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsNotItsOfferer() {
+    void testAnIntentionCanIdentificateIfAnUserIsNotItsOfferer(){
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         assertFalse(anIntention.isItsOfferer(otherUser));
     }
 
     @DisplayName("An Intention can identificate if an User is its offered")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsItsOffered() {
+    void testAnIntentionCanIdentificateIfAnUserIsItsOffered(){
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
         assertTrue(anIntention.isItsOfferer(anUser));
@@ -184,7 +182,7 @@ class IntentionTest {
 
     @DisplayName("An Intention can identificate if an User is not its offered")
     @Test
-    void testAnIntentionCanIdentificateIfAnUserIsNotItsOffered() {
+    void testAnIntentionCanIdentificateIfAnUserIsNotItsOffered(){
         Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
         otherUser.accept(anIntention, new BigDecimal(2));
         User otherUser = anyUser.build();
@@ -223,7 +221,8 @@ class IntentionTest {
     @DisplayName("An intention change its status to waiting for Transfer")
     @Test
     void testAnIntentionChangeItsStatusToWaitingForTransferToReceiveThisMessage(){
-        assertEquals(Status.OFFERED, intention.getStatus());
+        intention.sold();
+        assertEquals(Status.SOLD, intention.getStatus());
 
         intention.waitingForTransfer();
 
@@ -234,14 +233,15 @@ class IntentionTest {
     @DisplayName("An intention change its status to waiting for Delivery")
     @Test
     void testAnIntentionChangeItsStatusToWaitingForDeliveryToReceiveThisMessage(){
-        assertEquals(Status.OFFERED, intention.getStatus());
+        intention.sold();
+        assertEquals(Status.SOLD, intention.getStatus());
 
         intention.waitingForDelivery();
 
         assertEquals(Status.WAITINGFORDELIVERY, intention.getStatus());
     }
 
-    @DisplayName("When an intention was solded, its status changed to SOLD")
+    @DisplayName("When an intention was sell, its status changed to SOLD")
     @Test
     void testWhenAnIntentionHasSoledByOtherUserThisChangeItsStatusToSold(){
         Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -250,7 +250,7 @@ class IntentionTest {
     }
 
 
-    @DisplayName("When an intention was solded, before 30 minutes, its add 10 points to its offered")
+    @DisplayName("When an intention was sell, before 30 minutes, its add 10 points to its offered")
     @Test
     void testWhenAnIntentionWasSoledBefore30MinutesItAdd10PointsToItsOffered(){
         Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -260,7 +260,7 @@ class IntentionTest {
     }
 
 
-    @DisplayName("When an intention was solded, before 30 minutes, its add 10 points to its demander")
+    @DisplayName("When an intention was sell, before 30 minutes, its add 10 points to its demander")
     @Test
     void testWhenAnIntentionWasSoledBefore30MinutesItAdd10PointsToItsDemander(){
         Timestamp now = new Timestamp(System.currentTimeMillis());

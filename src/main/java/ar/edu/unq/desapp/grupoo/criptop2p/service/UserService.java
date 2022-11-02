@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.StatusChangeErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
@@ -148,20 +149,21 @@ public class UserService implements UserServiceInterface {
         Intention intention = this.intentionRepository.findById(intentionId)
                 .orElseThrow(() -> new IntentionNotFoundException(intentionId));
 
-        switch (action) {
-            case "accept":
-                try {
+        try {
+            switch (action) {
+                case "accept" -> {
                     user.accept(intention, quotationService.priceOf(intention.getCrypto()));
-                    // response = "{\"intentionId\":\""+ intention.getId() + "\"}";
                     response = intentionMapper.toIntentionDto(intention);
-                } catch (InterruptedException e) {
-                    throw new InterruptedErrorException();
                 }
-                break;
 //            case "delivery": intention.delivery(); break;
 //            case "payment": intention.payment(); break;
-            case "cancel": intention.cancel(user); break;
-            default : throw new NoValidActionErrorException(action);
+                case "cancel" -> intention.cancel(user);
+                default -> throw new NoValidActionErrorException(action);
+            }
+        } catch (InterruptedException e) {
+            throw new InterruptedErrorException();
+        } catch (StatusChangeErrorException e) {
+            throw new StatusChangeNotAllowedRestException(e.status);
         }
         return response;
     }
