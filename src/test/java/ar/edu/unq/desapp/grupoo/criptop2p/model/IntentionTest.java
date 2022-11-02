@@ -303,4 +303,15 @@ class IntentionTest {
         Date end = formatter.parse(dateEndString);
         assertFalse(intention.isBetween(init, end));
     }
+
+    @DisplayName("Intention Return False When init date is before end date")
+    @Test
+    void testIntentionReturnFalseWhenInitDateIsBeforeEndDate() throws ParseException {
+        String dateInitString = "02-01-1922";
+        String dateEndString = "01-01-1922";
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date init = formatter.parse(dateInitString);
+        Date end = formatter.parse(dateEndString);
+        assertFalse(intention.isBetween(init, end));
+    }
 }
