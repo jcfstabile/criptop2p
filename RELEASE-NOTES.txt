@@ -20,7 +20,7 @@ Un test integral de otro controller (distinto al UserRestController) (end-to-end
 
 KNOWN ISSUES
 * Datos repetidos en DB H2
-* La intention no resuelve correctamente si es entre 2 fechas
+
 ---------------------------------------------------------------------
 TAG 1.0
 ---------------------------------------------------------------------
