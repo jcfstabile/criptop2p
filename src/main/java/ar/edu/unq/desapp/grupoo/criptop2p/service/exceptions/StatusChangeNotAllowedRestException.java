@@ -8,6 +8,7 @@ public class StatusChangeNotAllowedRestException extends RuntimeException {
     private final String error;
 
     public StatusChangeNotAllowedRestException (Status nextStatus) {
+       super("Cant change the status to: " + nextStatus.toString() );
        this.error = "Cant change the intention to " + nextStatus.toString();
     }
 
