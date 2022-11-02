@@ -145,7 +145,8 @@ class UserRestControllerTest {
         UserDTO buyer = anUserRestController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.MATICUSDT), "SELL", CryptoName.MATICUSDT);
+        CryptoName cryptoName = CryptoName.ATOMUSDT;
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
