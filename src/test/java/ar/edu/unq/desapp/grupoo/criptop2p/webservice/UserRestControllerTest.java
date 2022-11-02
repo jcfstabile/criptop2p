@@ -155,16 +155,20 @@ class UserRestControllerTest {
         UserDTO buyer = anUserRestController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
+        Long  buyerId = buyer.getId();
         CryptoName cryptoName = CryptoName.ATOMUSDT;
         when(quotationServiceMock.priceOf(cryptoName)).thenReturn(BigDecimal.valueOf(1.0));
 
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationServiceMock.priceOf(cryptoName), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
+        Long intentionId = intentionDTO.getIntentionId();
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
 
+
+
         Exception exception = assertThrows(StatusChangeNotAllowedRestException.class, () ->
-                anUserRestController.processIntention(buyer.getId(), intentionDTO.getIntentionId(), "payment")
+                anUserRestController.processIntention(buyerId, intentionId, "payment")
         );
 
         assertEquals("Cant change the status to: WAITINGFORDELIVERY"  , exception.getMessage());
@@ -177,15 +181,17 @@ class UserRestControllerTest {
         UserDTO buyer = anUserRestController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
+        Long  buyerId = buyer.getId();
         CryptoName cryptoName = CryptoName.ATOMUSDT;
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
+        Long intentionId = intentionDTO.getIntentionId();
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
         String notValidAction = "WrongAction";
 
         Exception exception = assertThrows(NoValidActionErrorException.class, () ->
-                anUserRestController.processIntention(buyer.getId(), intentionDTO.getIntentionId(), notValidAction)
+                anUserRestController.processIntention(buyerId, intentionId, notValidAction)
         );
 
         assertEquals("Action not valid: " + notValidAction , exception.getMessage());
@@ -198,6 +204,7 @@ class UserRestControllerTest {
         UserDTO buyer = anUserRestController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
+        Long  buyerId = buyer.getId();
         CryptoName cryptoName = CryptoName.ATOMUSDT;
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
@@ -206,7 +213,7 @@ class UserRestControllerTest {
         Long notFoundIntentionID = intentionDTO.getIntentionId() + 1234;
 
         Exception exception = assertThrows(IntentionNotFoundException.class, () ->
-                anUserRestController.processIntention(buyer.getId(), notFoundIntentionID, "accept")
+                anUserRestController.processIntention(buyerId, notFoundIntentionID, "accept")
         );
 
         assertEquals("Could not find intention " + notFoundIntentionID, exception.getMessage());
