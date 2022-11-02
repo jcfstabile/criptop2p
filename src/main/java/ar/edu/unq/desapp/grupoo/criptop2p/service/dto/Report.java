@@ -1,12 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
-
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
 
 public class Report {
     private final CryptoName crypto;
