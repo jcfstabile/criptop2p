@@ -138,6 +138,24 @@ class UserRestControllerTest {
         assertEquals("Could not find user 0", exception.getMessage());
     }
 
+    @DisplayName("An user accept a intention" )
+    @Test
+    void testAnUserAcceptAIntentions() throws InterruptedException {
+        UserDTO seller = anUserRestController.register(anUser).getBody();
+        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        assertNotNull(seller);
+        assertNotNull(buyer);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.MATICUSDT), "SELL", CryptoName.MATICUSDT);
+        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        assertNotNull(intentionDTO);
+        assertEquals(Status.OFFERED, intentionDTO.getStatus());
+        IntentionDTO acceptedIntentionDTO = anUserRestController.processIntention(buyer.getId(), intentionDTO.getIntentionId(), "accept").getBody();
+
+
+        assertNotNull(acceptedIntentionDTO);
+        assertEquals(Status.SOLD, acceptedIntentionDTO.getStatus());
+    }
+
     @DisplayName("An user recently created hasn't activated intentions")
     @Test
     void testAnUserRecentlyHasNotActivatedIntentions(){
@@ -149,6 +167,7 @@ class UserRestControllerTest {
         assertNotNull(activatedIntentions);
         assertEquals(0, activatedIntentions.size());
     }
+
 
     @DisplayName("An user recently has only one activated intention when only offers one time")
     @Test

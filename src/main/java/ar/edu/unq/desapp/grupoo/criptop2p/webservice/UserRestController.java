@@ -148,7 +148,6 @@ public class UserRestController {
         return ResponseEntity.ok(this.userService.intentionsBetween(id, start, end));
     }
 
-    // U2 acepta intencion 2 u1 venta ->> {{host}}{{port}}/api/users/2/intentions/1?action=accept
     @PatchMapping("users/{userId}/intentions/{intentionId}")
     public ResponseEntity<IntentionDTO> processIntention(@PathVariable Long userId, @PathVariable Long intentionId,
                                                    @RequestParam String action){

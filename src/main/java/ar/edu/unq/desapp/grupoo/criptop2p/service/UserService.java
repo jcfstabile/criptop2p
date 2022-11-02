@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.StatusChangeErrorException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
@@ -142,7 +142,6 @@ public class UserService implements UserServiceInterface {
 
     @Transactional
     public IntentionDTO processIntention(Long userId, Long intentionId, String action) {
-        logger.info("User " + userId + " do " + action + " for intention " + intentionId);
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         Intention intention = this.intentionRepository.findById(intentionId)
@@ -157,6 +156,7 @@ public class UserService implements UserServiceInterface {
                 default         -> throw new NoValidActionErrorException(action);
             }
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new InterruptedErrorException();
         } catch (StatusChangeErrorException e) {
             throw new StatusChangeNotAllowedRestException(e.status);

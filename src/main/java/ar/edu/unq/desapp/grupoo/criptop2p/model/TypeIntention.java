@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
+
 import java.math.BigDecimal;
 
 public abstract class TypeIntention {

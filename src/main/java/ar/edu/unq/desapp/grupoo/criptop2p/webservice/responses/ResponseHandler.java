@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.model.StatusChangeErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

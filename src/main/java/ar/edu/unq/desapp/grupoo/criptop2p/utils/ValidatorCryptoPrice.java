@@ -4,7 +4,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
-import ar.edu.unq.desapp.grupoo.criptop2p.model.StatusChangeErrorException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
+
 public enum Status implements State{
     CANCELED           {},
     SOLD               { @Override public boolean allowed(Status next){
