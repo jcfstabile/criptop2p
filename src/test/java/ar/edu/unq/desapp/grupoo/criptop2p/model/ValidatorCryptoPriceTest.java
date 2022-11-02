@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.ValidatorCryptoPrice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +45,7 @@ class ValidatorCryptoPriceTest {
     @DisplayName("@ When a Intention is created with a price in range get a status of OFFERED")
     @ParameterizedTest
     @ValueSource(doubles = {2.0, 2.1, 1.9})
-    void createintentionWithStatusOFFEREDWhenTheCurrentPriceIsBeetweenTheRangeGivenBy5PerCentMoreOrLess(double currentPrice){
+    void createintentionWithStatusOFFEREDWhenTheCurrentPriceIsBeetweenTheRangeGivenBy5PerCentMoreOrLess(double currentPrice) throws StatusChangeErrorException {
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), new Sell(), CryptoName.ATOMUSDT, new BigDecimal(currentPrice));
         assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
@@ -58,7 +59,7 @@ class ValidatorCryptoPriceTest {
     @DisplayName("@ When a Intention is created with a price out of range get a status of CANCELEDBYSYSTEM")
     @ParameterizedTest
     @ValueSource(doubles = {2.2, 1.8})
-    void createintentionCreateAnIntentionWithStatusCANCELEDBYSYSTEMWhenTheCurrentPriceIs5PerCentOutOfRange(double currentPrice){
+    void createintentionCreateAnIntentionWithStatusCANCELEDBYSYSTEMWhenTheCurrentPriceIs5PerCentOutOfRange(double currentPrice) throws StatusChangeErrorException {
         Intention intention = validator.createIntention(anUser, 1, new BigDecimal("220"), new Sell(), CryptoName.ATOMUSDT, new BigDecimal(currentPrice));
 
         assertEquals(anUser, intention.getOffered());

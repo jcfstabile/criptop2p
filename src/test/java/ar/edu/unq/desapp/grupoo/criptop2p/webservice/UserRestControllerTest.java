@@ -4,10 +4,16 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IntentionNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.NoValidActionErrorException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeNotAllowedRestException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @DisplayName("UserRestController Tests")
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @Transactional
 class UserRestControllerTest {
 
     static UserCreationDTO anUser, oneUser;
+
+    @Mock QuotationService quotationServiceMock;
 
     @Autowired
     private UserRestController anUserRestController;
@@ -138,6 +148,99 @@ class UserRestControllerTest {
         assertEquals("Could not find user 0", exception.getMessage());
     }
 
+    @DisplayName("Not valid Status change ")
+    @Test
+    void testAnInvalidStatusChange() throws InterruptedException {
+        UserDTO seller = anUserRestController.register(anUser).getBody();
+        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        assertNotNull(seller);
+        assertNotNull(buyer);
+        Long  buyerId = buyer.getId();
+        CryptoName cryptoName = CryptoName.ATOMUSDT;
+        when(quotationServiceMock.priceOf(cryptoName)).thenReturn(BigDecimal.valueOf(1.0));
+
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationServiceMock.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        assertNotNull(intentionDTO);
+        Long intentionId = intentionDTO.getIntentionId();
+        assertEquals(Status.OFFERED, intentionDTO.getStatus());
+
+
+
+        Exception exception = assertThrows(StatusChangeNotAllowedRestException.class, () ->
+                anUserRestController.processIntention(buyerId, intentionId, "payment")
+        );
+
+        assertEquals("Cant change the status to: WAITINGFORDELIVERY"  , exception.getMessage());
+    }
+
+    @DisplayName("Not valid action found exception thrown")
+    @Test
+    void testAnInvalidActionIsNotFound() throws InterruptedException {
+        UserDTO seller = anUserRestController.register(anUser).getBody();
+        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        assertNotNull(seller);
+        assertNotNull(buyer);
+        Long  buyerId = buyer.getId();
+        CryptoName cryptoName = CryptoName.ATOMUSDT;
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        assertNotNull(intentionDTO);
+        Long intentionId = intentionDTO.getIntentionId();
+        assertEquals(Status.OFFERED, intentionDTO.getStatus());
+        String notValidAction = "WrongAction";
+
+        Exception exception = assertThrows(NoValidActionErrorException.class, () ->
+                anUserRestController.processIntention(buyerId, intentionId, notValidAction)
+        );
+
+        assertEquals("Action not valid: " + notValidAction , exception.getMessage());
+    }
+
+    @DisplayName("Intention not found exception thrown")
+    @Test
+    void testAnIntentionIsNotFound() throws InterruptedException {
+        UserDTO seller = anUserRestController.register(anUser).getBody();
+        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        assertNotNull(seller);
+        assertNotNull(buyer);
+        Long  buyerId = buyer.getId();
+        CryptoName cryptoName = CryptoName.ATOMUSDT;
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        assertNotNull(intentionDTO);
+        assertEquals(Status.OFFERED, intentionDTO.getStatus());
+        Long notFoundIntentionID = intentionDTO.getIntentionId() + 1234;
+
+        Exception exception = assertThrows(IntentionNotFoundException.class, () ->
+                anUserRestController.processIntention(buyerId, notFoundIntentionID, "accept")
+        );
+
+        assertEquals("Could not find intention " + notFoundIntentionID, exception.getMessage());
+    }
+
+
+    @DisplayName("An user accept a intention" )
+    @Test
+    void testAnUserAcceptAIntentions() throws InterruptedException {
+
+        UserDTO seller = anUserRestController.register(anUser).getBody();
+        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        assertNotNull(seller);
+        assertNotNull(buyer);
+        CryptoName cryptoName = CryptoName.ATOMUSDT;
+        when(quotationServiceMock.priceOf(cryptoName)).thenReturn(BigDecimal.valueOf(1.0));
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationServiceMock.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        assertNotNull(intentionDTO);
+        assertEquals(Status.OFFERED, intentionDTO.getStatus());
+        IntentionDTO acceptedIntentionDTO = anUserRestController.processIntention(buyer.getId(), intentionDTO.getIntentionId(), "accept").getBody();
+
+
+        assertNotNull(acceptedIntentionDTO);
+        assertEquals(Status.SOLD, acceptedIntentionDTO.getStatus());
+    }
+
     @DisplayName("An user recently created hasn't activated intentions")
     @Test
     void testAnUserRecentlyHasNotActivatedIntentions(){
@@ -149,6 +252,7 @@ class UserRestControllerTest {
         assertNotNull(activatedIntentions);
         assertEquals(0, activatedIntentions.size());
     }
+
 
     @DisplayName("An user recently has only one activated intention when only offers one time")
     @Test
