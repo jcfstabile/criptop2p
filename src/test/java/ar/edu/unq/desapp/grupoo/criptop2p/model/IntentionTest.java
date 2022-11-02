@@ -325,7 +325,7 @@ class IntentionTest {
         String dateInitString = "01-01-2022";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date init = formatter.parse(dateInitString);
-        Date end = new Date();
+        Date end = new Timestamp(intention.getTimeStamp().getTime() + 1000);
 
         assertTrue(intention.isBetween(init, end));
     }
