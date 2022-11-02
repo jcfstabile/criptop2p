@@ -11,7 +11,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Convert Date test")
-public class ConvertDateTest {
+class ConvertDateTest {
     ConvertDate convertDate;
     @BeforeEach
     void setUp(){
