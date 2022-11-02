@@ -2,21 +2,29 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
 @DisplayName("User Tests")
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class UserTest {
 
     Validator validator;
@@ -662,6 +670,51 @@ class UserTest {
         user.addPoints(10);
         assertEquals(10, user.getPoints());
     }
-}
 
+    @DisplayName("User return a empty list when hasnot any intention between these dates")
+    @Test
+    void testUserReturnsAEmptyListWhenHasNotAnyIntentionBetweenTheseDates(){
+        User user = anyUser.build();
+        Date init = mock(Date.class);
+        Date end = mock(Date.class);
+        List<Intention> intentionsBetween = user.offersBetween(init, end);
+        assertEquals(0,intentionsBetween.size());
+    }
+
+
+    @DisplayName("User return a list with an element when has only one intention between these dates")
+    @Test
+    void testUserReturnsAListWthAnINtentionWhenHasONlyOneIntentionBetweenTheseDates(@Mock Intention intention0, @Mock Intention intention1){
+        User user = anyUser.build();
+        Date init = mock(Date.class);
+        Date end = mock(Date.class);
+        Mockito.lenient().when(intention0.isBetween(init, end)).thenReturn(true);
+        Mockito.lenient().when(intention1.isBetween(init, end)).thenReturn(false);
+        user.addIntention(intention0);
+        user.addIntention(intention1);
+        List<Intention> intentionsBetween = user.offersBetween(init, end);
+        assertEquals(1,intentionsBetween.size());
+        assertTrue(intentionsBetween.contains(intention0));
+        assertFalse(intentionsBetween.contains(intention1));
+    }
+
+    @DisplayName("User return a list with 2 element when has two intentions between these dates")
+    @Test
+    void testUserReturnsAListWithTwoIntentionWhenHasTwoIntentionsBetweenTheseDates(@Mock Intention intention0, @Mock Intention intention1, @Mock Intention intention2){
+        User user = anyUser.build();
+        Date init = mock(Date.class);
+        Date end = mock(Date.class);
+        Mockito.lenient().when(intention0.isBetween(init, end)).thenReturn(true);
+        Mockito.lenient().when(intention1.isBetween(init, end)).thenReturn(true);
+        Mockito.lenient().when(intention2.isBetween(init, end)).thenReturn(false);
+        user.addIntention(intention0);
+        user.addIntention(intention1);
+        user.addIntention(intention2);
+        List<Intention> intentionsBetween = user.offersBetween(init, end);
+        assertEquals(2,intentionsBetween.size());
+        assertTrue(intentionsBetween.contains(intention0));
+        assertTrue(intentionsBetween.contains(intention1));
+        assertFalse(intentionsBetween.contains(intention2));
+    }
+}
 

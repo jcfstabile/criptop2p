@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Formless;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Report;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -52,14 +53,14 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAFormless(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersSellATOMUSDTAndBuyBNBUSDT);
-        assertInstanceOf(Report.Formless.class, inspector.offersBetween(anUser, init, end));
+        assertInstanceOf(Formless.class, inspector.offersBetween(anUser, init, end));
     }
 
     @DisplayName("Formless has a date")
     @Test
     void testInspectAUserReturnsAFormlessWithADate(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(new ArrayList<>(0));
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertInstanceOf(Date.class, form.getDate());
     }
 
@@ -67,7 +68,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAFormlessWithAListOfReports(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(new ArrayList<>(0));
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertInstanceOf(List.class, form.getReports());
     }
 
@@ -75,7 +76,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsFormWith0USDWhenThrereAreNotOffersBetweenDates(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(new ArrayList<>(0));
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(BigDecimal.ZERO, form.getTotalInDollars());
     }
 
@@ -83,7 +84,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAFormWithCorrectTotalInUSDWhenThereIsAnOnlyIntentionBetweenInitAndFinalDate(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerBuyATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(new BigDecimal("1.48"), form.getTotalInDollars());
     }
 
@@ -91,7 +92,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAFormWithCorrectTotalInUSDWhenThereAre2IntentionOfDifferentCryptoBetweenInitAndFinalDate(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersSellATOMUSDTAndBuyBNBUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(new BigDecimal("249.48"), form.getTotalInDollars());
     }
 
@@ -99,7 +100,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAFormWithCorrectTotalInUSDWhenThereAre2IntentionOfSameCryptoBetweenInitAndFinalDate(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersBuyAndSellATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(new BigDecimal("2.96"), form.getTotalInDollars());
     }
 
@@ -111,7 +112,7 @@ class InspectUserTest {
         offersBuyAndSellATOMUSDT.add(intention3);
         List<Intention> offers = offersBuyAndSellATOMUSDT;
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offers);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(new BigDecimal("498.96"), form.getTotalInDollars());
     }
 
@@ -120,7 +121,7 @@ class InspectUserTest {
     void testInspectAUserReturnsFormWith0PesosWhenThrereAreNotOffersBetweenDates(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(new ArrayList<>(0));
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(0, form.getTotalInPesos(aQuoter).compareTo(new BigDecimal(0)));
     }
 
@@ -129,7 +130,7 @@ class InspectUserTest {
     void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereIsAnOnlyIntentionBetweenInitAndFinalDate(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerBuyATOMUSDT);
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(new BigDecimal("228.068"), form.getTotalInPesos(aQuoter));
     }
 
@@ -138,7 +139,7 @@ class InspectUserTest {
     void testInspectAUserReturnsAFormWithCorrectTotalInPesosWhenThereAre2IntentionOfDifferentCryptoBetweenInitAndFinalDate(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersSellATOMUSDTAndBuyBNBUSDT);
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(new BigDecimal("38444.868"), form.getTotalInPesos(aQuoter));
     }
 
@@ -147,7 +148,7 @@ class InspectUserTest {
     void testInspectAUserReturnsAFormWithCorrectTotalIn$WhenThereAre2IntentionOfSameCryptoBetweenInitAndFinalDate(@Mock User anUser, @Mock Quoter aQuoter){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersBuyAndSellATOMUSDT);
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(new BigDecimal("456.136"), form.getTotalInPesos(aQuoter));
     }
 
@@ -160,7 +161,7 @@ class InspectUserTest {
         List<Intention> offers = offersBuyAndSellATOMUSDT;
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offers);
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(quotationUSD);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         assertEquals(new BigDecimal("76889.736"), form.getTotalInPesos(aQuoter));
     }
 
@@ -168,7 +169,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListWithOneReport(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerBuyATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertEquals(1, reports.size());
     }
@@ -177,7 +178,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListOfReports(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerSellATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertInstanceOf(Report.class, reports.get(0));
     }
@@ -186,7 +187,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListOfOneeExpectedReportWhenThereIsOnlyIntententionBetweenTheseDates(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerSellATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertInstanceOf(Report.class, reports.get(0));
     }
@@ -195,7 +196,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListOfTwoExpectedReportsWhenThereAre2IntententionsBetweenTheseDates(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersSellATOMUSDTAndBuyBNBUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertInstanceOf(Report.class, reports.get(0));
     }
@@ -204,7 +205,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListOfOneExpectedReportWhenThereAre2IntententionsWithSameSymbolsButDifferentTypeBetweenTheseDates(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersBuyAndSellATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertInstanceOf(Report.class, reports.get(0));
     }
@@ -217,7 +218,7 @@ class InspectUserTest {
         offersBuyAndSellATOMUSDT.add(intention3);
         List<Intention> offers = offersBuyAndSellATOMUSDT;
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offers);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertInstanceOf(Report.class, reports.get(0));
     }
@@ -226,7 +227,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListWithOneReportAndItIsLikeExpected(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerBuyATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         Report report = reports.get(0);
         assertEquals(1, reports.size());
@@ -238,7 +239,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListOfOneReportAndItIsLikeExpected(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offerSellATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         Report report = reports.get(0);
         assertInstanceOf(Report.class, report);
@@ -252,7 +253,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListOfTwoExpectedReportsWhenThereAre2IntententionsBetweenTheseDatesAndTheyAreLikeExpected(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersSellATOMUSDTAndBuyBNBUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertInstanceOf(Report.class, reports.get(0));
         assertEquals(2, reports.size());
@@ -278,7 +279,7 @@ class InspectUserTest {
     @Test
     void testInspectAUserReturnsAListOfOneExpectedReportWhenThereAre2IntententionsWithSameSymbolsButDifferentTypeBetweenTheseDatesAndItIsLikeExpected(@Mock User anUser){
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offersBuyAndSellATOMUSDT);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertInstanceOf(Report.class, reports.get(0));
         assertEquals(1, reports.size());
@@ -300,7 +301,7 @@ class InspectUserTest {
         offersBuyAndSellATOMUSDT.add(intention3);
         List<Intention> offers = offersBuyAndSellATOMUSDT;
         Mockito.lenient().when(anUser.offersBetween(init, end)).thenReturn(offers);
-        Report.Formless form = inspector.offersBetween(anUser, init, end);
+        Formless form = inspector.offersBetween(anUser, init, end);
         List<Report> reports = form.getReports();
         assertInstanceOf(Report.class, reports.get(0));
         assertEquals(2, reports.size());
