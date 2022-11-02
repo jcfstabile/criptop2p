@@ -10,7 +10,7 @@ abstract class ResponseError {
     @Schema(example = "Error message")
     private final String message;
 
-    public ResponseError(String errorCode, String message) {
+    protected ResponseError(String errorCode, String message) {
         this.errorCode = errorCode;
         this.message = message;
     }
