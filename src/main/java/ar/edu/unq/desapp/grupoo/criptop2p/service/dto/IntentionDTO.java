@@ -9,7 +9,11 @@ import java.math.BigDecimal;
 
 public class IntentionDTO {
     @Schema(example = "1")
+    private final Long intentionId;
+
+    @Schema(example = "1")
     private final int count;
+
     @Schema(example = "102")
     private final BigDecimal price;
 
@@ -25,7 +29,8 @@ public class IntentionDTO {
     @Schema(example = "OFFERED")
     private final Status status;
 
-    public IntentionDTO(int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, Long offeredId, Status status) {
+    public IntentionDTO(Long intentionId, int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, Long offeredId, Status status) {
+        this.intentionId = intentionId;
         this.count = aCount;
         this.price= aPrice;
         this.type = aType.getName();
@@ -33,6 +38,8 @@ public class IntentionDTO {
         this.cryptoName = aCryptoName;
         this.status = status;
     }
+
+    public Long getIntentionId(){ return this.intentionId; }
 
     public int getCount(){
         return this.count;

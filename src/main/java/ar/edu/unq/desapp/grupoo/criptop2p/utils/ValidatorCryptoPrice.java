@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,7 +20,7 @@ public class ValidatorCryptoPrice {
         this.percent = aPercent;
     }
 
-    public Intention createIntention(User anUser, Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice) {
+    public Intention createIntention(User anUser, Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice) throws StatusChangeErrorException {
         Intention intention = new Intention(anUser, aCount, aPrice, aType, aCryptoName);
         if(!this.isCorrectPrice(aPrice, currentPrice)){
             intention.canceledBySystem();

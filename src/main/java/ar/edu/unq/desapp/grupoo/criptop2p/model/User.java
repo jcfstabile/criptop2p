@@ -127,7 +127,7 @@ public class User{
         return intention;
     }
 
-    public void accept(Intention anIntention, BigDecimal aCurrentPrice) {
+    public void accept(Intention anIntention, BigDecimal aCurrentPrice){
         anIntention.verifyIfIsAcepted(aCurrentPrice);
     }
 
@@ -174,5 +174,13 @@ public class User{
 
     public List<Intention> offersBetween(Date init, Date end) {
         return this.offers.stream().filter(intention -> intention.isBetween(init, end)).toList();
+    }
+
+    public void delivery(Intention intention) {
+        intention.deliveryDone();
+    }
+
+    public void payment(Intention intention) {
+        intention.transferDone();
     }
 }

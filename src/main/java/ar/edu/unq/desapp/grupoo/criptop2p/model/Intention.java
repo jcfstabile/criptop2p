@@ -15,7 +15,7 @@ public class Intention {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
-    
+
     public Long getId() {
         return id;
     }
@@ -33,6 +33,8 @@ public class Intention {
 
     private Status status;
 
+    private boolean halfDone;
+
     @JoinColumn(name = "offered_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User offered;
@@ -41,6 +43,7 @@ public class Intention {
     Timestamp timestamp;
 
     public Intention() {
+        this.status = Status.OFFERED;
     }
 
     public Intention(User anUser, int aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName) {
@@ -51,6 +54,7 @@ public class Intention {
         this.cryptoName = aCryptoName;
         this.status = Status.OFFERED;
         this.timestamp = new Timestamp(System.currentTimeMillis());
+        this.halfDone = false;
     }
     public User getOffered(){ return this.offered; }
     public int getCount(){ return this.count; }
@@ -58,17 +62,24 @@ public class Intention {
     public TypeIntention getType(){ return this.type; }
     public CryptoName getCrypto(){ return this.cryptoName; }
     public Status getStatus() { return this.status; }
-    public void setStatus(Status aStatus){ this.status = aStatus; }
+    public void setStatus(Status aStatus){
+        halfDone = isHalfOfTransaction(aStatus);
+        status = status.changeTo(aStatus);
+    }
 
-    public void canceledBySystem() {
+    private boolean isHalfOfTransaction(Status aStatus){
+        return aStatus == Status.WAITINGFORDELIVERY || aStatus == Status.WAITINGFORTRANSFER;
+    }
+
+    public void canceledBySystem(){
         this.setStatus(Status.CANCELEDBYSYSTEM);
     }
 
-    public void canceled() {
+    public void canceled(){
         this.setStatus(Status.CANCELED);
     }
 
-    public void verifyIfIsAcepted(BigDecimal aCurrentPrice) {
+    public void verifyIfIsAcepted(BigDecimal aCurrentPrice){
         this.type.verifyIfIsAccepted(this, aCurrentPrice);
         this.price = aCurrentPrice;
     }
@@ -94,7 +105,7 @@ public class Intention {
         anDemander.addIntention(this);
     }
 
-    public void sold() {
+    public void sold(){
         this.setStatus(Status.SOLD);
     }
 
@@ -104,7 +115,7 @@ public class Intention {
 
     //[U1I, U2A,U3]
 
-    public void cancel(User user) {
+    public void cancel(User user){
         if(this.isItsOfferer(user)){
             this.canceled();
         }
@@ -114,7 +125,7 @@ public class Intention {
         user.applyPenalty(20);
     }
 
-    public void offered() {
+    public void offered(){
         this.setStatus(Status.OFFERED);
     }
 
@@ -141,12 +152,12 @@ public class Intention {
         return this.timestamp;
     }
 
-    public void waitingForTransfer(){
-        this.setStatus(Status.WAITINGFORTRANSFER);
+    public void deliveryDone(){
+        this.setStatus(halfDone ? Status.CLOSED : Status.WAITINGFORTRANSFER);
     }
 
-    public void waitingForDelivery(){
-        this.setStatus(Status.WAITINGFORDELIVERY);
+    public void transferDone(){
+        this.setStatus(halfDone ? Status.CLOSED : Status.WAITINGFORDELIVERY);
     }
 
     private boolean isAfter(Date when) {

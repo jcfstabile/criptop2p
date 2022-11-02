@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
@@ -15,6 +16,8 @@ import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class UserService implements UserServiceInterface {
     @Autowired
@@ -48,6 +52,11 @@ public class UserService implements UserServiceInterface {
 
     @Autowired
     private InspectUser inspectUser;
+
+    @Autowired
+    private QuotationService quotationService;
+
+    protected final Log logger = LogFactory.getLog(getClass());
 
     @Override
     @Transactional
@@ -129,5 +138,30 @@ public class UserService implements UserServiceInterface {
         Date startDate = convert.convertToDate(startLocalDate);
         Date endDate = convert.convertToDate(endLocalDate);
         return inspectUser.offersBetween(getUser, startDate, endDate);
+    }
+
+    @Transactional
+    public IntentionDTO processIntention(Long userId, Long intentionId, String action) {
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        Intention intention = this.intentionRepository.findById(intentionId)
+                .orElseThrow(() -> new IntentionNotFoundException(intentionId));
+
+        try {
+            switch (action) {
+                case "accept"   -> user.accept(intention, quotationService.priceOf(intention.getCrypto()));
+                case "delivery" -> user.delivery(intention);
+                case "payment"  -> user.payment(intention);
+                case "cancel"   -> user.cancel(intention);
+                default         -> throw new NoValidActionErrorException(action);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new InterruptedErrorException();
+        } catch (StatusChangeErrorException e) {
+            throw new StatusChangeNotAllowedRestException(e.status);
+        }
+
+        return intentionMapper.toIntentionDto(intention);
     }
 }
