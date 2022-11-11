@@ -2,10 +2,15 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -16,15 +21,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Service
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class IntentionService implements IntentionServiceInterface{
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private IntentionMapper intentionMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
     @Autowired
     private IntentionRepository intentionRepository;
 
@@ -39,21 +47,34 @@ public class IntentionService implements IntentionServiceInterface{
 
     @Override
     public List<IntentionDTO> intentions() {
-        return this.intentionsStream().map(
-                intention -> intentionMapper.toIntentionDto(intention)
-        ).toList();
+        List<IntentionDTO> intentions = new ArrayList<>();
+        for (Intention intention : this.intentionRepository.findAll()){
+            intentions.add(intentionMapper.toIntentionDto(intention));
+        }
+        return intentions;
+    }
+
+    @Override
+    public List<IntentionDTO> intentionsWithState(String aState) {
+        Status st;
+        try{
+            st = Status.valueOf(aState);
+        }
+        catch(IllegalArgumentException ex){
+            throw new IncorrectStatusException(aState);
+        }
+
+        List<IntentionDTO> intentions = new ArrayList<>();
+        for (Intention intention : this.intentionRepository.findAll()){
+            if(intention.hasStatus(st)){
+                intentions.add(intentionMapper.toIntentionDto(intention));
+            }
+        }
+        return intentions;
     }
 
     @Override
     @Transactional
-    public List<IntentionDTO> intentionsWithState(String aState) {
-        if(this.isCorrectState(aState)){
-            throw new IncorrectStatusException(aState);
-        }
-        return this.intentionsStream().filter(intention -> intention.hasStatus(Status.valueOf(aState))).map(intention -> intentionMapper.toIntentionDto(intention)).toList();
-    }
-
-    @Override
     public void delete(Long id) {
         Intention intention = this.intentionRepository.findById(id)
                 .orElseThrow(() -> new IntentionNotFoundException(id));
@@ -62,18 +83,9 @@ public class IntentionService implements IntentionServiceInterface{
 
     @Override
     @Transactional
-    public Long add(IntentionDTO intentionDTO) {
-        Intention intention = intentionMapper.toIntention(intentionDTO);
-        Set<ConstraintViolation<Intention>> intentionConstraintViolations = validator.validate(intention);
-        if (!intentionConstraintViolations.isEmpty() ) {
-            List<String> errors = new ArrayList<>();
-            for (ConstraintViolation<Intention> intentionConstraintViolation : intentionConstraintViolations){
-                errors.add(intentionConstraintViolation.getMessage());
-            }
-            throw new IntentionConstraintViolationException(errors);
-        }
+    public IntentionDTO add(IntentionCreationDTO intentionDTO, UserDTO userDTO) {
         try {
-            return this.intentionRepository.save(intention).getId();
+            return this.userService.offer(userDTO.getId(), intentionDTO);
         } catch (DataIntegrityViolationException e) {
             throw new DataIncomingConflictException();
         } catch (IllegalStateException e) {
@@ -83,9 +95,5 @@ public class IntentionService implements IntentionServiceInterface{
 
     private boolean isCorrectState(String aState) {
         return Arrays.stream(Status.values()).anyMatch(status -> status.equals(Status.valueOf(aState)));
-    }
-
-    private Stream<Intention> intentionsStream(){
-        return StreamSupport.stream(this.intentionRepository.findAll().spliterator(), false);
     }
 }

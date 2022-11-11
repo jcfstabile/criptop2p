@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.IntentionService;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
@@ -17,7 +18,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -106,8 +106,9 @@ public class IntentionController {
     )
 
     @PostMapping("/intentions")
-    public ResponseEntity<IntentionDTO> add(@Valid @RequestBody IntentionDTO intentionDTO) {
-        Long id = this.intentionService.add(intentionDTO);
+    public ResponseEntity<IntentionDTO> add(@Valid @RequestBody IntentionCreationDTO intentionDTO, UserDTO userDTO) {
+        IntentionDTO intention = this.intentionService.add(intentionDTO, userDTO);
+        Long id = intention.getIntentionId();
         return ResponseEntity.status(201).body(
                 this.intentionService.findById(id)
         );

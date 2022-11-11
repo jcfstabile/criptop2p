@@ -1,6 +1,9 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -14,5 +17,5 @@ public interface IntentionServiceInterface {
 
     void delete(Long id);
 
-    Long add(IntentionDTO intentionDTO);
+    IntentionDTO add(IntentionCreationDTO intentionDTO, UserDTO userDTO);
 }

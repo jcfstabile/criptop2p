@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class UserService implements UserServiceInterface {
     @Autowired

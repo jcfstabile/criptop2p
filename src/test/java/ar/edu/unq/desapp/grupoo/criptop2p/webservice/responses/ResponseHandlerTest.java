@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.ServerCantHandleRequestNowException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -95,6 +92,46 @@ class ResponseHandlerTest {
                 () -> assertEquals("004", body.getErrorCode()),
                 () -> assertEquals("A major error had occurred", body.getMessage()),
                 () -> assertEquals("The server can't handle the request now", body.getError())
+        );
+    }
+
+    @DisplayName("When the intention cant be found handle request the response is a not found error")
+    @Test
+    void handleIntentionNotFound() {
+        IntentionNotFoundException intentionNotFoundException = new IntentionNotFoundException(123456789L);
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleIntentionNotFoundException(intentionNotFoundException);
+        assertNotNull(responseEntity);
+        assertEquals("404 NOT_FOUND", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("006", body.getErrorCode()),
+                () -> assertEquals("Intention not found", body.getMessage()),
+                () -> assertEquals("Could not find intention 123456789", body.getError())
+        );
+    }
+
+    @DisplayName("When the status of intentions is incorrect handle request")
+    @Test
+    void handleIncorrectStatus() {
+        IncorrectStatusException incorrectStatusException = new IncorrectStatusException("ASD");
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleIncorrectStatusException(incorrectStatusException);
+        assertNotNull(responseEntity);
+        assertEquals("400 BAD_REQUEST", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("007", body.getErrorCode()),
+                () -> assertEquals("Incorrect state", body.getMessage()),
+                () -> assertEquals("The next status is a incorrect status for an intention: ASD", body.getError())
         );
     }
 }

@@ -49,4 +49,8 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ResponseErrorSimple("008", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler({IncorrectStatusException.class})
+    public ResponseEntity<Object> handleIncorrectStatusException(IncorrectStatusException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("007", "Incorrect state", exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }
