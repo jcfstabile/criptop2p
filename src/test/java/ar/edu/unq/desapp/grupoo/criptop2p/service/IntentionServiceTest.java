@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.Assert.assertNotNull;
+
 @DisplayName("Intention Service Tests")
 @SpringBootTest
 @Transactional
@@ -20,7 +22,7 @@ class IntentionServiceTest {
     @Test
     void testIntentionServiceReturnsAnIntention(){
         //IntentionDTO response = sut.findById(1L);
-
+        assertNotNull(sut);
     }
 
 }
