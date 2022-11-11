@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @ExtendWith(MockitoExtension.class)
-public class IntentionServiceTest {
+class IntentionServiceTest {
     @Autowired
     IntentionService sut;
 
