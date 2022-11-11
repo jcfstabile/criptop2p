@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IncorrectUserException;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.ValidatorCryptoPrice;
 import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
@@ -128,6 +129,9 @@ public class User{
     }
 
     public void accept(Intention anIntention, BigDecimal aCurrentPrice){
+        if(this.isSameUser(anIntention.getOffered())){
+            throw new IncorrectUserException(this.id);
+        }
         anIntention.verifyIfIsAcepted(aCurrentPrice);
     }
 
