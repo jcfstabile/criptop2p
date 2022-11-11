@@ -70,13 +70,6 @@ public class IntentionControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @DisplayName("When intentention controller receive the method intentions by ID with a wrong ID")
-    @Test
-    void testWhenIntententionControllerReceiveTheMethodIntentionByIdWithAWrongIDReturnsCode201() {
-        ResponseEntity<IntentionDTO> response = sut.intentionById(12345678L);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
     @DisplayName("When intentention controller receive the method intentions delegates to service")
     @Test
     void testWhenIntententionControllerReceiveTheMethodIntentionsReturnsCode201() {
@@ -84,12 +77,20 @@ public class IntentionControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    /*
     @DisplayName("When intentention controller receive the method intentions with status with a rigth status returns code 200 OK")
     @Test
     void testWhenIntententionControllerReceiveTheMethodIntentionsWithStateReturnsCode200OK() {
         ResponseEntity<List<IntentionDTO>> response = sut.intentionsWithState("SOLD");
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    /*
+
+    @DisplayName("When intentention controller receive the method intentions by ID with a wrong ID")
+    @Test
+    void testWhenIntententionControllerReceiveTheMethodIntentionByIdWithAWrongIDReturnsCode201() {
+        ResponseEntity<IntentionDTO> response = sut.intentionById(12345678L);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @DisplayName("When intentention controller receive the method intentions with status with a rigth status returns code 200 OK")
