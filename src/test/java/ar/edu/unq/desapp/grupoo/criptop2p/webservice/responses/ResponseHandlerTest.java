@@ -134,4 +134,24 @@ class ResponseHandlerTest {
                 () -> assertEquals("The next status is a incorrect status for an intention: ASD", body.getError())
         );
     }
+
+    @DisplayName("When user is incorrect handle request")
+    @Test
+    void handleIncorrectUser() {
+        IncorrectUserException incorrectUserException = new IncorrectUserException(1L);
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleIncorrectUserException(incorrectUserException);
+        assertNotNull(responseEntity);
+        assertEquals("409 CONFLICT", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("007", body.getErrorCode()),
+                () -> assertEquals("Incorrect user", body.getMessage()),
+                () -> assertEquals("The user with ID: 1 cant accepted this intention because its is the intention offered", body.getError())
+        );
+    }
 }

@@ -53,4 +53,9 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleIncorrectStatusException(IncorrectStatusException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("007", "Incorrect state", exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler({IncorrectUserException.class})
+    public ResponseEntity<Object> handleIncorrectUserException(IncorrectUserException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("007", "Incorrect user", exception.getMessage()), HttpStatus.CONFLICT);
+    }
 }
