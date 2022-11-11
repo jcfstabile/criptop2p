@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Validator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class IntentionService implements IntentionServiceInterface{
@@ -88,9 +86,5 @@ public class IntentionService implements IntentionServiceInterface{
         } catch (IllegalStateException e) {
             throw new ServerCantHandleRequestNowException();
         }
-    }
-
-    private boolean isCorrectState(String aState) {
-        return Arrays.stream(Status.values()).anyMatch(status -> status.equals(Status.valueOf(aState)));
     }
 }
