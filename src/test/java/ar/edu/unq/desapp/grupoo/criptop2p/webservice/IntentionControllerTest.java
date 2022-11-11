@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DisplayName("Intention Controller Tests")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class IntentionControllerTest {
+class IntentionControllerTest {
     @Autowired
     IntentionController sut;
     @Autowired
@@ -39,7 +39,7 @@ public class IntentionControllerTest {
 
     @SneakyThrows
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         binance = new BinanceIntegration();
         UserCreationDTO anUser = new UserCreationDTO("Jom", "Nen", "jk22@here.dom", "Fake Street 1234", "Pepito+1234", "66345678", "6664567890123456789012");
         userDTO = anUserRestController.register(anUser).getBody();
@@ -54,7 +54,7 @@ public class IntentionControllerTest {
     }
 
     @AfterEach
-    public void eraseAllIntentions() {
+    void eraseAllIntentions() {
         List<IntentionDTO> intentions = sut.intentions().getBody();
         assertNotNull(intentions);
         for (IntentionDTO intention : intentions) {

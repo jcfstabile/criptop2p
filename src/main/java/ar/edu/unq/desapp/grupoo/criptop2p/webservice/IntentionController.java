@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.IntentionService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorList;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorSimple;
