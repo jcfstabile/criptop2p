@@ -89,8 +89,4 @@ public class IntentionService implements IntentionServiceInterface{
             throw new ServerCantHandleRequestNowException();
         }
     }
-
-    private boolean isCorrectState(String aState) {
-        return Arrays.stream(Status.values()).anyMatch(status -> status.equals(Status.valueOf(aState)));
-    }
 }
