@@ -34,10 +34,10 @@ class UserRestControllerTest {
     @Mock QuotationService quotationServiceMock;
 
     @Autowired
-    private UserRestController anUserRestController;
+    UserRestController anUserRestController;
 
     @Autowired
-    private QuotationService quotationService;
+    QuotationService quotationService;
 
     @BeforeEach
     public void setUp(){
@@ -73,10 +73,12 @@ class UserRestControllerTest {
 
     @DisplayName("When an User make a offer it get an intention with status of OFFERED and the User as offered")
     @Test
-    void anUserCanMakeANewOfter(){
+    void anUserCanMakeANewOfter() throws InterruptedException {
         UserDTO userDTO = anUserRestController.register(anUser).getBody();
         assertNotNull(userDTO);
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10,new BigDecimal("1.47"), "SELL", CryptoName.ALICEUSDT);
+        CryptoName cryptoName = CryptoName.ALICEUSDT;
+
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
         assertNotNull(userDTO.getId());
 
         IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();
@@ -229,11 +231,14 @@ class UserRestControllerTest {
         assertNotNull(seller);
         assertNotNull(buyer);
         CryptoName cryptoName = CryptoName.ATOMUSDT;
-        when(quotationServiceMock.priceOf(cryptoName)).thenReturn(BigDecimal.valueOf(1.0));
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationServiceMock.priceOf(cryptoName), "SELL", cryptoName);
+        BigDecimal sellPrice = quotationService.priceOf(cryptoName).multiply(BigDecimal.valueOf(0.99));
+
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, sellPrice, "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+
         assertNotNull(intentionDTO);
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
+
         IntentionDTO acceptedIntentionDTO = anUserRestController.processIntention(buyer.getId(), intentionDTO.getIntentionId(), "accept").getBody();
 
 
