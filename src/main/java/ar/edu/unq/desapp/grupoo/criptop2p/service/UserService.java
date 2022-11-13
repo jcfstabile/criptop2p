@@ -12,7 +12,6 @@ import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.ConvertDate;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.FormatterDate;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.InspectUser;
-import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
@@ -88,14 +87,16 @@ public class UserService implements UserServiceInterface {
     public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO){
         User user = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
-        Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
-        IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
         QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
-        user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
+        Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
+        IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
+//        user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
+        user.offer(anIntention, aCurrentPrice);
         this.userRepository.save(user);
         if(anIntention.hasStatus(Status.CANCELEDBYSYSTEM)){
             throw new DifferenceWithCurrentPriceException(anIntention.getPrice(), aCurrentPrice);
+            // TODO this throws Internal server error????  check and add Response struct associated to exception
         }
         return intentionDTO;
     }
