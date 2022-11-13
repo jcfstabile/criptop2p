@@ -462,8 +462,6 @@ class UserTest {
     @DisplayName("When a User accept an intention this status change to sold")
     @Test
     void testWhenAnUserAcceptAnIntentionThisChangeItsStatusToSOLD(){
-        // User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        // User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), new Buy(), CryptoName.ETHUSDT,new BigDecimal(2));
@@ -475,8 +473,6 @@ class UserTest {
     @DisplayName("When a User accept a buy intention and the current price is bigger than the intention offer it is canceled automatically")
     @Test
     void testWhenAnUserAcceptAnIntentionBuyButTheCurrentPriceIsBiggerTheDemanderChangeButTheIntentionIsCanceledBySystem(){
-        // User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        // User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), new Buy(), CryptoName.ETHUSDT,new BigDecimal(2));
@@ -488,8 +484,6 @@ class UserTest {
     @DisplayName("When a User accept a sell intention and the quoted price is higger that de intention price it is canceled automatically")
     @Test
     void testWhenAnUserAcceptAnIntentionSellButTheCurrentPriceIsBiggerTheDemanderChangeButTheIntentionIsCanceledBySystem(){
-        // User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
-        // User otherUser = new User("Joe", "Kun", "asd@there.dom", "1234567891", "Pepito13!", "12345679", "1234567890123456789012");
         User anUser = anyUser.withEmail("jk@here.dom").build();
         User otherUser = anyUser.withEmail("asd@here.dom").build();
 
@@ -502,7 +496,6 @@ class UserTest {
     @DisplayName("When an offerer cancel its intention this is marked with CANCELED status")
     @Test
     void testWhenAnOffererCancelItsIntentionThisIsMarkedWithCanceledStatus() {
-//        User anUser = new User("Jim", "Ken", "jk@here.dom", "1234567890", "Pepito12!", "12345678", "1111111111111111111111");
         User anUser = anyUser.withEmail("jk@here.dom").build();
         Intention intention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.ETHUSDT,new BigDecimal(2));
 
