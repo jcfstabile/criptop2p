@@ -20,6 +20,13 @@ public class ValidatorCryptoPrice {
         this.percent = aPercent;
     }
 
+    public Intention checkIntention(Intention intention, BigDecimal currentPrice) throws StatusChangeErrorException {
+        if(! isCorrectPrice(intention.getPrice(), currentPrice)){
+            intention.canceledBySystem();
+        }
+        return intention;
+    }
+
     public Intention createIntention(User anUser, Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice) throws StatusChangeErrorException {
         Intention intention = new Intention(anUser, aCount, aPrice, aType, aCryptoName);
         if(!this.isCorrectPrice(aPrice, currentPrice)){

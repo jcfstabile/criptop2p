@@ -122,10 +122,9 @@ public class User{
 
     public List<Intention> getOffers() { return this.offers;}
 
-    public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice){
-        Intention intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);
+    public void offer(Intention intention, BigDecimal currentPrice){
+        new ValidatorCryptoPrice().checkIntention(intention, currentPrice);
         this.addIntention(intention);
-        return intention;
     }
 
     public void accept(Intention anIntention, BigDecimal aCurrentPrice){
@@ -133,17 +132,22 @@ public class User{
             throw new IncorrectUserException(this.id);
         }
         anIntention.verifyIfIsAcepted(aCurrentPrice);
+        if (anIntention.getStatus().equals(Status.SOLD)) {
+            addIntention(anIntention);
+        }
     }
 
     public void cancel(Intention intention) {
-        intention.cancel(this);
+        if(intention.isItsOfferer(this) || intention.isItsDemander(this) ) {
+            intention.cancel(this);
+        }
     }
 
-    public int quantityIntentions() { return ((int) this.intentionWithStatus(Status.SOLD).count());}
+    public int quantityIntentionsSold() { return ((int) this.intentionWithStatus(Status.SOLD).count());}
 
     public int getReputation() {
         try{
-            return this.points / this.quantityIntentions();
+            return this.points / this.quantityIntentionsSold();
         }
         catch(ArithmeticException ex){
             return 0;
