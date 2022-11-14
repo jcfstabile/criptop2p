@@ -89,15 +89,15 @@ public class UserService implements UserServiceInterface {
         User user = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
         Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
-        IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
+        //IntentionDTO intentionDTO = intentionMapper.toIntentionDto(anIntention);
         QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
-        user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
+        Intention intention = user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
         this.userRepository.save(user);
-        if(anIntention.hasStatus(Status.CANCELEDBYSYSTEM)){
-            throw new DifferenceWithCurrentPriceException(anIntention.getPrice(), aCurrentPrice);
+        if(intention.hasStatus(Status.CANCELEDBYSYSTEM)){
+            throw new DifferenceWithCurrentPriceException(intention.getPrice(), aCurrentPrice);
         }
-        return intentionDTO;
+        return intentionMapper.toIntentionDto(intention);
     }
 
     @Override
