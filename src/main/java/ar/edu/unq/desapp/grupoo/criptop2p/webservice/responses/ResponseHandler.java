@@ -39,7 +39,6 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleIntentionNotFoundException(IntentionNotFoundException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("006", "Intention not found", exception.getMessage()), HttpStatus.NOT_FOUND);
     }
-
     @ExceptionHandler({NoValidActionErrorException.class})
     public ResponseEntity<Object> handleNoValidActionErrorException(NoValidActionErrorException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("007", "Not a valid action", exception.getMessage()), HttpStatus.BAD_REQUEST);
@@ -48,14 +47,17 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleStatusChangeNotAllowedException(StatusChangeNotAllowedRestException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("008", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
     }
-
     @ExceptionHandler({IncorrectStatusException.class})
     public ResponseEntity<Object> handleIncorrectStatusException(IncorrectStatusException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("007", "Incorrect state", exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
-
     @ExceptionHandler({IncorrectUserException.class})
     public ResponseEntity<Object> handleIncorrectUserException(IncorrectUserException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("007", "Incorrect user", exception.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({DifferenceWithCurrentPriceException.class})
+    public ResponseEntity<Object> handleDifferenceWithCurrentPriceException(DifferenceWithCurrentPriceException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("008", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
     }
 }

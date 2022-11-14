@@ -84,7 +84,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     @Transactional
-    public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO){
+    public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO) {
         User user = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
         QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
@@ -93,7 +93,7 @@ public class UserService implements UserServiceInterface {
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
         user.offer(anIntention, aCurrentPrice);
         this.userRepository.save(user);
-        if(anIntention.hasStatus(Status.CANCELEDBYSYSTEM)){
+        if (anIntention.hasStatus(Status.CANCELEDBYSYSTEM)) {
             throw new DifferenceWithCurrentPriceException(anIntention.getPrice(), aCurrentPrice);
         }
         return intentionDTO;
