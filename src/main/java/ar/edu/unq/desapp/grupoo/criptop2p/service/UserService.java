@@ -91,12 +91,10 @@ public class UserService implements UserServiceInterface {
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
         Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
-//        user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
         user.offer(anIntention, aCurrentPrice);
         this.userRepository.save(user);
         if(anIntention.hasStatus(Status.CANCELEDBYSYSTEM)){
             throw new DifferenceWithCurrentPriceException(anIntention.getPrice(), aCurrentPrice);
-            // TODO this throws Internal server error????  check and add Response struct associated to exception
         }
         return intentionDTO;
     }
