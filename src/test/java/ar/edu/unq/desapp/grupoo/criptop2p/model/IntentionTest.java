@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeNotAllowedRestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -161,32 +160,34 @@ class IntentionTest {
     @DisplayName("An Intention can identificate if an User is its offerer")
     @Test
     void testAnIntentionCanIdentificateIfAnUserIsItsOfferer(){
-        Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
-        assertTrue(anIntention.isItsOfferer(anUser));
+        anUser.offer(intentionSell, BigDecimal.valueOf(2));
+
+        assertTrue(intentionSell.isItsOfferer(anUser));
     }
 
     @DisplayName("An Intention can identificate if an User is not its offerer")
     @Test
     void testAnIntentionCanIdentificateIfAnUserIsNotItsOfferer(){
-        Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
-        assertFalse(anIntention.isItsOfferer(otherUser));
+        anUser.offer(intentionSell, BigDecimal.valueOf(2));
+
+        assertFalse(intentionSell.isItsOfferer(otherUser));
     }
 
-    @DisplayName("An Intention can identificate if an User is its offered")
+    @DisplayName("An Intention can identificate if an User is its offered after accept it")
     @Test
     void testAnIntentionCanIdentificateIfAnUserIsItsOffered(){
-        Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
-        otherUser.accept(anIntention, new BigDecimal(2));
-        assertTrue(anIntention.isItsOfferer(anUser));
+        otherUser.accept(intentionSell, new BigDecimal(2));
+
+        assertTrue(intentionSell.isItsOfferer(anUser));
     }
 
     @DisplayName("An Intention can identificate if an User is not its offered")
     @Test
     void testAnIntentionCanIdentificateIfAnUserIsNotItsOffered(){
-        Intention anIntention = anUser.offer(1, new BigDecimal(2), new Sell(), CryptoName.MATICUSDT, new BigDecimal(2));
-        otherUser.accept(anIntention, new BigDecimal(2));
-        User otherUser = anyUser.build();
-        assertFalse(intention.isItsOfferer(otherUser));
+        Intention someIntention = anyIntention.build();
+        otherUser.accept(someIntention, new BigDecimal(2));
+
+        assertFalse(someIntention.isItsOfferer(otherUser));
     }
 
     @DisplayName("An Intention has timestamp")
