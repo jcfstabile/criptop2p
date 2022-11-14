@@ -6,6 +6,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IntentionNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.UserRestController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Intention Service Tests")
 @SpringBootTest
@@ -29,9 +31,7 @@ class IntentionServiceTest {
     IntentionService sut;
     @Autowired
     UserRestController anUserRestController;
-    IntentionDTO intention0;
-    IntentionDTO intention1;
-
+    IntentionCreationDTO intentionDTO0, intentionDTO1, intentionDTO2;
     UserDTO userDTO;
 
     BinanceIntegration binance;
@@ -43,12 +43,11 @@ class IntentionServiceTest {
         userDTO = anUserRestController.register(anUser).getBody();
         BigDecimal priceATOM = new BigDecimal(binance.priceOf(CryptoName.ATOMUSDT).getPrice());
         BigDecimal priceBN = new BigDecimal(binance.priceOf(CryptoName.BNBUSDT).getPrice());
+        BigDecimal priceCK = new BigDecimal(binance.priceOf(CryptoName.CAKEUSDT).getPrice());
 
-        IntentionCreationDTO intentionDTO0 = new IntentionCreationDTO(1, priceATOM, "BUY", CryptoName.ATOMUSDT);
-        IntentionCreationDTO intentionDTO1 = new IntentionCreationDTO(1, priceBN, "SELL", CryptoName.BNBUSDT);
-
-        intention0 = sut.add(intentionDTO0, userDTO);
-        intention1 = sut.add(intentionDTO1, userDTO);
+        intentionDTO0 = new IntentionCreationDTO(1, priceATOM, "BUY", CryptoName.ATOMUSDT);
+        intentionDTO1 = new IntentionCreationDTO(1, priceBN, "SELL", CryptoName.BNBUSDT);
+        intentionDTO2 = new IntentionCreationDTO(2, priceCK, "BUY", CryptoName.CAKEUSDT);
     }
 
     @AfterEach
@@ -57,12 +56,30 @@ class IntentionServiceTest {
         for (IntentionDTO intention : intentions) {
             sut.delete(intention.getIntentionId());
         }
-        //anUserRestController.unregister(userDTO.getId());
+        anUserRestController.unregister(userDTO.getId());
     }
 
-    @DisplayName("When intentention controller receive the method intentions by ID delegates to service")
+
+    @DisplayName("At first, there arent any intention")
     @Test
-    void testWhenIntententionControllerReceiveTheMethodIntentionByIdWithARightIDReturnsCode201() {
+    void testThreArentAnyIntention(){
+        List<IntentionDTO> response = sut.intentions();
+        assertEquals(0, response.size());
+    }
+
+    @DisplayName("To add an intention its add one ")
+    @Test
+    void testToSaveAnIntentionItAddOne(){
+        assertEquals(0, sut.intentions().size());
+        sut.add(intentionDTO0, userDTO);
+        assertEquals(1, sut.intentions().size());
+    }
+
+    @DisplayName("IntentionService returns a intention when find by Id with an rigth ID")
+    @Test
+    void testWhenTheIDIsRigthIntentionServiceReturnAnExpectedIntention() {
+        IntentionDTO intention0 = sut.add(intentionDTO0, userDTO);
+
         IntentionDTO response = sut.findById(intention0.getIntentionId());
         assertEquals(response.getIntentionId(), intention0.getIntentionId());
         assertEquals(response.getCount(), intention0.getCount());
@@ -72,28 +89,85 @@ class IntentionServiceTest {
         assertEquals(response.getType(), intention0.getType());
     }
 
-    @DisplayName("When intentention controller receive the method intentions delegates to service")
+    @DisplayName("Intention Service returns the number of intentions")
     @Test
-    void testWhenIntententionControllerReceiveTheMethodIntentionsReturnsCode201() {
-        List<IntentionDTO> response = sut.intentions();
-        assertEquals(2, response.size());
+    void testIntentionServiceReturnsTheIntentions() {
+        assertEquals(0, sut.intentions().size());
+        sut.add(intentionDTO0, userDTO);
+        assertEquals(1, sut.intentions().size());
+        sut.add(intentionDTO1, userDTO);
+        assertEquals(2, sut.intentions().size());
+        sut.add(intentionDTO2, userDTO);
+        assertEquals(3, sut.intentions().size());
     }
 
-    @DisplayName("When intentention controller receive the method intentions delegates to service")
+    @DisplayName("When intentention service receives the method intentions with status with a rigth status returns a list of intentions")
     @Test
-    void test() {
-        this.eraseAllIntentions();
-        List<IntentionDTO> response = sut.intentions();
-        assertEquals(0, response.size());
-    }
-
-    @DisplayName("When intentention controller receive the method intentions with status with a rigth status returns code 200 OK")
-    @Test
-    void testWhenIntententionControllerReceiveTheMethodIntentionsWithStateReturnsCode200OK() {
+    void testWhenIntententionServiceReceiveTheMethodIntentionWithStateWithAnSpecificStatusReturnsTheExpectedIntentions() {
+        sut.add(intentionDTO0, userDTO);
+        sut.add(intentionDTO1, userDTO);
+        sut.add(intentionDTO2, userDTO);
         List<IntentionDTO> response = sut.intentionsWithState("SOLD");
         assertEquals(0, response.size());
         response = sut.intentionsWithState("OFFERED");
-        assertEquals(2, response.size());
+        assertEquals(3, response.size());
     }
 
+    @DisplayName("When there arent any intention IntentionService returns a empty list when status is right and receives the method intentionsWithStatus")
+    @Test
+    void testAnyIntentionWithAnyStatus(){
+        List<IntentionDTO> solds = sut.intentionsWithState("SOLD");
+        List<IntentionDTO> offereds = sut.intentionsWithState("OFFERED");
+        assertEquals(0, solds.size());
+        assertEquals(0, offereds.size());
+    }
+
+    @DisplayName("IntentionService can delete an intention when the ID es rigth")
+    @Test
+    void testToDeleteAnIntentionItEliminateOne(){
+        IntentionDTO intention0 = sut.add(intentionDTO0, userDTO);
+        assertEquals(1, sut.intentions().size());
+        sut.delete(intention0.getIntentionId());
+//        assertEquals(0, sut.intentions().size());
+    }
+
+    @DisplayName("To delete an intention find by ID it throws an exception")
+    @Test
+    void testIntentionServiceThrowsAnExceptionWhenDeleteAnIntentionAndAfterSearchForIt(){
+        IntentionDTO intention0 = sut.add(intentionDTO0, userDTO);
+        IntentionDTO response = sut.findById(intention0.getIntentionId());
+        assertEquals(response.getIntentionId(), intention0.getIntentionId());
+        assertEquals(response.getCount(), intention0.getCount());
+        assertEquals(response.getPrice(), intention0.getPrice());
+        assertEquals(response.getCryptoName(), intention0.getCryptoName());
+        assertEquals(response.getStatus(), intention0.getStatus());
+        assertEquals(response.getType(), intention0.getType());
+
+        Long IDToRemove = intention0.getIntentionId();
+
+        sut.delete(IDToRemove);
+
+        IntentionNotFoundException exception = assertThrows(IntentionNotFoundException.class, () ->
+                sut.delete(IDToRemove)
+        );
+        assertEquals("Could not find intention " + intention0.getIntentionId(), exception.getMessage());
+    }
+
+    @DisplayName("To find with a wrong ID its throws an exception")
+    @Test
+    void testIntentionServiceThrowsAnExceptionWhenFindByIDWithAWrongID(){
+        IntentionNotFoundException exception = assertThrows(IntentionNotFoundException.class, () ->
+                sut.findById(123456789L)
+        );
+        assertEquals("Could not find intention 123456789", exception.getMessage());
+    }
+
+    @DisplayName("To delete with a wrong ID its throws an exception")
+    @Test
+    void testIntentionServiceThrowsAnExceptionWhenDeleteByIDWithAWrongID(){
+        IntentionNotFoundException exception = assertThrows(IntentionNotFoundException.class, () ->
+                sut.delete(123456789L)
+        );
+        assertEquals("Could not find intention 123456789", exception.getMessage());
+    }
 }

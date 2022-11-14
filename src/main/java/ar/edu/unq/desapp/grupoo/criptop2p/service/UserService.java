@@ -84,27 +84,19 @@ public class UserService implements UserServiceInterface {
 
     @Override
     @Transactional
-    public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO){
+    public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO) {
         User user = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
-<<<<<<< HEAD
-        Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
-        //IntentionDTO intentionDTO = intentionMapper.toIntentionDto(anIntention);
-        QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
-        BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
-        Intention intention = user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
-=======
         QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
         Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
         user.offer(anIntention, aCurrentPrice);
->>>>>>> b3302d94f2758e68d4ffdd4e12bf8c2e4dbd1d88
         this.userRepository.save(user);
-        if(intention.hasStatus(Status.CANCELEDBYSYSTEM)){
-            throw new DifferenceWithCurrentPriceException(intention.getPrice(), aCurrentPrice);
+        if (anIntention.hasStatus(Status.CANCELEDBYSYSTEM)) {
+            throw new DifferenceWithCurrentPriceException(anIntention.getPrice(), aCurrentPrice);
         }
-        return intentionMapper.toIntentionDto(intention);
+        return intentionDTO;
     }
 
     @Override
