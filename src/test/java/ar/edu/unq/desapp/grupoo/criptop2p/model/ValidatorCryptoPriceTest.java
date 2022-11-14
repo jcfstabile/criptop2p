@@ -46,7 +46,10 @@ class ValidatorCryptoPriceTest {
     @ParameterizedTest
     @ValueSource(doubles = {2.0, 2.1, 1.9})
     void createintentionWithStatusOFFEREDWhenTheCurrentPriceIsBeetweenTheRangeGivenBy5PerCentMoreOrLess(double currentPrice) throws StatusChangeErrorException {
-        Intention intention = validator.createIntention(anUser, 1, new BigDecimal(2), new Sell(), CryptoName.ATOMUSDT, new BigDecimal(currentPrice));
+        Intention intention = new Intention(anUser, 1, BigDecimal.valueOf(2), new Sell(), CryptoName.ATOMUSDT);
+
+        validator.checkIntention(intention, BigDecimal.valueOf(currentPrice));
+
         assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());
         assertEquals(new BigDecimal(2), intention.getPrice());
@@ -60,7 +63,9 @@ class ValidatorCryptoPriceTest {
     @ParameterizedTest
     @ValueSource(doubles = {2.2, 1.8})
     void createintentionCreateAnIntentionWithStatusCANCELEDBYSYSTEMWhenTheCurrentPriceIs5PerCentOutOfRange(double currentPrice) throws StatusChangeErrorException {
-        Intention intention = validator.createIntention(anUser, 1, new BigDecimal("220"), new Sell(), CryptoName.ATOMUSDT, new BigDecimal(currentPrice));
+        Intention intention = new Intention(anUser, 1, BigDecimal.valueOf(220), new Sell(), CryptoName.ATOMUSDT);
+
+        validator.checkIntention(intention, BigDecimal.valueOf(currentPrice));
 
         assertEquals(anUser, intention.getOffered());
         assertEquals(1, intention.getCount());

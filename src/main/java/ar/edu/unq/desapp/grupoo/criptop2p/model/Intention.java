@@ -98,7 +98,7 @@ public class Intention {
     }
 
     public void sold(Timestamp aTimeStamp, User anDemander){
-        Integer reward = this.reward(aTimeStamp);
+        int reward = this.reward(aTimeStamp);
         this.offered.addPoints(reward);
         anDemander.addPoints(reward);
         this.sold();
@@ -170,5 +170,9 @@ public class Intention {
 
     public boolean isBetween(Date init, Date end) {
         return this.isAfter(init) && this.isBefore(end);
+    }
+
+    public boolean isItsDemander(User anUser) {
+        return anUser.getOffers().contains(this) && ! anUser.isSameUser(this.offered);
     }
 }
