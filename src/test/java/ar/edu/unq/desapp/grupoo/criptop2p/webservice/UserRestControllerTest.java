@@ -159,7 +159,7 @@ class UserRestControllerTest {
         assertNotNull(buyer);
         Long  buyerId = buyer.getId();
         CryptoName cryptoName = CryptoName.ATOMUSDT;
-        when(quotationServiceMock.priceOf(cryptoName)).thenReturn(BigDecimal.valueOf(10.0)); //TODO correct price here
+        when(quotationServiceMock.priceOf(cryptoName)).thenReturn(BigDecimal.valueOf(10.720000267028809)); //TODO correct price here
 
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationServiceMock.priceOf(cryptoName), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
