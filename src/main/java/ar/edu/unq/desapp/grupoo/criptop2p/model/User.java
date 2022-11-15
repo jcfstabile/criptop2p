@@ -81,6 +81,19 @@ public class User{
         this.points = 0;
     }
 
+    public User(Long anID, String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
+        this.id = anID;
+        this.name = aName;
+        this.surname = aSurname;
+        this.email = anEmail;
+        this.address = anAddress;
+        this.password = aPassword;
+        this.walletAddress = aWalletAddress;
+        this.cvu = aCvu;
+        this.offers = new ArrayList<>();
+        this.points = 0;
+    }
+
     public User() {
 
     }

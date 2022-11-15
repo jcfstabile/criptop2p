@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IncorrectUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -817,6 +818,34 @@ class UserTest {
         buyer.payment(intention);
 
         assertEquals(Status.CLOSED, intention.getStatus());
+    }
+
+    @DisplayName("When an offered acepted its own intention throws an exception")
+    @Test
+    void testWhenOfferedAceptedItsOwnIntentionThrowsAnException(){
+        User seller = new User(123456789L, "pepe", "juarez", "vato@mx.org", "FakeSt 44332211", "PasswordSegura85+", "11112222", "2109876543210987654321");
+        Intention intention = anyIntention.withUser(seller).withPrice(2.0).build();
+        seller.offer(intention, BigDecimal.valueOf(2.0));
+        IncorrectUserException exception = assertThrows(IncorrectUserException.class, () ->
+                seller.accept(intention, new BigDecimal(2))
+        );
+        assertEquals("The user with ID: 123456789 cant accepted this intention because its is the intention offered", exception.getMessage());
+    }
+
+    @DisplayName("User can difference between it and other user")
+    @Test
+    void testUserCanDifferenceBetweenItAndOtherUser(){
+        User seller = new User("pepe", "juarez", "vato@mx.org", "FakeSt 44332211", "PasswordSegura85+", "11112222", "2109876543210987654321");
+        User buyer = anyUser.build();
+        assertFalse(seller.isSameUser(buyer));
+    }
+
+
+    @DisplayName("User can identicate it")
+    @Test
+    void testUserIsSameuser(){
+        User seller = anyUser.build();
+        assertTrue(seller.isSameUser(seller));
     }
 }
 
