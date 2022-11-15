@@ -81,12 +81,12 @@ public class User{
         this.points = 0;
     }
 
-    public User(Long anID, String aName, String aSurname, String anEmail, String anAddress, String aPassword, String aWalletAddress, String aCvu){
+    public User(Long anID, String aName, String aSurname, String anEmail, String aPassword, String aWalletAddress, String aCvu){
         this.id = anID;
         this.name = aName;
         this.surname = aSurname;
         this.email = anEmail;
-        this.address = anAddress;
+        this.address = null;
         this.password = aPassword;
         this.walletAddress = aWalletAddress;
         this.cvu = aCvu;

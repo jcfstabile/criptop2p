@@ -823,7 +823,7 @@ class UserTest {
     @DisplayName("When an offered acepted its own intention throws an exception")
     @Test
     void testWhenOfferedAceptedItsOwnIntentionThrowsAnException(){
-        User seller = new User(123456789L, "pepe", "juarez", "vato@mx.org", "FakeSt 44332211", "PasswordSegura85+", "11112222", "2109876543210987654321");
+        User seller = new User(123456789L, "pepe", "juarez", "vato@mx.org", "PasswordSegura85+", "11112222", "2109876543210987654321");
         Intention intention = anyIntention.withUser(seller).withPrice(2.0).build();
         seller.offer(intention, BigDecimal.valueOf(2.0));
         IncorrectUserException exception = assertThrows(IncorrectUserException.class, () ->
