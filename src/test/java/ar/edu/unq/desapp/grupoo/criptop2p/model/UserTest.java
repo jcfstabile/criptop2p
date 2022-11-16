@@ -826,8 +826,9 @@ class UserTest {
         User seller = new User(123456789L, "pepe", "juarez", "vato@mx.org", "PasswordSegura85+", "11112222", "2109876543210987654321");
         Intention intention = anyIntention.withUser(seller).withPrice(2.0).build();
         seller.offer(intention, BigDecimal.valueOf(2.0));
+        BigDecimal price = new BigDecimal(2);
         IncorrectUserException exception = assertThrows(IncorrectUserException.class, () ->
-                seller.accept(intention, new BigDecimal(2))
+                seller.accept(intention, price)
         );
         assertEquals("The user with ID: 123456789 cant accepted this intention because its is the intention offered", exception.getMessage());
     }
