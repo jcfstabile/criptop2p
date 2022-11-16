@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Formless;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Form;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Report;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Component
 public class InspectUser {
 
-    public Formless offersBetween(User anUser, Date init, Date end) {
-        return new Formless(this.reportsOf(anUser.offersBetween(init, end)));
+    public Form offersBetween(User anUser, Date init, Date end, Quoter aQuoter) {
+        return new Form(this.reportsOf(anUser.offersBetween(init, end)), aQuoter);
     }
 
     private List<Report> reportsOf(List<Intention> intentions){

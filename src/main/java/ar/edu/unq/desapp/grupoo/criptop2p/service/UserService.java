@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
@@ -125,7 +126,8 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public Formless intentionsBetween(Long id, String start, String end) {
+    public Form intentionsBetween(Long id, String start, String end) {
+        Quoter aQuoter = new Quoter();
         User getUser = this.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         FormatterDate formatter = new FormatterDate();
@@ -134,7 +136,7 @@ public class UserService implements UserServiceInterface {
         ConvertDate convert = new ConvertDate();
         Date startDate = convert.convertToDate(startLocalDate);
         Date endDate = convert.convertToDate(endLocalDate);
-        return inspectUser.offersBetween(getUser, startDate, endDate);
+        return inspectUser.offersBetween(getUser, startDate, endDate, aQuoter);
     }
 
     @Transactional

@@ -6,13 +6,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public class Formless {
+public class Form {
     private final List<Report> reports;
     private final Date date;
 
-    public Formless(List<Report> reports) {
+    private final BigDecimal totalInDollars;
+    private final BigDecimal totalInPesos;
+
+    public Form(List<Report> reports, Quoter quoter) {
         this.reports = reports;
         date = new Date();
+        this.totalInDollars = this.getTotalInDollars();
+        this.totalInPesos = this.getTotalInPesos(quoter);
     }
 
     public List<Report> getReports(){
@@ -23,11 +28,19 @@ public class Formless {
         return this.date;
     }
 
+    public BigDecimal getTotalPesos() {
+        return this.totalInPesos;
+    }
+
+    public BigDecimal getTotalDollars() {
+        return this.totalInDollars;
+    }
+
     public BigDecimal getTotalInDollars() {
         return this.reports.stream().map(Report::getTotalInDollars).reduce(new BigDecimal(0), BigDecimal::add);
     }
 
     public BigDecimal getTotalInPesos(Quoter aQuoter) {
-        return this.getTotalInDollars().multiply(aQuoter.quotationOfUsd());
+        return this.totalInDollars.multiply(aQuoter.quotationOfUsd());
     }
 }
