@@ -8,12 +8,10 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
-import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,26 +24,18 @@ public class IntentionService implements IntentionServiceInterface{
     private IntentionMapper intentionMapper;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private IntentionRepository intentionRepository;
-
-    @Autowired
-    private Validator validator;
 
     @Override
     public IntentionDTO findById(Long anId) {
-        return  intentionMapper.toIntentionDBDto(this.intentionRepository.findById(anId)
+        return  intentionMapper.toIntentionDto(this.intentionRepository.findById(anId)
                 .orElseThrow(() -> new IntentionNotFoundException(anId)));
     }
 
     @Override
     public List<IntentionDTO> intentions() {
         List<IntentionDTO> intentions = new ArrayList<>();
-        for (Intention intention : this.intentionRepository.findAll()){
-            intentions.add(intentionMapper.toIntentionDto(intention));
-        }
+        this.intentionRepository.findAll().forEach(intention -> intentions.add(this.intentionMapper.toIntentionDto(intention)));
         return intentions;
     }
 

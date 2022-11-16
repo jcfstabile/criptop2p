@@ -31,7 +31,6 @@ public class User{
 
     @Column(name="email", nullable = false, unique = true)
     @NotNull(message = "Email cannot be empty")
-//    @Email(message = "Email is not valid", regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*)?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:)\\])")
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     String email;
 
@@ -75,6 +74,19 @@ public class User{
         this.surname = aSurname;
         this.email = anEmail;
         this.address = anAddress;
+        this.password = aPassword;
+        this.walletAddress = aWalletAddress;
+        this.cvu = aCvu;
+        this.offers = new ArrayList<>();
+        this.points = 0;
+    }
+
+    public User(Long anID, String aName, String aSurname, String anEmail, String aPassword, String aWalletAddress, String aCvu){
+        this.id = anID;
+        this.name = aName;
+        this.surname = aSurname;
+        this.email = anEmail;
+        this.address = null;
         this.password = aPassword;
         this.walletAddress = aWalletAddress;
         this.cvu = aCvu;

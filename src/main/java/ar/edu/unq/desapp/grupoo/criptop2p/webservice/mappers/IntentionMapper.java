@@ -15,8 +15,4 @@ public class IntentionMapper {
     public Intention toIntention(User user, IntentionCreationDTO intentionCreationDTO){
         return new Intention(user, intentionCreationDTO.getCount(), intentionCreationDTO.getPrice(), new TypeIntentionDelivery().get(intentionCreationDTO.getType()), intentionCreationDTO.getCryptoName());
     }
-
-    public IntentionDTO toIntentionDBDto(Intention intention) {
-        return new IntentionDTO(intention.getId(), intention.getCount(), intention.getPrice(), intention.getType(), intention.getCrypto(), null, intention.getStatus());
-    }
 }
