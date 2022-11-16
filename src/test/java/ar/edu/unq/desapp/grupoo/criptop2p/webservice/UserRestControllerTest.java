@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @DisplayName("UserRestController Tests")
 @SpringBootTest
@@ -30,8 +28,6 @@ import static org.mockito.Mockito.when;
 class UserRestControllerTest {
 
     static UserCreationDTO anUser, oneUser;
-
-    @Mock QuotationService quotationServiceMock;
 
     @Autowired
     UserRestController anUserRestController;
@@ -159,9 +155,8 @@ class UserRestControllerTest {
         assertNotNull(buyer);
         Long  buyerId = buyer.getId();
         CryptoName cryptoName = CryptoName.ATOMUSDT;
-        when(quotationServiceMock.priceOf(cryptoName)).thenReturn(BigDecimal.valueOf(10.0)); //TODO correct price here
 
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationServiceMock.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
         Long intentionId = intentionDTO.getIntentionId();
