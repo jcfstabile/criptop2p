@@ -53,12 +53,12 @@ class IntentionTest {
     @DisplayName("An IntentionCreationDTO exist")
     @Test
     void testAnIntentionDTOExist() {
-        IntentionCreationDTO intentionDTO = new IntentionCreationDTO(1, new BigDecimal(2).toString(), "SELL", "ATOMUSDT");
+        IntentionCreationDTO intentionDTO = new IntentionCreationDTO(1, "2", "SELL", "ATOMUSDT");
 
         assertEquals(1, intentionDTO.getCount());
-        assertEquals(new BigDecimal(2), intentionDTO.getPrice());
+        assertEquals("2", intentionDTO.getPrice());
         assertEquals("SELL", intentionDTO.getType());
-        assertEquals(CryptoName.ATOMUSDT, intentionDTO.getCryptoName());
+        assertEquals("ATOMUSDT", intentionDTO.getCryptoName());
     }
 
     @DisplayName("An Intention can change Status to CANCELED")
