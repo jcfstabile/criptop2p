@@ -72,9 +72,9 @@ class UserRestControllerTest {
     void anUserCanMakeANewOfter() throws InterruptedException {
         UserDTO userDTO = anUserRestController.register(anUser).getBody();
         assertNotNull(userDTO);
-        CryptoName cryptoName = CryptoName.ALICEUSDT;
+        String cryptoName = "ALICEUSDT";
 
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.ALICEUSDT).toString(), "SELL", cryptoName);
         assertNotNull(userDTO.getId());
 
         IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();
@@ -154,9 +154,9 @@ class UserRestControllerTest {
         assertNotNull(seller);
         assertNotNull(buyer);
         Long  buyerId = buyer.getId();
-        CryptoName cryptoName = CryptoName.ATOMUSDT;
+        String cryptoName = "ATOMUSDT";
 
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.ATOMUSDT).toString(), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
         Long intentionId = intentionDTO.getIntentionId();
@@ -179,8 +179,8 @@ class UserRestControllerTest {
         assertNotNull(seller);
         assertNotNull(buyer);
         Long  buyerId = buyer.getId();
-        CryptoName cryptoName = CryptoName.ATOMUSDT;
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        String cryptoName = "ATOMUSDT";
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.valueOf(cryptoName)).toString(), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
         Long intentionId = intentionDTO.getIntentionId();
@@ -202,8 +202,8 @@ class UserRestControllerTest {
         assertNotNull(seller);
         assertNotNull(buyer);
         Long  buyerId = buyer.getId();
-        CryptoName cryptoName = CryptoName.ATOMUSDT;
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        String cryptoName = "ATOMUSDT";
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.valueOf(cryptoName)).toString(), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
@@ -225,10 +225,10 @@ class UserRestControllerTest {
         UserDTO buyer = anUserRestController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
-        CryptoName cryptoName = CryptoName.ATOMUSDT;
-        BigDecimal sellPrice = quotationService.priceOf(cryptoName).multiply(BigDecimal.valueOf(0.99));
+        String cryptoName = "ATOMUSDT";
+        BigDecimal sellPrice = quotationService.priceOf(CryptoName.valueOf(cryptoName)).multiply(BigDecimal.valueOf(0.99));
 
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, sellPrice, "SELL", cryptoName);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, sellPrice.toString(), "SELL", cryptoName);
         IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
 
         assertNotNull(intentionDTO);
@@ -260,7 +260,7 @@ class UserRestControllerTest {
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
         assertNotNull(registeredUser);
         CryptoName cryptoName = CryptoName.ALICEUSDT;
-        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
+        IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName).toString(), "SELL", "ALICEUSDT");
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO);
 
         List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
@@ -275,8 +275,8 @@ class UserRestControllerTest {
         UserDTO registeredUser = anUserRestController.register(anUser).getBody();
         assertNotNull(registeredUser);
         CryptoName cryptoName = CryptoName.ALICEUSDT;
-        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "SELL", cryptoName);
-        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName), "BUY", cryptoName);
+        IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName).toString(), "SELL", "ALICEUSDT");
+        IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName).toString(), "BUY", "ALICEUSDT");
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO0);
         anUserRestController.offer(registeredUser.getId(), intentionCreationDTO1);
 

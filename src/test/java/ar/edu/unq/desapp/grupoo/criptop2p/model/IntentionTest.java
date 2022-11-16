@@ -53,7 +53,7 @@ class IntentionTest {
     @DisplayName("An IntentionCreationDTO exist")
     @Test
     void testAnIntentionDTOExist() {
-        IntentionCreationDTO intentionDTO = new IntentionCreationDTO(1, new BigDecimal(2), "SELL", CryptoName.ATOMUSDT);
+        IntentionCreationDTO intentionDTO = new IntentionCreationDTO(1, new BigDecimal(2).toString(), "SELL", "ATOMUSDT");
 
         assertEquals(1, intentionDTO.getCount());
         assertEquals(new BigDecimal(2), intentionDTO.getPrice());

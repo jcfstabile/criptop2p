@@ -9,11 +9,11 @@ public class IntentionCreationDTO {
 
     private final String type;
     private final CryptoName cryptoName;
-    public IntentionCreationDTO(int aCount, BigDecimal aPrice, String aType, CryptoName aCryptoName) {
+    public IntentionCreationDTO(int aCount, String aPrice, String aType, String aCryptoName) {
         this.count = aCount;
-        this.price= aPrice;
+        this.price= new BigDecimal(aPrice);
         this.type = aType;
-        this.cryptoName = aCryptoName;
+        this.cryptoName = CryptoName.valueOf(aCryptoName);
     }
 
     public int getCount(){
