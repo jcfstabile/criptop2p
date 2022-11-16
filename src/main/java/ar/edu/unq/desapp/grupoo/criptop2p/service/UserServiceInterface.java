@@ -18,5 +18,5 @@ public interface UserServiceInterface {
 
     List<IntentionDTO> activatedIntentionsOf(Long id);
 
-    Formless intentionsBetween(Long id, String start, String end);
+    Form intentionsBetween(Long id, String start, String end);
 }

@@ -135,7 +135,7 @@ public class UserRestController {
             responses = {
                     @ApiResponse( description = "User information for id", responseCode = "200",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Formless.class))),
+                                    schema = @Schema(implementation = Form.class))),
                     @ApiResponse( description = "User not found", responseCode = "404",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
@@ -144,7 +144,7 @@ public class UserRestController {
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
-    public ResponseEntity<Formless> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end) {
+    public ResponseEntity<Form> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end) {
         return ResponseEntity.ok(this.userService.intentionsBetween(id, start, end));
     }
 
