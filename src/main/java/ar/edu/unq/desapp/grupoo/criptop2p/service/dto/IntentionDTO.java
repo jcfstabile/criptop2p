@@ -41,12 +41,10 @@ public class IntentionDTO {
 
     public Long getIntentionId(){ return this.intentionId; }
 
-    public int getCount(){
-        return this.count;
-    }
+    public int getCount(){ return this.count; }
 
-    public BigDecimal getPrice(){
-        return this.price;
+    public String getPrice(){
+        return this.price.toString();
     }
 
     public TypeName getType(){
