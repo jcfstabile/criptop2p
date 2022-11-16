@@ -45,9 +45,9 @@ class IntentionServiceTest {
         BigDecimal priceBN = new BigDecimal(binance.priceOf(CryptoName.BNBUSDT).getPrice());
         BigDecimal priceCK = new BigDecimal(binance.priceOf(CryptoName.CAKEUSDT).getPrice());
 
-        intentionDTO0 = new IntentionCreationDTO(1, priceATOM, "BUY", CryptoName.ATOMUSDT);
-        intentionDTO1 = new IntentionCreationDTO(1, priceBN, "SELL", CryptoName.BNBUSDT);
-        intentionDTO2 = new IntentionCreationDTO(2, priceCK, "BUY", CryptoName.CAKEUSDT);
+        intentionDTO0 = new IntentionCreationDTO(1, priceATOM.toString(), "BUY", "ATOMUSDT");
+        intentionDTO1 = new IntentionCreationDTO(1, priceBN.toString(), "SELL", "BNBUSDT");
+        intentionDTO2 = new IntentionCreationDTO(2, priceCK.toString(), "BUY", "CAKEUSDT");
     }
 
     @AfterEach

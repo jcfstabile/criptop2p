@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
@@ -88,7 +89,7 @@ public class UserService implements UserServiceInterface {
     public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO) {
         User user = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
-        QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
+        QuotationDTO quotation = new BinanceIntegration().priceOf(CryptoName.valueOf(anIntentionDTO.getCryptoName()));
         BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
         Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));

@@ -5,11 +5,9 @@ import java.math.BigDecimal;
 
 public class IntentionCreationDTO {
     private final int count;
-    private final BigDecimal price;
+    private final String price, type, cryptoName;
 
-    private final String type;
-    private final CryptoName cryptoName;
-    public IntentionCreationDTO(int aCount, BigDecimal aPrice, String aType, CryptoName aCryptoName) {
+    public IntentionCreationDTO(int aCount, String aPrice, String aType, String aCryptoName) {
         this.count = aCount;
         this.price= aPrice;
         this.type = aType;
@@ -20,7 +18,7 @@ public class IntentionCreationDTO {
         return this.count;
     }
 
-    public BigDecimal getPrice(){
+    public String getPrice(){
         return this.price;
     }
 
@@ -28,7 +26,7 @@ public class IntentionCreationDTO {
         return this.type;
     }
 
-    public CryptoName getCryptoName(){
+    public String getCryptoName(){
         return this.cryptoName;
     }
 }

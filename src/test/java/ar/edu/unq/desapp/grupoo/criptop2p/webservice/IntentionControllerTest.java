@@ -46,8 +46,8 @@ class IntentionControllerTest {
         BigDecimal priceATOM = new BigDecimal(binance.priceOf(CryptoName.ATOMUSDT).getPrice());
         BigDecimal priceBN = new BigDecimal(binance.priceOf(CryptoName.BNBUSDT).getPrice());
 
-        IntentionCreationDTO intentionDTO0 = new IntentionCreationDTO(1, priceATOM, "BUY", CryptoName.ATOMUSDT);
-        IntentionCreationDTO intentionDTO1 = new IntentionCreationDTO(1, priceBN, "SELL", CryptoName.BNBUSDT);
+        IntentionCreationDTO intentionDTO0 = new IntentionCreationDTO(1, priceATOM.toString(), "BUY", "ATOMUSDT");
+        IntentionCreationDTO intentionDTO1 = new IntentionCreationDTO(1, priceBN.toString(), "SELL", "BNBUSDT");
 
         intention0 = sut.add(intentionDTO0, userDTO).getBody();
         intention1 = sut.add(intentionDTO1, userDTO).getBody();
