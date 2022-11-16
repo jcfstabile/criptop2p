@@ -2,7 +2,6 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
 public class IntentionCreationDTO {
     private final int count;
-    private final String;
     private final String price;
     private final String type;
     private final String cryptoName;
