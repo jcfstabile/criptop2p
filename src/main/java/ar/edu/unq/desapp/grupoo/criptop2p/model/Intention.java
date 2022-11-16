@@ -25,6 +25,7 @@ public class Intention {
     }
 
     private int count;
+    @Column(precision = 12, scale=8)
     private BigDecimal price;
 
     @Convert(converter = TypeIntentionConverter.class)
