@@ -1,6 +1,6 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.model;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("Quotation Tests")
 @SpringBootTest
 @Transactional
-class QuotationTest {
+class QuotationDTOTest {
     QuotationDTO quotationSUT;
 
     @BeforeEach
