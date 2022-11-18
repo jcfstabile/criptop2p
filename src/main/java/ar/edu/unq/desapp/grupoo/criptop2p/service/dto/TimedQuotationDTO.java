@@ -8,7 +8,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class TimedQuotationDTO {
-    @Schema(example = "xxxxxx xxxxxxx 102")
+
+    @Schema(example = "2022-11-18T01:20:22.263")
     private final LocalDateTime dateTime;
     @Schema(example = "CAKEUSDT")
     private final CryptoName cryptoName;

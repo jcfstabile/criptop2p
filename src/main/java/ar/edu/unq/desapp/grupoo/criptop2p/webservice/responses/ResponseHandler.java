@@ -54,4 +54,9 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleDifferenceWithCurrentPriceException(DifferenceWithCurrentPriceException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("008", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler({CryptoNotFoundException.class})
+    public ResponseEntity<Object> handleCryptoNotFound(CryptoNotFoundException exception) {
+        return new ResponseEntity<>(new ResponseErrorSimple("012", "Crypto not found", exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
 }

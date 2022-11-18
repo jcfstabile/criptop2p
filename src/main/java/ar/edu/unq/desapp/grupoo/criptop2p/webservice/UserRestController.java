@@ -29,7 +29,8 @@ public class UserRestController {
     @Operation(
             summary = "List of registered users",
             responses = {
-                    @ApiResponse( responseCode = "200", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserInfoDTO.class)))),
+                    @ApiResponse( responseCode = "200", content = @Content(mediaType = "application/json",
+                                  array = @ArraySchema(schema = @Schema(implementation = UserInfoDTO.class)))),
             }
     )
     @GetMapping("/users")

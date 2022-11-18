@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.CryptoNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,19 @@ class QuotationControllerTest {
     @DisplayName("When asked for last 24hs quotations a timed quotation list is returned")
     @Test
     void testLast24hsForACrypto(){
-        List<TimedQuotationDTO> last24hs = quotationController.last24hs("ATOMUSDT");
+        List<TimedQuotationDTO> last24hs = quotationController.last24hs("ATOMUSDT").getBody();
 
         assertNotNull(last24hs);
         assertInstanceOf(ArrayList.class, last24hs );
+    }
+
+    @DisplayName("When asked for last 24hs quotations of not existent crypto a exception is throw")
+    @Test
+    void testLast24hsForACryptoNotFound(){
+        Exception exception = assertThrows(CryptoNotFoundException.class, () ->
+                quotationController.last24hs("DONOTUSDT")
+        );
+
+        assertEquals("The crypto with name DONOTUSDT was not found", exception.getMessage());
     }
 }

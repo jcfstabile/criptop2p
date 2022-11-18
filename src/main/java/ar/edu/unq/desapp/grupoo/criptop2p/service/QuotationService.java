@@ -7,6 +7,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.Quotation;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.QuotationsRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.CryptoNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static java.lang.Long.parseLong;
 
 @Service
 @Component
@@ -102,8 +101,13 @@ public class QuotationService {
     private TimedQuotationDTO timedQuotationDTO(Timestamp ts, Quotation quotation){
         return new TimedQuotationDTO(ts, quotation.getCryptoName(), quotation.getPrice());
     }
-    public List<TimedQuotationDTO> last24hsOf(String quotationName) {
-        CryptoName cryptoName = CryptoName.valueOf(quotationName);
+    public List<TimedQuotationDTO> last24hsOf(String quotationName){
+        var ref = new Object() { CryptoName cryptoName = null; };
+        try {
+            ref.cryptoName = CryptoName.valueOf(quotationName);
+        } catch (IllegalArgumentException e) {
+            throw new CryptoNotFoundException(quotationName);
+        }
         List<TimedQuotationDTO> timedQuotationDTOs = new ArrayList<>();
         Timestamp now24hsBefore = new Timestamp(System.currentTimeMillis() - 86400000);
         this.quotationsRepository.findAll()
@@ -112,7 +116,7 @@ public class QuotationService {
                                          try {
                                              timedQuotationDTOs.add(
                                                      timedQuotationDTO(cachedQuotations.getTimeStamp(),
-                                                                       cachedQuotations.getQuotation(cryptoName))
+                                                                       cachedQuotations.getQuotation(ref.cryptoName))
                                                      );
                                          } catch (IOException e) {}
                                      }
