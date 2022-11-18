@@ -2,12 +2,18 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Quotation;
+import ar.edu.unq.desapp.grupoo.criptop2p.persistence.QuotationsRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +23,9 @@ public class QuotationService {
 
     @Autowired
     BinanceIntegration binanceIntegrator;
+
+    @Autowired
+    QuotationsRepository quotationsRepository;
 
     protected boolean busy = false;
     protected boolean invalidCache = true;
@@ -64,5 +73,26 @@ public class QuotationService {
         return cryptos.stream().map(crypto ->
             binanceIntegrator.priceOf(crypto)
         ).toList();
+    }
+
+    TimedQuotationDTO timedQuotationDTO(Timestamp ts, Quotation quotation){
+        return new TimedQuotationDTO(ts, quotation.getCryptoName(), quotation.getPrice());
+    }
+    public List<TimedQuotationDTO> last24hsOf(String quotationName) {
+        CryptoName cryptoName = CryptoName.valueOf(quotationName);
+        List<TimedQuotationDTO> timedQuotationDTOs = new ArrayList<>();
+        Timestamp now24hsBefore = new Timestamp(System.currentTimeMillis() - 86400000);
+        this.quotationsRepository.findAll()
+                                 .forEach(cachedQuotations -> {
+                                     if (cachedQuotations.getTimeStamp().after(now24hsBefore)) {
+                                         try {
+                                             timedQuotationDTOs.add(
+                                                     timedQuotationDTO(cachedQuotations.getTimeStamp(),
+                                                                       cachedQuotations.getQuotation(cryptoName))
+                                                     );
+                                         } catch (IOException e) {}
+                                     }
+                                 });
+        return timedQuotationDTOs;
     }
 }
