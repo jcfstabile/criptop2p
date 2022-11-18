@@ -1,14 +1,17 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.CachedQuotations;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Quotation;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.QuotationsRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -16,6 +19,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.lang.Long.parseLong;
 
 @Service
 @Component
@@ -47,6 +52,25 @@ public class QuotationService {
         notifyAll();
     }
 
+    @Transactional
+    public synchronized void saveCachedQuotations() throws JsonProcessingException, InterruptedException {
+        while(busy || invalidCache) { wait(); }
+        setBusy();
+        List<QuotationDTO> quotations = cachedQuotations;
+        clearBusy();
+        notifyAll();
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        List<Quotation> cs =
+                quotations.stream()
+                        .map(quotationDTO ->
+                                new Quotation(CryptoName.valueOf(quotationDTO.getCryptoName()),
+                                              new BigDecimal(quotationDTO.getPrice())
+                                )
+                        )
+                        .toList();
+        CachedQuotations cq = new CachedQuotations(ts, cs);
+        quotationsRepository.save(cq);
+    }
     public synchronized List<QuotationDTO> allQuotations() throws InterruptedException {
         while(busy || invalidCache) { wait(); }
         setBusy();
@@ -75,7 +99,7 @@ public class QuotationService {
         ).toList();
     }
 
-    TimedQuotationDTO timedQuotationDTO(Timestamp ts, Quotation quotation){
+    private TimedQuotationDTO timedQuotationDTO(Timestamp ts, Quotation quotation){
         return new TimedQuotationDTO(ts, quotation.getCryptoName(), quotation.getPrice());
     }
     public List<TimedQuotationDTO> last24hsOf(String quotationName) {

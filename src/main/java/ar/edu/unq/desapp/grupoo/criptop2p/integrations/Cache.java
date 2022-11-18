@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,11 @@ public class Cache implements Runnable {
         logger.info("Caching all quotations" );
         try {
             quotationService.setCachedQuotations();
+            quotationService.saveCachedQuotations();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(); // TODO
         }
         logger.info("All quotations cached" );
     }

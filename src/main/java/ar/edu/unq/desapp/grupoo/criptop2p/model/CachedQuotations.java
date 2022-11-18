@@ -13,10 +13,11 @@ import java.util.List;
 @Table(name="cached_quotations")
 public class CachedQuotations {
 
-    @Id
-    @GeneratedValue
-    Long id;
+//    @Id
+//    @GeneratedValue
+//    Long id;
 
+    @Id
     @Column(name="time_stamp", columnDefinition = "TIMESTAMP")
     private Timestamp timeStamp;
 
@@ -25,12 +26,11 @@ public class CachedQuotations {
     private String quotationsBlob;
 
     @Transient
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     protected CachedQuotations() {}
 
-    public CachedQuotations(Timestamp timeStamp, List<Quotation> quotationList) throws JsonProcessingException {
-        this.mapper = new ObjectMapper();
+    public CachedQuotations(Timestamp timeStamp, List<Quotation> quotationList) throws JsonProcessingException, IllegalStateException {
         this.timeStamp = timeStamp;
         this.quotationsBlob = mapper.writeValueAsString(quotationList);
     }
