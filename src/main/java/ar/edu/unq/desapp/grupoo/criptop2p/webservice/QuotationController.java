@@ -23,6 +23,15 @@ public class QuotationController {
     @Autowired
     private QuotationService quotationService;
 
+    @Operation(summary = "Show all current quotations",
+            responses = {
+                    @ApiResponse(description = "List of all current quotations", responseCode = "200",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = QuotationDTO.class))
+                            )
+                    )
+            }
+    )
     @GetMapping("/quotations")
     public List<QuotationDTO> allQuotations() throws InterruptedException {
         return quotationService.allQuotations();
@@ -31,7 +40,7 @@ public class QuotationController {
     @Operation(
             summary = "Show the last 24 hs quotations for a give crypto",
             responses = {
-                    @ApiResponse( description = "List of quotations done", responseCode = "200",
+                    @ApiResponse( description = "List of quotations for a crypto on last 24hs", responseCode = "200",
                             content = @Content(mediaType = "application/json",
                                     array = @ArraySchema(schema = @Schema(implementation = TimedQuotationDTO.class)))),
                     @ApiResponse( description = "Crypto not found", responseCode = "404",
