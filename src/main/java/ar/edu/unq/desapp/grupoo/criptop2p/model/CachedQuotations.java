@@ -13,10 +13,6 @@ import java.util.List;
 @Table(name="cached_quotations")
 public class CachedQuotations {
 
-//    @Id
-//    @GeneratedValue
-//    Long id;
-
     @Id
     @Column(name="time_stamp", columnDefinition = "TIMESTAMP")
     private Timestamp timeStamp;

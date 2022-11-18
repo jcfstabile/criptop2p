@@ -8,6 +8,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.persistence.QuotationsRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.CryptoNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.InternalErrorProcessingQuotationsException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -109,16 +110,19 @@ public class QuotationService {
             throw new CryptoNotFoundException(quotationName);
         }
         List<TimedQuotationDTO> timedQuotationDTOs = new ArrayList<>();
-        Timestamp now24hsBefore = new Timestamp(System.currentTimeMillis() - 86400000);
+        int millisOf24hs = 864000000;
+        Timestamp now24hsBefore = new Timestamp(System.currentTimeMillis() - millisOf24hs);
         this.quotationsRepository.findAll()
-                                 .forEach(cachedQuotations -> {
-                                     if (cachedQuotations.getTimeStamp().after(now24hsBefore)) {
+                                 .forEach(quotations -> {
+                                     if (quotations.getTimeStamp().after(now24hsBefore)) {
                                          try {
                                              timedQuotationDTOs.add(
-                                                     timedQuotationDTO(cachedQuotations.getTimeStamp(),
-                                                                       cachedQuotations.getQuotation(ref.cryptoName))
+                                                     timedQuotationDTO(quotations.getTimeStamp(),
+                                                                       quotations.getQuotation(ref.cryptoName))
                                                      );
-                                         } catch (IOException e) {}
+                                         } catch (IOException e) {
+                                             throw new InternalErrorProcessingQuotationsException();
+                                         }
                                      }
                                  });
         return timedQuotationDTOs;
