@@ -21,7 +21,7 @@ import java.util.List;
 @EnableAutoConfiguration
 public class QuotationController {
     @Autowired
-    private QuotationService quotationService;
+    QuotationService quotationService;
 
     @Operation(summary = "Show all current quotations",
             responses = {
@@ -33,8 +33,8 @@ public class QuotationController {
             }
     )
     @GetMapping("/quotations")
-    public List<QuotationDTO> allQuotations() throws InterruptedException {
-        return quotationService.allQuotations();
+    public ResponseEntity<List<QuotationDTO>> allQuotations() throws InterruptedException {
+        return ResponseEntity.ok(quotationService.allQuotations());
     }
 
     @Operation(

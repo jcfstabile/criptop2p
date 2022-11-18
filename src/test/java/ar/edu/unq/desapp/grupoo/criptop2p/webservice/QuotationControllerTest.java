@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -22,24 +23,31 @@ import static org.junit.jupiter.api.Assertions.*;
 class QuotationControllerTest {
 
     @Autowired
-    private QuotationController quotationController;
+    QuotationController quotationController;
 
     @DisplayName("The QuotationController returns a list")
     @Test
     void testQuotationControllerReturnAListOf() throws InterruptedException {
-        assertInstanceOf(List.class, quotationController.allQuotations());
+        assertInstanceOf(ResponseEntity.class, quotationController.allQuotations());
+        assertInstanceOf(List.class, quotationController.allQuotations().getBody());
     }
 
     @DisplayName("The QuotationController returns a list of quotations")
     @Test
     void testQuotationControllerReturnAListOfQuotations() throws InterruptedException {
-        assertInstanceOf(QuotationDTO.class, quotationController.allQuotations().get(0));
+        List<QuotationDTO> body = quotationController.allQuotations().getBody();
+
+        assertNotNull(body);
+        assertInstanceOf(QuotationDTO.class, body.get(0));
     }
 
     @DisplayName("All quotations returns the same count of quotations that the app has cryptos name")
     @Test
     void testAllQuotationsGetsTheSameCountOfQuatantionThatCryptosNames() throws InterruptedException {
-       assertEquals(Arrays.asList(CryptoName.values()).size(), quotationController.allQuotations().size());
+        List<QuotationDTO> body = quotationController.allQuotations().getBody();
+
+        assertNotNull(body);
+        assertEquals(Arrays.asList(CryptoName.values()).size(), body.size());
     }
 
     @DisplayName("When asked for last 24hs quotations a timed quotation list is returned")
