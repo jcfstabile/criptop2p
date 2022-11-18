@@ -43,20 +43,25 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     }
     @ExceptionHandler({IncorrectStatusException.class})
     public ResponseEntity<Object> handleIncorrectStatusException(IncorrectStatusException exception){
-        return new ResponseEntity<>(new ResponseErrorSimple("007", "Incorrect state", exception.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseErrorSimple("009", "Incorrect state", exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler({IncorrectUserException.class})
     public ResponseEntity<Object> handleIncorrectUserException(IncorrectUserException exception){
-        return new ResponseEntity<>(new ResponseErrorSimple("007", "Incorrect user", exception.getMessage()), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(new ResponseErrorSimple("010", "Incorrect user", exception.getMessage()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({DifferenceWithCurrentPriceException.class})
     public ResponseEntity<Object> handleDifferenceWithCurrentPriceException(DifferenceWithCurrentPriceException exception){
-        return new ResponseEntity<>(new ResponseErrorSimple("008", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(new ResponseErrorSimple("011", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({CryptoNotFoundException.class})
     public ResponseEntity<Object> handleCryptoNotFound(CryptoNotFoundException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("012", "Crypto not found", exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({InternalErrorProcessingQuotationsException.class})
+    public ResponseEntity<Object> handleInternalErrorProcessingQuotation(InternalErrorProcessingQuotationsException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("013", "Error on processing", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

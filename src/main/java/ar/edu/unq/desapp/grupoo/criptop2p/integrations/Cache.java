@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.InternalErrorProcessingQuotationsException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +36,7 @@ public class Cache implements Runnable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(); // TODO
+            throw new InternalErrorProcessingQuotationsException();
         }
         logger.info("All quotations cached" );
     }

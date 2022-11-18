@@ -1,9 +1,12 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
+
+import java.math.BigDecimal;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,6 +98,34 @@ class ResponseHandlerTest {
         );
     }
 
+    /*
+    @ExceptionHandler({InterruptedErrorException.class})
+    public ResponseEntity<Object> handleInterruptedErrorException(InterruptedErrorException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("005", "A major error had occurred", exception.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
+    }
+     */
+    @DisplayName("When the server is interrupted the response is a body error with a 503 status code")
+    @Test
+    void testHandlerInterruptedErrorException() {
+        InterruptedErrorException interruptedErrorException = new InterruptedErrorException();
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleInterruptedErrorException(interruptedErrorException);
+
+        assertNotNull(responseEntity);
+        assertEquals("503 SERVICE_UNAVAILABLE", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("005", body.getErrorCode()),
+                () -> assertEquals("A major error had occurred", body.getMessage()),
+                () -> assertEquals("Server operation has been interrupted", body.getError())
+        );
+    }
+
+
     @DisplayName("When the intention cant be found handle request the response is a not found error")
     @Test
     void handleIntentionNotFound() {
@@ -115,6 +146,48 @@ class ResponseHandlerTest {
         );
     }
 
+    @DisplayName("When the intention cant be found handle request the response is a not found error")
+    @Test
+    void testHandleNoValidActionErrorException() {
+        String action = "deliver";
+        NoValidActionErrorException noValidActionErrorException = new NoValidActionErrorException(action);
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleNoValidActionErrorException(noValidActionErrorException);
+        assertNotNull(responseEntity);
+        assertEquals("400 BAD_REQUEST", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("007", body.getErrorCode()),
+                () -> assertEquals("Not a valid action", body.getMessage()),
+                () -> assertEquals("Action not valid: " + action, body.getError())
+        );
+    }
+
+    @DisplayName("When the intention cant be found handle request the response is a not found error")
+    @Test
+    void testStatusChangeNotAllowedRestException() {
+        Status status = Status.CLOSED;
+        StatusChangeNotAllowedRestException statusChangeNotAllowedRestException = new StatusChangeNotAllowedRestException(status);
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleStatusChangeNotAllowedException(statusChangeNotAllowedRestException);
+        assertNotNull(responseEntity);
+        assertEquals("409 CONFLICT", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("008", body.getErrorCode()),
+                () -> assertEquals("The action can not be terminated", body.getMessage()),
+                () -> assertEquals("Cant change the status to: " + Status.CLOSED , body.getError())
+        );
+    }
+
     @DisplayName("When the status of intentions is incorrect handle request")
     @Test
     void handleIncorrectStatus() {
@@ -129,7 +202,7 @@ class ResponseHandlerTest {
 
         assertNotNull(body);
         assertAll("Should return a error body of a major error",
-                () -> assertEquals("007", body.getErrorCode()),
+                () -> assertEquals("009", body.getErrorCode()),
                 () -> assertEquals("Incorrect state", body.getMessage()),
                 () -> assertEquals("The next status is a incorrect status for an intention: ASD", body.getError())
         );
@@ -149,9 +222,73 @@ class ResponseHandlerTest {
 
         assertNotNull(body);
         assertAll("Should return a error body of a major error",
-                () -> assertEquals("007", body.getErrorCode()),
+                () -> assertEquals("010", body.getErrorCode()),
                 () -> assertEquals("Incorrect user", body.getMessage()),
                 () -> assertEquals("The user with ID: 1 cant accepted this intention because its is the intention offered", body.getError())
+        );
+    }
+
+    @DisplayName("When the price of a intention has a incompatible diff with current price of a crypto")
+    @Test
+    void testHandleDifferenceOfPrice() {
+        BigDecimal priceA = BigDecimal.valueOf(1.23334000);
+        BigDecimal priceB = BigDecimal.valueOf(2.65430000);
+        DifferenceWithCurrentPriceException differenceWithCurrentPriceException = new DifferenceWithCurrentPriceException(priceA, priceB);
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleDifferenceWithCurrentPriceException(differenceWithCurrentPriceException);
+        assertNotNull(responseEntity);
+        assertEquals("409 CONFLICT", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("011", body.getErrorCode()),
+                () -> assertEquals("The action can not be terminated", body.getMessage()),
+                () -> assertEquals("The expected price " + priceA + " has a difference of 20% or more with " + priceB, body.getError())
+        );
+    }
+
+    @DisplayName("When crypto requested was not found a error is show")
+    @Test
+    void testHandleCryptoNotFound() {
+        String cryptoName = "ASDASDUSDT";
+        CryptoNotFoundException cryptoNotFoundException = new CryptoNotFoundException(cryptoName);
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleCryptoNotFound(cryptoNotFoundException);
+        assertNotNull(responseEntity);
+        assertEquals("404 NOT_FOUND", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("012", body.getErrorCode()),
+                () -> assertEquals("Crypto not found", body.getMessage()),
+                () -> assertEquals("The crypto with name " + cryptoName + " was not found", body.getError())
+        );
+    }
+
+    @DisplayName("When a error is found processing quotations a exception is trown")
+    @Test
+    void handleInternalError(){
+        InternalErrorProcessingQuotationsException internalErrorProcessingQuotationsException = new InternalErrorProcessingQuotationsException();
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleInternalErrorProcessingQuotation(internalErrorProcessingQuotationsException);
+
+        assertNotNull(responseEntity);
+        assertEquals("500 INTERNAL_SERVER_ERROR", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("013", body.getErrorCode()),
+                () -> assertEquals("Error on processing", body.getMessage()),
+                () -> assertEquals("Internal error processing quotations", body.getError())
         );
     }
 }
