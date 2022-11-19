@@ -1,0 +1,356 @@
+{
+	"info": {
+		"_postman_id": "5695dda6-57d4-4f51-9207-7459742d2910",
+		"name": "CriptoP2P-last24hs-quotations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Quotations All",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"});",
+							"pm.test(\"Response time is less than 999ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(999);",
+							"})",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Quotations is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Quotations has 14 quotations\", function () {",
+							"    pm.expect(jsonData).to.have.lengthOf(14);",
+							"});",
+							"",
+							"pm.test(\"Quotations has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"pm.test(\"Quotation in quotations has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Quotation in quotations has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Quotations in quotations has all the 14 cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.deep.property( 'cryptoName','ALICEUSDT');",
+							"    pm.expect(jsonData[1]).to.have.deep.property( 'cryptoName','MATICUSDT');",
+							"    pm.expect(jsonData[2]).to.have.deep.property( 'cryptoName','AXSUSDT');",
+							"    pm.expect(jsonData[3]).to.have.deep.property( 'cryptoName','AAVEUSDT');",
+							"    pm.expect(jsonData[4]).to.have.deep.property( 'cryptoName','ATOMUSDT');",
+							"    pm.expect(jsonData[5]).to.have.deep.property( 'cryptoName','NEOUSDT');",
+							"    pm.expect(jsonData[6]).to.have.deep.property( 'cryptoName','DOTUSDT');",
+							"    pm.expect(jsonData[7]).to.have.deep.property( 'cryptoName','ETHUSDT');",
+							"    pm.expect(jsonData[8]).to.have.deep.property( 'cryptoName','CAKEUSDT');",
+							"    pm.expect(jsonData[9]).to.have.deep.property( 'cryptoName','BTCUSDT');",
+							"    pm.expect(jsonData[10]).to.have.deep.property('cryptoName','BNBUSDT');",
+							"    pm.expect(jsonData[11]).to.have.deep.property('cryptoName','ADAUSDT');",
+							"    pm.expect(jsonData[12]).to.have.deep.property('cryptoName','TRXUSDT');",
+							"    pm.expect(jsonData[13]).to.have.deep.property('cryptoName','AUDIOUSDT');        ",
+							"});",
+							"// Save crypto prices to later",
+							"pm.collectionVariables.set(\"aliceusdt.last_price\", jsonData[0].price);",
+							"pm.collectionVariables.set(\"maticusdt.last_price\", jsonData[1].price);",
+							"pm.collectionVariables.set(\"axsusdt.last_price\", jsonData[2].price);",
+							"pm.collectionVariables.set(\"neousdt.last_price\", jsonData[5].price);",
+							"",
+							"",
+							"console.log(pm.collectionVariables.get(\"aliceusdt.last_price\"));",
+							"console.log(pm.collectionVariables.get(\"maticusdt.last_price\"));",
+							"console.log(pm.collectionVariables.get(\"axsusdt.last_price\"));",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}/api/quotations",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"quotations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Last 24hs quotations of BTCUST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Quotations is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"",
+							"pm.test(\"Quotations has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"pm.test(\"Quotation in quotations has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Quotation in quotations has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Quotation in quotations has dateTime\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('dateTime');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}/api/quotations/last24hs?crypto=BTCUSDT",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"quotations",
+						"last24hs"
+					],
+					"query": [
+						{
+							"key": "crypto",
+							"value": "BTCUSDT"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Last 24hs quotations of not existent crypto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Crypto is not valid\", function () {",
+							"    const crypto_not_found = pm.collectionVariables.get(\"not_found_crypto\")",
+							"    pm.expect(jsonData.errorCode).to.be.eql(\"012\");",
+							"    pm.expect(jsonData.message).to.be.eql(\"Crypto not found\");",
+							"    pm.expect(jsonData.error).to.be.eql(`The crypto with name ${crypto_not_found} was not found`);",
+							"  ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"not_found_crypto\", \"FREEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/quotations/last24hs?crypto={{not_found_crypto}}",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"quotations",
+						"last24hs"
+					],
+					"query": [
+						{
+							"key": "crypto",
+							"value": "{{not_found_crypto}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "created_user_id",
+			"value": ""
+		},
+		{
+			"key": "error_code",
+			"value": ""
+		},
+		{
+			"key": "new_email",
+			"value": ""
+		},
+		{
+			"key": "created_user_email",
+			"value": ""
+		},
+		{
+			"key": "new_wallet",
+			"value": ""
+		},
+		{
+			"key": "new_name",
+			"value": ""
+		},
+		{
+			"key": "new_surname",
+			"value": ""
+		},
+		{
+			"key": "r_name",
+			"value": ""
+		},
+		{
+			"key": "r_surname",
+			"value": ""
+		},
+		{
+			"key": "r_email",
+			"value": ""
+		},
+		{
+			"key": "r_wallet",
+			"value": ""
+		},
+		{
+			"key": "intention_count",
+			"value": ""
+		},
+		{
+			"key": "intention_price",
+			"value": ""
+		},
+		{
+			"key": "intention_type",
+			"value": ""
+		},
+		{
+			"key": "intention_crypto_name",
+			"value": ""
+		},
+		{
+			"key": "intention_offered",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt.price",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "maticusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "axsusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "neousdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "adausdt",
+			"value": ""
+		},
+		{
+			"key": "intention_offeredId",
+			"value": ""
+		},
+		{
+			"key": "intention3_id",
+			"value": ""
+		},
+		{
+			"key": "not_found_crypto",
+			"value": ""
+		}
+	]
+}
