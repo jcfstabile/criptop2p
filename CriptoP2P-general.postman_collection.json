@@ -1,0 +1,1598 @@
+{
+	"info": {
+		"_postman_id": "69cd3439-07a5-4e57-8f81-537dc467dc1b",
+		"name": "CriptoP2P-general",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Quotations All",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"});",
+							"pm.test(\"Response time is less than 999ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(999);",
+							"})",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Quotations is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Quotations has 14 quotations\", function () {",
+							"    pm.expect(jsonData).to.have.lengthOf(14);",
+							"});",
+							"",
+							"pm.test(\"Quotations has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"pm.test(\"Quotation in quotations has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Quotation in quotations has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Quotations in quotations has all the 14 cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.deep.property( 'cryptoName','ALICEUSDT');",
+							"    pm.expect(jsonData[1]).to.have.deep.property( 'cryptoName','MATICUSDT');",
+							"    pm.expect(jsonData[2]).to.have.deep.property( 'cryptoName','AXSUSDT');",
+							"    pm.expect(jsonData[3]).to.have.deep.property( 'cryptoName','AAVEUSDT');",
+							"    pm.expect(jsonData[4]).to.have.deep.property( 'cryptoName','ATOMUSDT');",
+							"    pm.expect(jsonData[5]).to.have.deep.property( 'cryptoName','NEOUSDT');",
+							"    pm.expect(jsonData[6]).to.have.deep.property( 'cryptoName','DOTUSDT');",
+							"    pm.expect(jsonData[7]).to.have.deep.property( 'cryptoName','ETHUSDT');",
+							"    pm.expect(jsonData[8]).to.have.deep.property( 'cryptoName','CAKEUSDT');",
+							"    pm.expect(jsonData[9]).to.have.deep.property( 'cryptoName','BTCUSDT');",
+							"    pm.expect(jsonData[10]).to.have.deep.property('cryptoName','BNBUSDT');",
+							"    pm.expect(jsonData[11]).to.have.deep.property('cryptoName','ADAUSDT');",
+							"    pm.expect(jsonData[12]).to.have.deep.property('cryptoName','TRXUSDT');",
+							"    pm.expect(jsonData[13]).to.have.deep.property('cryptoName','AUDIOUSDT');        ",
+							"});",
+							"// Save crypto prices to later",
+							"pm.collectionVariables.set(\"aliceusdt.last_price\", jsonData[0].price);",
+							"pm.collectionVariables.set(\"maticusdt.last_price\", jsonData[1].price);",
+							"pm.collectionVariables.set(\"axsusdt.last_price\", jsonData[2].price);",
+							"pm.collectionVariables.set(\"neousdt.last_price\", jsonData[5].price);",
+							"",
+							"",
+							"console.log(pm.collectionVariables.get(\"aliceusdt.last_price\"));",
+							"console.log(pm.collectionVariables.get(\"maticusdt.last_price\"));",
+							"console.log(pm.collectionVariables.get(\"axsusdt.last_price\"));",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}/api/quotations",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"quotations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Successful user registered\", function () {",
+							"    const email = pm.collectionVariables.get(\"new_email\");",
+							"    const name = pm.collectionVariables.get(\"new_name\");",
+							"    const surname = pm.collectionVariables.get(\"new_surname\");",
+							"    const wallet = pm.collectionVariables.get(\"new_wallet\");",
+							"",
+							"    pm.expect(jsonData.email).to.be.eql(email);",
+							"    pm.expect(jsonData.name).to.be.eql(name);",
+							"    pm.expect(jsonData.surname).to.be.eql(surname);",
+							"    pm.expect(jsonData.walletAddress).to.be.eql(wallet);",
+							"    ",
+							"    pm.collectionVariables.set(\"created_user_id\", jsonData.id);",
+							"    pm.collectionVariables.set(\"created_user_email\", jsonData.email);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"new_name\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.collectionVariables.set(\"new_surname\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.collectionVariables.set(\"new_email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.collectionVariables.set(\"new_wallet\", pm.variables.replaceIn('{{$randomBankAccount}}'));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{new_name}}\",\n    \"surname\": \"{{new_surname}}\",\n    \"email\": \"{{new_email}}\",\n    \"address\": \"here on the street\",\n    \"password\": \"11234aP.\",\n    \"walletAddress\": \"{{new_wallet}}\",\n    \"cvu\": \"12345678901234567890;P\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User just registered",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"User is the just created\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"created_user_id\"));",
+							"    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get(\"new_email\"));",
+							"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"new_name\"));",
+							"    pm.expect(jsonData.surname).to.eql(pm.collectionVariables.get(\"new_surname\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const created_user_id = pm.collectionVariables.get(\"created_user_id\");",
+							"if (!created_user_id){",
+							"    pm.collectionVariables.set(\"created_user_id\", \"12341234\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/{{created_user_id}}",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{created_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"});",
+							"pm.test(\"Response time is less than 999ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(999);",
+							"})",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Users is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Users has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"pm.test(\"User in users has id\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('id');",
+							"});",
+							"pm.test(\"User in users has name\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('name');",
+							"});",
+							"pm.test(\"User in users has surname\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('surname');",
+							"});",
+							"pm.test(\"User in users has operationCount\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('operationCount');",
+							"});",
+							"pm.test(\"User in users has reputation\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('reputation');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user with not valid email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Email is not valid\", function () {",
+							"    pm.expect(jsonData.errorCode).to.be.eql(\"002\");",
+							"    pm.expect(jsonData.message).to.be.eql(\"User data malformed\");",
+							"    pm.expect(jsonData.errors).to.be.an('array');",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(1);",
+							"    pm.expect(jsonData.errors[0]).to.be.eql('Email is not valid');",
+							"  ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"r_name\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.variables.set(\"r_surname\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.variables.set(\"r_email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.variables.set(\"r_wallet\", pm.variables.replaceIn('{{$randomBankAccount}}'));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{r_name}}\",\n    \"surname\": \"{{r_surname}}\",\n    \"email\": \"an_email.place\",\n    \"address\": \"here on the street\",\n    \"password\": \"11234aP.\",\n    \"walletAddress\": \"{{r_wallet}}\",\n    \"cvu\": \"12345678901234567890;P\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user with not valid cvu",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"CVU is not valid\", function () {",
+							"    pm.expect(jsonData.errorCode).to.be.eql(\"002\");",
+							"    pm.expect(jsonData.message).to.be.eql(\"User data malformed\");",
+							"    pm.expect(jsonData.errors).to.be.an('array');",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(1);",
+							"    pm.expect(jsonData.errors[0]).to.be.eql('CVU must have 22 characters');",
+							"  ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"r_name\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.variables.set(\"r_surname\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.variables.set(\"r_email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.variables.set(\"r_wallet\", pm.variables.replaceIn('{{$randomBankAccount}}'));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{r_name}}\",\n    \"surname\": \"{{r_surname}}\",\n    \"email\": \"{{r_email}}\",\n    \"address\": \"here on the street\",\n    \"password\": \"11234aP.\",\n    \"walletAddress\": \"{{r_wallet}}\",\n    \"cvu\": \"12345678901234567890;\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user with not valid wallet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Wallet is not valid\", function () {",
+							"    pm.expect(jsonData.errorCode).to.be.eql(\"002\");",
+							"    pm.expect(jsonData.message).to.be.eql(\"User data malformed\");",
+							"    pm.expect(jsonData.errors).to.be.an('array');",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(1);",
+							"    pm.expect(jsonData.errors[0]).to.be.eql('Wallet Address must have 8 characters');",
+							"  ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"r_name\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.variables.set(\"r_surname\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.variables.set(\"r_email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.variables.set(\"r_wallet\", pm.variables.replaceIn('{{$randomBankAccount}}'));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{r_name}}\",\n    \"surname\": \"{{r_surname}}\",\n    \"email\": \"{{r_email}}\",\n    \"address\": \"here on the street\",\n    \"password\": \"11234aP.\",\n    \"walletAddress\": \"1234567\",\n    \"cvu\": \"12345678901234567890;P\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user with not valid password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Password is not valid\", function () {",
+							"    pm.expect(jsonData.errorCode).to.be.eql(\"002\");",
+							"    pm.expect(jsonData.message).to.be.eql(\"User data malformed\");",
+							"    pm.expect(jsonData.errors).to.be.an('array');",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(1);",
+							"    pm.expect(jsonData.errors[0]).to.have.string('Password must contain');",
+							"  ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"r_name\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.variables.set(\"r_surname\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.variables.set(\"r_email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.variables.set(\"r_wallet\", pm.variables.replaceIn('{{$randomBankAccount}}'));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{r_name}}\",\n    \"surname\": \"{{r_surname}}\",\n    \"email\": \"{{r_email}}\",\n    \"address\": \"here on the street\",\n    \"password\": \".......\",\n    \"walletAddress\": \"{{r_wallet}}\",\n    \"cvu\": \"12345678901234567890;P\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user with not valid address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Address is not valid\", function () {",
+							"    pm.expect(jsonData.errorCode).to.be.eql(\"002\");",
+							"    pm.expect(jsonData.message).to.be.eql(\"User data malformed\");",
+							"    pm.expect(jsonData.errors).to.be.an('array');",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(1);",
+							"    pm.expect(jsonData.errors[0]).to.be.eql('Address must have between 10 and 30 characters');",
+							"  ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"r_name\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.variables.set(\"r_surname\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.variables.set(\"r_email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.variables.set(\"r_wallet\", pm.variables.replaceIn('{{$randomBankAccount}}'));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{r_name}}\",\n    \"surname\": \"{{r_surname}}\",\n    \"email\": \"{{r_email}}\",\n    \"address\": \"street\",\n    \"password\": \"11234aP.\",\n    \"walletAddress\": \"{{r_wallet}}\",\n    \"cvu\": \"12345678901234567890;P\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user with not valid name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Name is not valid\", function () {",
+							"    pm.expect(jsonData.errorCode).to.be.eql(\"002\");",
+							"    pm.expect(jsonData.message).to.be.eql(\"User data malformed\");",
+							"    pm.expect(jsonData.errors).to.be.an('array');",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(1);",
+							"    pm.expect(jsonData.errors[0]).to.be.eql('Name must have between 3 and 30 characters');",
+							"  ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"r_name\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.variables.set(\"r_surname\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.variables.set(\"r_email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.variables.set(\"r_wallet\", pm.variables.replaceIn('{{$randomBankAccount}}'));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"am\",\n    \"surname\": \"{{r_surname}}\",\n    \"email\": \"{{r_email}}\",\n    \"address\": \"here on the street\",\n    \"password\": \".1.A.x.$\",\n    \"walletAddress\": \"{{r_wallet}}\",\n    \"cvu\": \"12345678901234567890;P\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user with not valid surname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Surname is not valid\", function () {",
+							"    pm.expect(jsonData.errorCode).to.be.eql(\"002\");",
+							"    pm.expect(jsonData.message).to.be.eql(\"User data malformed\");",
+							"    pm.expect(jsonData.errors).to.be.an('array');",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(1);",
+							"    pm.expect(jsonData.errors[0]).to.be.eql('Surname must have between 3 and 30 characters');",
+							"  ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"r_name\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.variables.set(\"r_surname\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.variables.set(\"r_email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.variables.set(\"r_wallet\", pm.variables.replaceIn('{{$randomBankAccount}}'));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{r_name}}\",\n    \"surname\": \"su\",\n    \"email\": \"{{r_email}}\",\n    \"address\": \"here on the street\",\n    \"password\": \".1.A.x.$\",\n    \"walletAddress\": \"{{r_wallet}}\",\n    \"cvu\": \"12345678901234567890;P\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intention U3 Buy MATICUSDT",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 123);",
+							"console.log(pm.collectionVariables.get(\"intention_price\"));",
+							"pm.collectionVariables.set(\"intention_price\",",
+							"                            pm.collectionVariables.get(\"maticusdt.last_price\"));",
+							"pm.collectionVariables.set(\"intention_type\", \"BUY\");",
+							"pm.collectionVariables.set(\"intention_offered\", 3);",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"MATICUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Intention of buy is just created\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log(\"body price:\", jsonData.price, \"saved price\",",
+							"                 pm.collectionVariables.get(\"intention_price\"));",
+							"    pm.expect(jsonData.count).to.eql(pm.collectionVariables.get(\"intention_count\"));",
+							"    pm.expect(jsonData.price).to.eql(pm.collectionVariables.get(\"intention_price\"));",
+							"    pm.expect(jsonData.type).to.eql(pm.collectionVariables.get(\"intention_type\"));",
+							"    pm.expect(jsonData.cryptoName).to.eql(pm.collectionVariables.get(\"intention_crypto_name\"));   ",
+							"    pm.expect(jsonData.offeredId).to.eql(pm.collectionVariables.get(\"intention_offered\"));",
+							"    pm.expect(jsonData.status).to.eql(\"OFFERED\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"123\",\n    \"price\": \"{{maticusdt.last_price}}\",\n    \"type\": \"BUY\",\n    \"cryptoName\": \"MATICUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/3/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"3",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intention U1 Buy MATICUSDT",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 42);",
+							"pm.collectionVariables.set(\"intention_price\", pm.collectionVariables.get(\"maticusdt.last_price\"));",
+							"pm.collectionVariables.set(\"intention_type\", \"BUY\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"MATICUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Intention of sell is just created\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.count).to.eql(pm.collectionVariables.get(\"intention_count\"));",
+							"    pm.expect(jsonData.price).to.eql(pm.collectionVariables.get(\"intention_price\"));",
+							"    pm.expect(jsonData.type).to.eql(pm.collectionVariables.get(\"intention_type\"));",
+							"    pm.expect(jsonData.cryptoName).to.eql(pm.collectionVariables.get(\"intention_crypto_name\"));    ",
+							"    pm.expect(jsonData.offeredId).to.eql(1);",
+							"    pm.expect(jsonData.status).to.eql(\"OFFERED\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"42\",\n    \"price\": \"{{maticusdt.last_price}}\",\n    \"type\": \"BUY\",\n    \"cryptoName\": \"MATICUSDT\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/1/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"1",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intention U1 Sell ALICEUSDT (3)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_offeredId\", 1);",
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\",pm.collectionVariables.get(\"aliceusdt.last_price\"));",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Intention of sell is just created\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.count).to.eql(pm.collectionVariables.get(\"intention_count\"));",
+							"    pm.expect(jsonData.price).to.eql(pm.collectionVariables.get(\"intention_price\"));",
+							"    pm.expect(jsonData.type).to.eql(pm.collectionVariables.get(\"intention_type\"));",
+							"    pm.expect(jsonData.offeredId).to.eql(pm.collectionVariables.get(\"intention_offeredId\"));",
+							"    pm.expect(jsonData.cryptoName).to.eql(pm.collectionVariables.get(\"intention_crypto_name\"));    ",
+							"    pm.expect(jsonData.offeredId).to.eql(1);",
+							"    pm.expect(jsonData.status).to.eql(\"OFFERED\");",
+							"});",
+							"pm.collectionVariables.set(\"intention3_id\", jsonData.intentionId);",
+							"pm.variables.set(\"intention3_count\", jsonData.count);",
+							"pm.variables.set(\"intention3_price\", jsonData.price);",
+							"pm.variables.set(\"intention3_type\", jsonData.type);",
+							"pm.variables.set(\"intention3_offeredId\", jsonData.offeredId);",
+							"pm.variables.set(\"intention3_cryptoName\", jsonData.cryptoName);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"{{aliceusdt.last_price}}\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/1/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"1",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accept U2 Intention 3",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Intention of sell of count is just accepted\", function () {",
+							"    pm.expect(jsonData.count).to.eql(pm.variables.get(\"intention3_count\"));",
+							"    pm.expect(jsonData.price).to.eql(pm.variables.get(\"intention3_price\"));",
+							"    pm.expect(jsonData.type).to.eql(pm.variables.get(\"intention3_type\"));",
+							"    pm.expect(jsonData.cryptoName).to.eql(pm.variables.get(\"intention3_cryptoName\"));    ",
+							"    pm.expect(jsonData.offeredId).to.eql(pm.variables.get(\"intention3_offeredId\"));",
+							"    pm.expect(jsonData.status).to.eql(\"SOLD\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/2/intentions/{{intention3_id}}?action=accept",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"2",
+						"intentions",
+						"{{intention3_id}}"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "accept"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deliver U1 Intention 3",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Intention of sell cryptos just delivered\", function () {",
+							"    pm.expect(jsonData.count).to.eql(pm.variables.get(\"intention3_count\"));",
+							"    pm.expect(jsonData.intentionId).to.eql(pm.variables.get(\"intention3_id\"));    ",
+							"    pm.expect(jsonData.price).to.eql(pm.variables.get(\"intention3_price\"));",
+							"    pm.expect(jsonData.type).to.eql(pm.variables.get(\"intention3_type\"));",
+							"    pm.expect(jsonData.cryptoName).to.eql(pm.variables.get(\"intention3_cryptoName\"));    ",
+							"    pm.expect(jsonData.offeredId).to.eql(pm.variables.get(\"intention3_offeredId\"));",
+							"    pm.expect(jsonData.status).to.eql(\"WAITINGFORTRANSFER\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/1/intentions/{{intention3_id}}?action=delivery",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"1",
+						"intentions",
+						"{{intention3_id}}"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "delivery"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment U2 Intention 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Intention of sell payment just done\", function () {",
+							"    pm.expect(jsonData.count).to.eql(pm.variables.get(\"intention3_count\"));",
+							"    pm.expect(jsonData.price).to.eql(pm.variables.get(\"intention3_price\"));",
+							"    pm.expect(jsonData.type).to.eql(pm.variables.get(\"intention3_type\"));",
+							"    pm.expect(jsonData.cryptoName).to.eql(pm.variables.get(\"intention3_cryptoName\")); ",
+							"    pm.expect(jsonData.offeredId).to.eql(pm.variables.get(\"intention3_offeredId\"));",
+							"    pm.expect(jsonData.status).to.eql(\"CLOSED\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/2/intentions/{{intention3_id}}?action=payment",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"2",
+						"intentions",
+						"{{intention3_id}}"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "payment"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones de User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Active intentions is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Active intentions has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"",
+							"pm.test(\"Intention in active intentions has count\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('count');",
+							"});",
+							"pm.test(\"Intention in active intentions has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Intention in active intentions has type\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('type');",
+							"});",
+							"pm.test(\"Intention in active intentions has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Intention in active intentions has offeredId\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('offeredId');",
+							"});",
+							"pm.test(\"Intention in active intentions has status\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('status');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/1/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"1",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones de User 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Active intentions is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Active intentions has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"",
+							"pm.test(\"Intention in active intentions has count\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('count');",
+							"});",
+							"pm.test(\"Intention in active intentions has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Intention in active intentions has type\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('type');",
+							"});",
+							"pm.test(\"Intention in active intentions has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Intention in active intentions has offeredId\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('offeredId');",
+							"});",
+							"pm.test(\"Intention in active intentions has status\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('status');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/3/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"3",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Quotations all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"});",
+							"pm.test(\"Response time is less than 999ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(999);",
+							"})",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Quotations is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Quotations has 14 quotations\", function () {",
+							"    pm.expect(jsonData).to.have.lengthOf(14);",
+							"});",
+							"",
+							"pm.test(\"Quotations has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"pm.test(\"Quotation in quotations has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Quotation in quotations has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Quotations in quotations has all the 14 cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.deep.property( 'cryptoName','ALICEUSDT');",
+							"    pm.expect(jsonData[1]).to.have.deep.property( 'cryptoName','MATICUSDT');",
+							"    pm.expect(jsonData[2]).to.have.deep.property( 'cryptoName','AXSUSDT');",
+							"    pm.expect(jsonData[3]).to.have.deep.property( 'cryptoName','AAVEUSDT');",
+							"    pm.expect(jsonData[4]).to.have.deep.property( 'cryptoName','ATOMUSDT');",
+							"    pm.expect(jsonData[5]).to.have.deep.property( 'cryptoName','NEOUSDT');",
+							"    pm.expect(jsonData[6]).to.have.deep.property( 'cryptoName','DOTUSDT');",
+							"    pm.expect(jsonData[7]).to.have.deep.property( 'cryptoName','ETHUSDT');",
+							"    pm.expect(jsonData[8]).to.have.deep.property( 'cryptoName','CAKEUSDT');",
+							"    pm.expect(jsonData[9]).to.have.deep.property( 'cryptoName','BTCUSDT');",
+							"    pm.expect(jsonData[10]).to.have.deep.property('cryptoName','BNBUSDT');",
+							"    pm.expect(jsonData[11]).to.have.deep.property('cryptoName','ADAUSDT');",
+							"    pm.expect(jsonData[12]).to.have.deep.property('cryptoName','TRXUSDT');",
+							"    pm.expect(jsonData[13]).to.have.deep.property('cryptoName','AUDIOUSDT');        ",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}/api/quotations",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"quotations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intentions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Intentions is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Intentions has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"pm.test(\"Intention in intentions has intentioId\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('intentionId');",
+							"});",
+							"",
+							"pm.test(\"Intention in intentions has count\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('count');",
+							"});",
+							"pm.test(\"Intention in intentions has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Intention in intentions has type\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('type');",
+							"});",
+							"pm.test(\"Intention in intentions has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Intention in intentions has offeredId\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('offeredId');",
+							"});",
+							"pm.test(\"Intention in intentions has status\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('status');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "created_user_id",
+			"value": ""
+		},
+		{
+			"key": "error_code",
+			"value": ""
+		},
+		{
+			"key": "new_email",
+			"value": ""
+		},
+		{
+			"key": "created_user_email",
+			"value": ""
+		},
+		{
+			"key": "new_wallet",
+			"value": ""
+		},
+		{
+			"key": "new_name",
+			"value": ""
+		},
+		{
+			"key": "new_surname",
+			"value": ""
+		},
+		{
+			"key": "r_name",
+			"value": ""
+		},
+		{
+			"key": "r_surname",
+			"value": ""
+		},
+		{
+			"key": "r_email",
+			"value": ""
+		},
+		{
+			"key": "r_wallet",
+			"value": ""
+		},
+		{
+			"key": "intention_count",
+			"value": ""
+		},
+		{
+			"key": "intention_price",
+			"value": ""
+		},
+		{
+			"key": "intention_type",
+			"value": ""
+		},
+		{
+			"key": "intention_crypto_name",
+			"value": ""
+		},
+		{
+			"key": "intention_offered",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt.price",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "maticusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "axsusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "neousdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "adausdt",
+			"value": ""
+		},
+		{
+			"key": "intention_offeredId",
+			"value": ""
+		},
+		{
+			"key": "intention3_id",
+			"value": ""
+		}
+	]
+}
