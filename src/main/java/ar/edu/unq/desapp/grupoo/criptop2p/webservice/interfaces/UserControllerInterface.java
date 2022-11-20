@@ -2,8 +2,6 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice.interfaces;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
 
 public interface UserControllerInterface {
@@ -14,5 +12,5 @@ public interface UserControllerInterface {
     ResponseEntity<Void> unregister(Long id);
     ResponseEntity<List<IntentionDTO>> activatedIntentionsOf(Long id);
     ResponseEntity<IntentionDTO> processIntention(Long userId, Long intentionId, String action);
-    ResponseEntity<Form> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end);
+    ResponseEntity<Form> intentionsBetween(Long id, String start, String end);
 }

@@ -10,6 +10,6 @@ public interface IntentionControllerInterface {
     ResponseEntity<IntentionDTO> intentionById(Long id);
     ResponseEntity<List<IntentionDTO>> intentions();
     ResponseEntity<List<IntentionDTO>> intentionsWithState(String aState);
-    void delete(Long id);
+    ResponseEntity<Void> delete(Long id);
     ResponseEntity<IntentionDTO> add(IntentionCreationDTO intentionDTO, UserDTO userDTO);
 }

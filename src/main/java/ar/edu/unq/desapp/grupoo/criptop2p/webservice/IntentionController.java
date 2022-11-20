@@ -89,9 +89,9 @@ public class IntentionController implements IntentionControllerInterface {
     @Parameter(name = "id", description = "Id of the intention to delete")
     @DeleteMapping("/intentions/={id}")
     @Override
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.intentionService.delete(id);
-        ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Operation(
