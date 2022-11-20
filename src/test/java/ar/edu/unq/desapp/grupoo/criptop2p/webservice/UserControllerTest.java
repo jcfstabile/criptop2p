@@ -25,12 +25,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @Transactional
-class UserRestControllerTest {
+class UserControllerTest {
 
     static UserCreationDTO anUser, oneUser;
 
     @Autowired
-    UserRestController anUserRestController;
+    UserController anUserController;
 
     @Autowired
     QuotationService quotationService;
@@ -44,7 +44,7 @@ class UserRestControllerTest {
     @DisplayName("An User can be registered")
     @Test
     void userRegister(){
-        UserDTO getUser = anUserRestController.register(anUser).getBody();
+        UserDTO getUser = anUserController.register(anUser).getBody();
         assertNotNull(getUser);
         assertEquals(anUser.getName(), getUser.getName());
         assertEquals(anUser.getEmail(), getUser.getEmail());
@@ -54,13 +54,13 @@ class UserRestControllerTest {
     @Test
     void testAUserIsSearchedById(){
         Exception exception = assertThrows(UserNotFoundException.class, () ->
-                anUserRestController.findUserById(0L));
+                anUserController.findUserById(0L));
         String expectedMessage = "Could not find user 0";
         String actualMessage = exception.getMessage();
         assertEquals(actualMessage, expectedMessage);
-        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        UserDTO registeredUser = anUserController.register(anUser).getBody();
         assertNotNull(registeredUser);
-        UserDTO getUser = anUserRestController.findUserById(registeredUser.getId()).getBody();
+        UserDTO getUser = anUserController.findUserById(registeredUser.getId()).getBody();
         assertNotNull(getUser);
         assertEquals(registeredUser.getId(), getUser.getId());
         assertEquals(registeredUser.getName(), getUser.getName());
@@ -70,14 +70,14 @@ class UserRestControllerTest {
     @DisplayName("When an User make a offer it get an intention with status of OFFERED and the User as offered")
     @Test
     void anUserCanMakeANewOfter() throws InterruptedException {
-        UserDTO userDTO = anUserRestController.register(anUser).getBody();
+        UserDTO userDTO = anUserController.register(anUser).getBody();
         assertNotNull(userDTO);
         String cryptoName = "ALICEUSDT";
 
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.ALICEUSDT).toString(), "SELL", cryptoName);
         assertNotNull(userDTO.getId());
 
-        IntentionDTO intentionDTO = anUserRestController.offer(userDTO.getId(), intentionCreationDTO).getBody();
+        IntentionDTO intentionDTO = anUserController.offer(userDTO.getId(), intentionCreationDTO).getBody();
 
         assertNotNull(intentionCreationDTO);
         assertNotNull(intentionDTO);
@@ -86,9 +86,9 @@ class UserRestControllerTest {
     }
 
     void eraseAllUsers() {
-        List<UserInfoDTO> users = anUserRestController.allUsers().getBody();
+        List<UserInfoDTO> users = anUserController.allUsers().getBody();
         assertNotNull(users);
-        for(UserInfoDTO user : users) { anUserRestController.unregister(user.getId()); }
+        for(UserInfoDTO user : users) { anUserController.unregister(user.getId()); }
     }
 
     @DisplayName("When there is no User registered allUsers get no UserInfo users")
@@ -96,7 +96,7 @@ class UserRestControllerTest {
     void allUsersEmpty() {
         eraseAllUsers();
 
-        List<UserInfoDTO> userInfoDTOS = anUserRestController.allUsers().getBody();
+        List<UserInfoDTO> userInfoDTOS = anUserController.allUsers().getBody();
 
         assertNotNull(userInfoDTOS);
         assertEquals(0, userInfoDTOS.size() );
@@ -107,10 +107,10 @@ class UserRestControllerTest {
     @Test
     void allUsers() {
         eraseAllUsers();
-        UserDTO user1 = anUserRestController.register(anUser).getBody();
-        UserDTO user2 = anUserRestController.register(oneUser).getBody();
+        UserDTO user1 = anUserController.register(anUser).getBody();
+        UserDTO user2 = anUserController.register(oneUser).getBody();
 
-        List<UserInfoDTO> users = anUserRestController.allUsers().getBody();
+        List<UserInfoDTO> users = anUserController.allUsers().getBody();
 
         assertNotNull(users);
         assertNotNull(user1);
@@ -124,23 +124,23 @@ class UserRestControllerTest {
     @Test
     void unregister() {
         ResponseEntity<Void> deleteResponse;
-        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        UserDTO registeredUser = anUserController.register(anUser).getBody();
         assertNotNull(registeredUser);
         Long userId = registeredUser.getId();
-        anUserRestController.findUserById(userId);
+        anUserController.findUserById(userId);
 
 
-        deleteResponse = anUserRestController.unregister(userId);
+        deleteResponse = anUserController.unregister(userId);
 
         assertNotNull(deleteResponse);
-        assertThrows(UserNotFoundException.class, () -> anUserRestController.findUserById(userId));
+        assertThrows(UserNotFoundException.class, () -> anUserController.findUserById(userId));
     }
 
     @DisplayName("When a non existent User is unsubscribed a exception is thrown")
     @Test
     void unregisterANonExistentUser(){
         Exception exception = assertThrows(UserNotFoundException.class, () ->
-                anUserRestController.unregister(0L)
+                anUserController.unregister(0L)
         );
 
         assertEquals("Could not find user 0", exception.getMessage());
@@ -149,15 +149,15 @@ class UserRestControllerTest {
     @DisplayName("Not valid Status change ")
     @Test
     void testAnInvalidStatusChange() throws InterruptedException {
-        UserDTO seller = anUserRestController.register(anUser).getBody();
-        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        UserDTO seller = anUserController.register(anUser).getBody();
+        UserDTO buyer = anUserController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
         Long  buyerId = buyer.getId();
         String cryptoName = "ATOMUSDT";
 
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.ATOMUSDT).toString(), "SELL", cryptoName);
-        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        IntentionDTO intentionDTO = anUserController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
         Long intentionId = intentionDTO.getIntentionId();
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
@@ -165,7 +165,7 @@ class UserRestControllerTest {
 
 
         Exception exception = assertThrows(StatusChangeNotAllowedRestException.class, () ->
-                anUserRestController.processIntention(buyerId, intentionId, "payment")
+                anUserController.processIntention(buyerId, intentionId, "payment")
         );
 
         assertEquals("Cant change the status to: WAITINGFORDELIVERY"  , exception.getMessage());
@@ -174,21 +174,21 @@ class UserRestControllerTest {
     @DisplayName("Not valid action found exception thrown")
     @Test
     void testAnInvalidActionIsNotFound() throws InterruptedException {
-        UserDTO seller = anUserRestController.register(anUser).getBody();
-        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        UserDTO seller = anUserController.register(anUser).getBody();
+        UserDTO buyer = anUserController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
         Long  buyerId = buyer.getId();
         String cryptoName = "ATOMUSDT";
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.valueOf(cryptoName)).toString(), "SELL", cryptoName);
-        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        IntentionDTO intentionDTO = anUserController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
         Long intentionId = intentionDTO.getIntentionId();
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
         String notValidAction = "WrongAction";
 
         Exception exception = assertThrows(NoValidActionErrorException.class, () ->
-                anUserRestController.processIntention(buyerId, intentionId, notValidAction)
+                anUserController.processIntention(buyerId, intentionId, notValidAction)
         );
 
         assertEquals("Action not valid: " + notValidAction , exception.getMessage());
@@ -197,20 +197,20 @@ class UserRestControllerTest {
     @DisplayName("Intention not found exception thrown")
     @Test
     void testAnIntentionIsNotFound() throws InterruptedException {
-        UserDTO seller = anUserRestController.register(anUser).getBody();
-        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        UserDTO seller = anUserController.register(anUser).getBody();
+        UserDTO buyer = anUserController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
         Long  buyerId = buyer.getId();
         String cryptoName = "ATOMUSDT";
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(CryptoName.valueOf(cryptoName)).toString(), "SELL", cryptoName);
-        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        IntentionDTO intentionDTO = anUserController.offer(seller.getId(), intentionCreationDTO).getBody();
         assertNotNull(intentionDTO);
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
         Long notFoundIntentionID = intentionDTO.getIntentionId() + 1234;
 
         Exception exception = assertThrows(IntentionNotFoundException.class, () ->
-                anUserRestController.processIntention(buyerId, notFoundIntentionID, "accept")
+                anUserController.processIntention(buyerId, notFoundIntentionID, "accept")
         );
 
         assertEquals("Could not find intention " + notFoundIntentionID, exception.getMessage());
@@ -221,20 +221,20 @@ class UserRestControllerTest {
     @Test
     void testAnUserAcceptAIntentions() throws InterruptedException {
 
-        UserDTO seller = anUserRestController.register(anUser).getBody();
-        UserDTO buyer = anUserRestController.register(oneUser).getBody();
+        UserDTO seller = anUserController.register(anUser).getBody();
+        UserDTO buyer = anUserController.register(oneUser).getBody();
         assertNotNull(seller);
         assertNotNull(buyer);
         String cryptoName = "ATOMUSDT";
         BigDecimal sellPrice = quotationService.priceOf(CryptoName.valueOf(cryptoName)).multiply(BigDecimal.valueOf(0.99));
 
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, sellPrice.toString(), "SELL", cryptoName);
-        IntentionDTO intentionDTO = anUserRestController.offer(seller.getId(), intentionCreationDTO).getBody();
+        IntentionDTO intentionDTO = anUserController.offer(seller.getId(), intentionCreationDTO).getBody();
 
         assertNotNull(intentionDTO);
         assertEquals(Status.OFFERED, intentionDTO.getStatus());
 
-        IntentionDTO acceptedIntentionDTO = anUserRestController.processIntention(buyer.getId(), intentionDTO.getIntentionId(), "accept").getBody();
+        IntentionDTO acceptedIntentionDTO = anUserController.processIntention(buyer.getId(), intentionDTO.getIntentionId(), "accept").getBody();
 
 
         assertNotNull(acceptedIntentionDTO);
@@ -244,10 +244,10 @@ class UserRestControllerTest {
     @DisplayName("An user recently created hasn't activated intentions")
     @Test
     void testAnUserRecentlyHasNotActivatedIntentions(){
-        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        UserDTO registeredUser = anUserController.register(anUser).getBody();
         assertNotNull(registeredUser);
 
-        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        List<IntentionDTO> activatedIntentions = anUserController.activatedIntentionsOf(registeredUser.getId()).getBody();
 
         assertNotNull(activatedIntentions);
         assertEquals(0, activatedIntentions.size());
@@ -257,13 +257,13 @@ class UserRestControllerTest {
     @DisplayName("An user recently has only one activated intention when only offers one time")
     @Test
     void testAnUserRecentlyHasOnlyActivatedIntentions() throws InterruptedException {
-        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        UserDTO registeredUser = anUserController.register(anUser).getBody();
         assertNotNull(registeredUser);
         CryptoName cryptoName = CryptoName.ALICEUSDT;
         IntentionCreationDTO intentionCreationDTO = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName).toString(), "SELL", "ALICEUSDT");
-        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO);
+        anUserController.offer(registeredUser.getId(), intentionCreationDTO);
 
-        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        List<IntentionDTO> activatedIntentions = anUserController.activatedIntentionsOf(registeredUser.getId()).getBody();
 
         assertNotNull(activatedIntentions);
         assertEquals(1, activatedIntentions.size());
@@ -272,15 +272,15 @@ class UserRestControllerTest {
     @DisplayName("An user has two activated intention when offers twice")
     @Test
     void testAnUserHasTwoActivatedIntentions() throws InterruptedException {
-        UserDTO registeredUser = anUserRestController.register(anUser).getBody();
+        UserDTO registeredUser = anUserController.register(anUser).getBody();
         assertNotNull(registeredUser);
         CryptoName cryptoName = CryptoName.ALICEUSDT;
         IntentionCreationDTO intentionCreationDTO0 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName).toString(), "SELL", "ALICEUSDT");
         IntentionCreationDTO intentionCreationDTO1 = new IntentionCreationDTO(10, quotationService.priceOf(cryptoName).toString(), "BUY", "ALICEUSDT");
-        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO0);
-        anUserRestController.offer(registeredUser.getId(), intentionCreationDTO1);
+        anUserController.offer(registeredUser.getId(), intentionCreationDTO0);
+        anUserController.offer(registeredUser.getId(), intentionCreationDTO1);
 
-        List<IntentionDTO> activatedIntentions = anUserRestController.activatedIntentionsOf(registeredUser.getId()).getBody();
+        List<IntentionDTO> activatedIntentions = anUserController.activatedIntentionsOf(registeredUser.getId()).getBody();
 
         assertNotNull(activatedIntentions);
         assertEquals(2, activatedIntentions.size());
