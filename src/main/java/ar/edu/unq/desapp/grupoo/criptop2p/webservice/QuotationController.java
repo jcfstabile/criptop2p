@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.interfaces.QuotationControllerInterface;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorSimple;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -19,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @EnableAutoConfiguration
-public class QuotationController {
+public class QuotationController implements QuotationControllerInterface {
     @Autowired
     QuotationService quotationService;
 
@@ -33,6 +34,7 @@ public class QuotationController {
             }
     )
     @GetMapping("/quotations")
+    @Override
     public ResponseEntity<List<QuotationDTO>> allQuotations() throws InterruptedException {
         return ResponseEntity.ok(quotationService.allQuotations());
     }
@@ -49,6 +51,7 @@ public class QuotationController {
             }
     )
     @GetMapping("/quotations/last24hs")
+    @Override
     public ResponseEntity<List<TimedQuotationDTO>> last24hs(@RequestParam String crypto){
         return ResponseEntity.ok(quotationService.last24hsOf(crypto));
     }

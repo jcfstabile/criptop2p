@@ -2,11 +2,8 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import lombok.SneakyThrows;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +26,7 @@ class IntentionControllerTest {
     @Autowired
     IntentionController sut;
     @Autowired
-    UserRestController anUserRestController;
+    UserController anUserController;
     IntentionDTO intention0;
     IntentionDTO intention1;
 
@@ -42,7 +39,7 @@ class IntentionControllerTest {
     void setUp(){
         binance = new BinanceIntegration();
         UserCreationDTO anUser = new UserCreationDTO("Jom", "Nen", "jk22@here.dom", "Fake Street 1234", "Pepito+1234", "66345678", "6664567890123456789012");
-        userDTO = anUserRestController.register(anUser).getBody();
+        userDTO = anUserController.register(anUser).getBody();
         BigDecimal priceATOM = new BigDecimal(binance.priceOf(CryptoName.ATOMUSDT).getPrice());
         BigDecimal priceBN = new BigDecimal(binance.priceOf(CryptoName.BNBUSDT).getPrice());
 
@@ -60,7 +57,7 @@ class IntentionControllerTest {
         for (IntentionDTO intention : intentions) {
             sut.delete(intention.getIntentionId());
         }
-        anUserRestController.unregister(userDTO.getId());
+        anUserController.unregister(userDTO.getId());
     }
 
     @DisplayName("When intentention controller receive the method intentions by ID delegates to service")

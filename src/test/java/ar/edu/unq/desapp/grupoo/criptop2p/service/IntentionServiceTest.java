@@ -7,7 +7,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IntentionNotFoundException;
-import ar.edu.unq.desapp.grupoo.criptop2p.webservice.UserRestController;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.UserController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class IntentionServiceTest {
     @Autowired
     IntentionService sut;
     @Autowired
-    UserRestController anUserRestController;
+    UserController anUserController;
     IntentionCreationDTO intentionDTO0, intentionDTO1, intentionDTO2;
     UserDTO userDTO;
 
@@ -40,7 +40,7 @@ class IntentionServiceTest {
     void setUp(){
         binance = new BinanceIntegration();
         UserCreationDTO anUser = new UserCreationDTO("Jom", "Nen", "jk22@here.dom", "Fake Street 1234", "Pepito+1234", "66345678", "6664567890123456789012");
-        userDTO = anUserRestController.register(anUser).getBody();
+        userDTO = anUserController.register(anUser).getBody();
         BigDecimal priceATOM = new BigDecimal(binance.priceOf(CryptoName.ATOMUSDT).getPrice());
         BigDecimal priceBN = new BigDecimal(binance.priceOf(CryptoName.BNBUSDT).getPrice());
         BigDecimal priceCK = new BigDecimal(binance.priceOf(CryptoName.CAKEUSDT).getPrice());
@@ -56,7 +56,7 @@ class IntentionServiceTest {
         for (IntentionDTO intention : intentions) {
             sut.delete(intention.getIntentionId());
         }
-        anUserRestController.unregister(userDTO.getId());
+        anUserController.unregister(userDTO.getId());
     }
 
 
