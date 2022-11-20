@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.interfaces.UserControllerInterface;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorList;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorSimple;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @EnableAutoConfiguration
-public class UserController {
+public class UserController implements UserControllerInterface {
 
     @Autowired
     private UserService userService;
@@ -34,6 +35,7 @@ public class UserController {
             }
     )
     @GetMapping("/users")
+    @Override
     public ResponseEntity<List<UserInfoDTO>> allUsers() {
         return ResponseEntity.ok(this.userService.findAll());
     }
@@ -53,6 +55,7 @@ public class UserController {
     )
 
     @PostMapping("/users")
+    @Override
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         Long id = this.userService.addUser(userCreationDTO);
         return ResponseEntity.status(201).body(
@@ -73,6 +76,7 @@ public class UserController {
     )
     @Parameter(name = "id", description = "Id of the user to retrieve information")
     @GetMapping("/users/{id}")
+    @Override
     public ResponseEntity<UserDTO> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 this.userService.findByID(id)
@@ -93,6 +97,7 @@ public class UserController {
 
     @Parameter(name = "id", description = "Id of the user adding the intention")
     @PostMapping("/users/{id}/intentions")
+    @Override
     public ResponseEntity<IntentionDTO> offer(@PathVariable Long id, @RequestBody IntentionCreationDTO anIntentionDTO) {
         return ResponseEntity.status(201).body(this.userService.offer(id, anIntentionDTO));
     }
@@ -107,6 +112,7 @@ public class UserController {
 )
     @Parameter(name = "id", description = "Id of the user to delete")
     @DeleteMapping("/users/{id}")
+    @Override
     public ResponseEntity<Void> unregister(@PathVariable Long id) {
         this.userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -123,6 +129,7 @@ public class UserController {
                             schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
+    @Override
     public ResponseEntity<List<IntentionDTO>> activatedIntentionsOf(@PathVariable Long id) {
         return ResponseEntity.ok(this.userService.activatedIntentionsOf(id));
     }
@@ -145,14 +152,15 @@ public class UserController {
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
+    @Override
     public ResponseEntity<Form> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end) {
         return ResponseEntity.ok(this.userService.intentionsBetween(id, start, end));
     }
 
     @PatchMapping("users/{userId}/intentions/{intentionId}")
+    @Override
     public ResponseEntity<IntentionDTO> processIntention(@PathVariable Long userId, @PathVariable Long intentionId,
                                                    @RequestParam String action){
-
         return ResponseEntity.status(200).body(userService.processIntention(userId, intentionId, action));
 
     }
