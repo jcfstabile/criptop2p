@@ -11,6 +11,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.interfaces.UserServiceInterface;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.ConvertDate;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.FormatterDate;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.InspectUser;

@@ -9,12 +9,12 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.CryptoNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.InternalErrorProcessingQuotationsException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.interfaces.QuotationServiceInterface;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -24,7 +24,7 @@ import java.util.List;
 
 @Service
 @Component
-public class QuotationService {
+public class QuotationService implements QuotationServiceInterface {
 
     @Autowired
     BinanceIntegration binanceIntegrator;
@@ -53,6 +53,7 @@ public class QuotationService {
     }
 
     @Transactional
+    @Override
     public synchronized void saveCachedQuotations() throws JsonProcessingException, InterruptedException {
         while(busy || invalidCache) { wait(); }
         setBusy();
@@ -71,6 +72,8 @@ public class QuotationService {
         CachedQuotations cq = new CachedQuotations(ts, cs);
         quotationsRepository.save(cq);
     }
+
+    @Override
     public synchronized List<QuotationDTO> allQuotations() throws InterruptedException {
         while(busy || invalidCache) { wait(); }
         setBusy();
@@ -80,6 +83,7 @@ public class QuotationService {
         return quotations;
     }
 
+    @Override
     public BigDecimal priceOf(CryptoName cryptoName) throws InterruptedException {
         return new BigDecimal(
                 this.allQuotations()

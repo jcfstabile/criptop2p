@@ -7,6 +7,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.interfaces.IntentionServiceInterface;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class IntentionService implements IntentionServiceInterface{
+public class IntentionService implements IntentionServiceInterface {
 
     @Autowired
     private UserService userService;
