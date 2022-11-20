@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.IntentionService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.interfaces.IntentionControllerInterface;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorList;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorSimple;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @EnableAutoConfiguration
-public class IntentionController {
+public class IntentionController implements IntentionControllerInterface {
     @Autowired
     private IntentionService intentionService;
 
@@ -40,6 +41,7 @@ public class IntentionController {
     )
     @Parameter(name = "id", description = "Id of the intention to search")
     @PostMapping("/intentions/{id}")
+    @Override
     public ResponseEntity<IntentionDTO> intentionById(@PathVariable Long id) {
         return ResponseEntity.status(200).body(this.intentionService.findById(id));
     }
@@ -51,6 +53,7 @@ public class IntentionController {
             }
     )
     @GetMapping("/intentions")
+    @Override
     public ResponseEntity<List<IntentionDTO>> intentions() {
         return ResponseEntity.status(200).body(this.intentionService.intentions());
     }
@@ -70,6 +73,7 @@ public class IntentionController {
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
             }
     )
+    @Override
     public ResponseEntity<List<IntentionDTO>> intentionsWithState(@PathVariable String aState) {
         return ResponseEntity.status(200).body(this.intentionService.intentionsWithState(aState));
     }
@@ -84,9 +88,10 @@ public class IntentionController {
     )
     @Parameter(name = "id", description = "Id of the intention to delete")
     @DeleteMapping("/intentions/={id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @Override
+    public void delete(@PathVariable Long id) {
         this.intentionService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Operation(
@@ -105,6 +110,7 @@ public class IntentionController {
     )
 
     @PostMapping("/intentions")
+    @Override
     public ResponseEntity<IntentionDTO> add(@Valid @RequestBody IntentionCreationDTO intentionDTO, UserDTO userDTO) {
         IntentionDTO intention = this.intentionService.add(intentionDTO, userDTO);
         Long id = intention.getIntentionId();
