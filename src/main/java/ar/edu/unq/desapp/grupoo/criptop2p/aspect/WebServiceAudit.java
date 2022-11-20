@@ -22,23 +22,21 @@ public class WebServiceAudit {
             "@annotation(org.springframework.web.bind.annotation.PatchMapping)"
     )
     public Object logWebServiceAudit(ProceedingJoinPoint joinPoint) throws Throwable {
-        // Loguear <timestamp,user,operación/metodo, parámetros, tiempoDeEjecicion>
         Long start = System.currentTimeMillis();
         Object proceed = new Object();
         try {
             proceed = joinPoint.proceed();
-        } catch (Exception e) {
-            throw e;
         } finally {
-            Long now = System.currentTimeMillis();
-            Timestamp timestamp = new Timestamp(now);
-            // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            logger.info("Timestamp={} User={} Operation={} Parameter(s)={} Execution time={}ms",
-                    timestamp,
-                    "WAITING JWT",
-                    joinPoint.getSignature(),
-                    Arrays.toString(joinPoint.getArgs()),
-                    now - start );
+            if (logger.isInfoEnabled()) {
+                Long now = System.currentTimeMillis();
+                Timestamp timestamp = new Timestamp(now);
+                logger.info("Timestamp={} User={} Operation={} Parameter(s)={} Execution time={}ms",
+                        timestamp,
+                        "WAITING JWT",
+                        joinPoint.getSignature(),
+                        Arrays.toString(joinPoint.getArgs()),
+                        now - start);
+            }
         }
 
         return proceed;
