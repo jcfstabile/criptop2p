@@ -6,22 +6,22 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public class Form {
-    private final List<Report> reports;
+public class FormDTO {
+    private final List<ReportDTO> reportDTOS;
     private final Date date;
 
     private final BigDecimal totalInDollars;
     private final BigDecimal totalInPesos;
 
-    public Form(List<Report> reports, Quoter quoter) {
-        this.reports = reports;
+    public FormDTO(List<ReportDTO> reportDTOS, Quoter quoter) {
+        this.reportDTOS = reportDTOS;
         date = new Date();
         this.totalInDollars = this.getTotalInDollars();
         this.totalInPesos = this.getTotalInPesos(quoter);
     }
 
-    public List<Report> getReports(){
-        return this.reports;
+    public List<ReportDTO> getReports(){
+        return this.reportDTOS;
     }
 
     public Date getDate(){
@@ -37,7 +37,7 @@ public class Form {
     }
 
     public BigDecimal getTotalInDollars() {
-        return this.reports.stream().map(Report::getTotalInDollars).reduce(new BigDecimal(0), BigDecimal::add);
+        return this.reportDTOS.stream().map(ReportDTO::getTotalInDollars).reduce(new BigDecimal(0), BigDecimal::add);
     }
 
     public BigDecimal getTotalInPesos(Quoter aQuoter) {

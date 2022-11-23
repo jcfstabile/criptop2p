@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.service;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.services;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
@@ -128,7 +128,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public Form intentionsBetween(Long id, String start, String end) {
+    public FormDTO intentionsBetween(Long id, String start, String end) {
         Quoter aQuoter = new Quoter();
         User getUser = this.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));

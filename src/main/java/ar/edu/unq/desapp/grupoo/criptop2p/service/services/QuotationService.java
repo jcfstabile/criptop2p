@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.service;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.services;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CachedQuotations;
@@ -12,7 +12,6 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.InternalErrorProces
 import ar.edu.unq.desapp.grupoo.criptop2p.service.interfaces.QuotationServiceInterface;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@Component
 public class QuotationService implements QuotationServiceInterface {
 
     @Autowired

@@ -12,5 +12,5 @@ public interface UserControllerInterface {
     ResponseEntity<Void> unregister(Long id);
     ResponseEntity<List<IntentionDTO>> activatedIntentionsOf(Long id);
     ResponseEntity<IntentionDTO> processIntention(Long userId, Long intentionId, String action);
-    ResponseEntity<Form> intentionsBetween(Long id, String start, String end);
+    ResponseEntity<FormDTO> intentionsBetween(Long id, String start, String end);
 }

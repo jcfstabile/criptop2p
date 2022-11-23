@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.CryptoNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers.QuotationController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
