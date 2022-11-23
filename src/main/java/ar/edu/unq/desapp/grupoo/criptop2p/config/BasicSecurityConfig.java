@@ -42,7 +42,7 @@ public class BasicSecurityConfig {
         System.out.println("On filterChain");
         http
                 .authorizeRequests()
-                .antMatchers("/api/canta**")
+                .antMatchers("/api/ping")
                 .hasRole("USER")
                 .anyRequest()
                 .authenticated()
