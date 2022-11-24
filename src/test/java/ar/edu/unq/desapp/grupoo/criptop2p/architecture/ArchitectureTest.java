@@ -7,7 +7,7 @@ import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.stereotype.Service;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 @DisplayName("Architecture's test")
@@ -65,6 +65,25 @@ public class ArchitectureTest {
                 .should().beInterfaces();
     }
 
+    @DisplayName("3")
+    @ArchTest
+    void testServicesAreAnnotatedWithServiceAnnotation(JavaClasses classes){
+        ArchRule myRule = classes().that().
+                resideInAPackage("..service.services").should()
+                .beAnnotatedWith(Service.class);
+        myRule.check(classes);
+    }
+
+    @DisplayName("Services have simple name ending with Service")
+    @ArchTest
+    public void servicesHaveSimpleNameEndingWithServices(JavaClasses classes) {
+        ArchRule myRule = classes()
+                .that().resideInAPackage("..service.services")
+                .should().haveSimpleNameEndingWith("Service");
+        myRule.check(classes);
+    }
+
+
 }
 
 /*
@@ -81,14 +100,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 public class ArchitectureTest {
 
     //Este falla y no entiendo porque
-    @DisplayName("Services have simple name ending with Service")
-    @ArchTest
-    public void servicesHaveSimpleNameEndingWithServices(JavaClasses classes) {
-        ArchRule myRule = classes()
-                .that().resideInAPackage("..service.services")
-                .should().haveSimpleNameEndingWith("Service");
-        myRule.check(classes);
-    }
+
 
     //Este falla y no entiendo porque
     @DisplayName("3")

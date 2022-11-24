@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.InitDbData;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
@@ -54,7 +55,7 @@ public class UserService implements UserServiceInterface {
     private InspectUser inspectUser;
 
     @Autowired
-    private QuotationService quotationService;
+    private InitDbData.QuotationService quotationService;
 
     protected final Log logger = LogFactory.getLog(getClass());
 

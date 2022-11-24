@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.services.QuotationService;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.InitDbData;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IntentionNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.NoValidActionErrorException;
@@ -34,7 +34,7 @@ class UserControllerTest {
     UserController anUserController;
 
     @Autowired
-    QuotationService quotationService;
+    InitDbData.QuotationService quotationService;
 
     @BeforeEach
     public void setUp(){
