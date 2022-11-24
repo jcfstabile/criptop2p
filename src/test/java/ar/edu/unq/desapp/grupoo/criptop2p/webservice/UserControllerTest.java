@@ -2,12 +2,13 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.InitDbData;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IntentionNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.NoValidActionErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeNotAllowedRestException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class UserControllerTest {
     UserController anUserController;
 
     @Autowired
-    QuotationService quotationService;
+    InitDbData.QuotationService quotationService;
 
     @BeforeEach
     public void setUp(){

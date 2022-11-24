@@ -3,6 +3,8 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers.IntentionController;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers.UserController;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

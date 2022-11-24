@@ -1,6 +1,6 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
+package ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.IntentionService;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.services.IntentionService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;

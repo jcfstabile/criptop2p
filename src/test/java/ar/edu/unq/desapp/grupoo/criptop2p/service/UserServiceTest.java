@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.services.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
