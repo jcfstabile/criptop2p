@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.InitDbData;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
