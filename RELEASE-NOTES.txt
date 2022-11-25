@@ -1,31 +1,69 @@
 ---------------------------------------------------------------------
-TAG 2.0
+TAG 3.0
 ---------------------------------------------------------------------
+
 - NEW FEATURES:
 
 <<<Core>>>
-- Utilización de H2 para persistir datos
-- Documentation de Endpoints (APIs) con Swagger (v3)
+
+    - Crear un test de arquitectura
+    - Auditoria de Web-Services.
+    - Loguear <timestamp,user,operación/metodo, parámetros, tiempoDeEjecicion> de los servicios publicados con Spring utilizando Log4j/logback
+
 
 <<<Funcionalidad>>>
-- Listar cotizacion de criptoactivos
-- Construir un listado donde se muestran las intenciones activas de compra/venta
-- Procesar la transacción informada por un usuario
-- Informar al usuario el volumen operado de cripto activos entre dos fechas
-- Testing integral de 2 controllers (end-to-end)
+
+    - Segurizar el acceso a la API (JWT)
+    - Mostrar las cotizaciones de las últimas 24hs para un cripto activo dado
+    - Listado de cotizaciones (alta performance - implementar cache)
+
 
 NOTES:
 * Faltantes:
-- Un test integral de otro controller (distinto al UserRestController) (end-to-end)
-- Refactorización de los test para hacerlos unitarios y evitar el acoplamiento entre módulos
+    -
+
+    - Notas:
+        - Se resuelve faltantes de entregas anteriores
+        - Se resuelve deuda tecnica de entregas anteriores
+        - Se resuelve issues identificados enentregas anteriores
+
+
+* KNOWN ISSUES:
+    -
+
+
+---------------------------------------------------------------------
+TAG 2.0
+---------------------------------------------------------------------
+
+- NEW FEATURES:
+
+<<<Core>>>
+    - Utilización de H2 para persistir datos
+    - Documentation de Endpoints (APIs) con Swagger (v3)
+
+<<<Funcionalidad>>>
+    - Listar cotizacion de criptoactivos
+    - Construir un listado donde se muestran las intenciones activas de compra/venta
+    - Procesar la transacción informada por un usuario
+    - Informar al usuario el volumen operado de cripto activos entre dos fechas
+    - Testing integral de 2 controllers (end-to-end)
+
+NOTES:
+* Faltantes:
+    - Un test integral de otro controller (distinto al UserRestController) (end-to-end)
+    - Refactorización de los test para hacerlos unitarios y evitar el acoplamiento entre módulos
 
 
 * KNOWN ISSUES
-- Datos repetidos en DB H2
+    - Datos repetidos en DB H2
+
+
 
 ---------------------------------------------------------------------
 TAG 1.0
 ---------------------------------------------------------------------
+
 - NEW FEATURES:
 
 <<<Core>>>

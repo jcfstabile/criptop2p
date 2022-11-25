@@ -25,4 +25,11 @@ class InitDbDataTest {
         verify(userService, times(4)).addUser(any());
     }
 
+    @DisplayName("InitDb data add intention to users")
+    @Test
+    void testInitWithIntentionsOffereds() {
+        (new InitDbData(userService)).init();
+        verify(userService, times(8)).offer(any(), any());
+    }
+
 }
