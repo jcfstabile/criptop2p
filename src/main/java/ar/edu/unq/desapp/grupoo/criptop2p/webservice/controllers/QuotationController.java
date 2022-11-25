@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.InitDbData;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.TimedQuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.interfaces.QuotationControllerInterface;
@@ -22,7 +23,7 @@ import java.util.List;
 @EnableAutoConfiguration
 public class QuotationController implements QuotationControllerInterface {
     @Autowired
-    InitDbData.QuotationService quotationService;
+    QuotationService quotationService;
 
     @Operation(summary = "Show all current quotations",
             responses = {

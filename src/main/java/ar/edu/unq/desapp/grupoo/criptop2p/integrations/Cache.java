@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.integrations;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.InitDbData;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.InternalErrorProcessingQuotationsException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.logging.Log;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class Cache implements Runnable {
 
     @Autowired
-    InitDbData.QuotationService quotationService;
+    QuotationService quotationService;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
