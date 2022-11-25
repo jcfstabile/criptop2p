@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service.dto;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import java.math.BigDecimal;
 
-public class Report {
+public class ReportDTO {
     private final CryptoName crypto;
     private final BigDecimal totalInDollars;
     private final BigDecimal currentPrice;
@@ -11,7 +11,7 @@ public class Report {
 
     private final int amount;
 
-    public Report(CryptoName aCrypto, BigDecimal aTotalInDollars, int anAmount, BigDecimal currentPrice, BigDecimal currentPriceInPesos) {
+    public ReportDTO(CryptoName aCrypto, BigDecimal aTotalInDollars, int anAmount, BigDecimal currentPrice, BigDecimal currentPriceInPesos) {
         this.crypto = aCrypto;
         this.totalInDollars = aTotalInDollars;
         this.amount = anAmount;

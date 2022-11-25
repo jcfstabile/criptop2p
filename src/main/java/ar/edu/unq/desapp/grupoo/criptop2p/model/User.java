@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IncorrectUserException;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.ValidatorCryptoPrice;
 import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
@@ -30,7 +31,6 @@ public class User{
 
     @Column(name="email", nullable = false, unique = true)
     @NotNull(message = "Email cannot be empty")
-//    @Email(message = "Email is not valid", regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*)?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:)\\])")
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     String email;
 
@@ -81,6 +81,19 @@ public class User{
         this.points = 0;
     }
 
+    public User(Long anID, String aName, String aSurname, String anEmail, String aPassword, String aWalletAddress, String aCvu){
+        this.id = anID;
+        this.name = aName;
+        this.surname = aSurname;
+        this.email = anEmail;
+        this.address = null;
+        this.password = aPassword;
+        this.walletAddress = aWalletAddress;
+        this.cvu = aCvu;
+        this.offers = new ArrayList<>();
+        this.points = 0;
+    }
+
     public User() {
 
     }
@@ -121,25 +134,32 @@ public class User{
 
     public List<Intention> getOffers() { return this.offers;}
 
-    public Intention offer(Integer aCount, BigDecimal aPrice, TypeIntention aType, CryptoName aCryptoName, BigDecimal currentPrice){
-        Intention intention = new ValidatorCryptoPrice().createIntention(this, aCount, aPrice, aType, aCryptoName, currentPrice);
+    public void offer(Intention intention, BigDecimal currentPrice){
+        new ValidatorCryptoPrice().checkIntention(intention, currentPrice);
         this.addIntention(intention);
-        return intention;
     }
 
     public void accept(Intention anIntention, BigDecimal aCurrentPrice){
+        if(this.isSameUser(anIntention.getOffered())){
+            throw new IncorrectUserException(this.id);
+        }
         anIntention.verifyIfIsAcepted(aCurrentPrice);
+        if (anIntention.getStatus().equals(Status.SOLD)) {
+            addIntention(anIntention);
+        }
     }
 
     public void cancel(Intention intention) {
-        intention.cancel(this);
+        if(intention.isItsOfferer(this) || intention.isItsDemander(this) ) {
+            intention.cancel(this);
+        }
     }
 
-    public int quantityIntentions() { return ((int) this.intentionWithStatus(Status.SOLD).count());}
+    public int quantityIntentionsSold() { return ((int) this.intentionWithStatus(Status.SOLD).count());}
 
     public int getReputation() {
         try{
-            return this.points / this.quantityIntentions();
+            return this.points / this.quantityIntentionsSold();
         }
         catch(ArithmeticException ex){
             return 0;

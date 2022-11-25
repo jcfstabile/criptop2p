@@ -51,6 +51,8 @@ dependencies {
 		exclude group: 'junit'
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
+	testImplementation 'com.tngtech.archunit:archunit-junit5:1.0.1'
 }
 
 configurations.compileOnly.setCanBeResolved(true)

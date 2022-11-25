@@ -10,6 +10,5 @@ import java.util.Optional;
 @Repository
 @Configuration
 public interface IntentionRepository extends CrudRepository<Intention, Long> {
-    @Override
     Optional<Intention> findById(Long id);
 }

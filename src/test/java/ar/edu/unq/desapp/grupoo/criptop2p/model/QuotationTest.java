@@ -1,34 +1,23 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Quotation Tests")
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@DisplayName("Quotation Test")
 @SpringBootTest
-@Transactional
 class QuotationTest {
-    QuotationDTO quotationSUT;
 
-    @BeforeEach
-    void setUp(){
-        quotationSUT = new QuotationDTO(CryptoName.BNBUSDT.name(),"123");
-    }
-
-    @DisplayName("The price of Quotation is the expected")
+    @DisplayName("Quotation has price and cryptoName")
     @Test
-    void testNameOfAQuotationIsTheExpected() {
-        assertEquals("BNBUSDT", quotationSUT.getCryptoName());
-    }
+    void checkDataClass(){
+        Quotation quotation = new Quotation(CryptoName.ALICEUSDT, BigDecimal.valueOf(1.2));
 
-
-    @DisplayName("The Name of Crypto of Quotation is the expected")
-    @Test
-    void testPriceOfAQuotationIsTheExpected() {
-        assertEquals("123", quotationSUT.getPrice());
+        assertEquals(CryptoName.ALICEUSDT, quotation.getCryptoName());
+        assertEquals(BigDecimal.valueOf(1.2), quotation.getPrice());
     }
 }

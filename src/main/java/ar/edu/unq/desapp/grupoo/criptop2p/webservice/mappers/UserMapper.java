@@ -17,6 +17,6 @@ public class UserMapper {
     }
 
     public UserInfoDTO toUserInfoDto(User user){
-        return new UserInfoDTO( user.getId(), user.getName(), user.getSurname(), user.quantityIntentions(), user.getReputation());
+        return new UserInfoDTO( user.getId(), user.getName(), user.getSurname(), user.quantityIntentionsSold(), user.getReputation());
     }
 }

@@ -1,18 +1,21 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.service;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.services;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Intention;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.IntentionRepository;
 import ar.edu.unq.desapp.grupoo.criptop2p.persistence.UserRepository;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.interfaces.UserServiceInterface;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.ConvertDate;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.FormatterDate;
 import ar.edu.unq.desapp.grupoo.criptop2p.utils.InspectUser;
-import ar.edu.unq.desapp.grupoo.criptop2p.utils.TypeIntentionDelivery;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.QuotationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.IntentionMapper;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.mappers.UserMapper;
@@ -22,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
@@ -32,7 +34,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class UserService implements UserServiceInterface {
     @Autowired
@@ -87,16 +88,16 @@ public class UserService implements UserServiceInterface {
 
     @Override
     @Transactional
-    public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO){
+    public IntentionDTO offer(Long anId, IntentionCreationDTO anIntentionDTO) {
         User user = this.userRepository.findById(anId)
                 .orElseThrow(() -> new UserNotFoundException(anId));
+        QuotationDTO quotation = new BinanceIntegration().priceOf(CryptoName.valueOf(anIntentionDTO.getCryptoName()));
+        BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
         Intention anIntention = this.intentionMapper.toIntention(user, anIntentionDTO);
         IntentionDTO intentionDTO = intentionMapper.toIntentionDto(this.intentionRepository.save(anIntention));
-        QuotationDTO quotation = new BinanceIntegration().priceOf(anIntentionDTO.getCryptoName());
-        BigDecimal aCurrentPrice = BigDecimal.valueOf(Float.parseFloat(quotation.getPrice()));
-        user.offer(anIntentionDTO.getCount(), anIntentionDTO.getPrice(), new TypeIntentionDelivery().get(anIntentionDTO.getType()),anIntentionDTO.getCryptoName(), aCurrentPrice);
+        user.offer(anIntention, aCurrentPrice);
         this.userRepository.save(user);
-        if(anIntention.hasStatus(Status.CANCELEDBYSYSTEM)){
+        if (anIntention.hasStatus(Status.CANCELEDBYSYSTEM)) {
             throw new DifferenceWithCurrentPriceException(anIntention.getPrice(), aCurrentPrice);
         }
         return intentionDTO;
@@ -128,7 +129,8 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public Formless intentionsBetween(Long id, String start, String end) {
+    public FormDTO intentionsBetween(Long id, String start, String end) {
+        Quoter aQuoter = new Quoter();
         User getUser = this.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         FormatterDate formatter = new FormatterDate();
@@ -137,7 +139,7 @@ public class UserService implements UserServiceInterface {
         ConvertDate convert = new ConvertDate();
         Date startDate = convert.convertToDate(startLocalDate);
         Date endDate = convert.convertToDate(endLocalDate);
-        return inspectUser.offersBetween(getUser, startDate, endDate);
+        return inspectUser.offersBetween(getUser, startDate, endDate, aQuoter);
     }
 
     @Transactional

@@ -25,6 +25,7 @@ public class Intention {
     }
 
     private int count;
+    @Column(precision = 12, scale=8)
     private BigDecimal price;
 
     @Convert(converter = TypeIntentionConverter.class)
@@ -35,7 +36,7 @@ public class Intention {
 
     private boolean halfDone;
 
-    @JoinColumn(name = "offered_id", nullable = false)
+    @JoinColumn(name = "offered_id", nullable = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User offered;
 
@@ -98,7 +99,7 @@ public class Intention {
     }
 
     public void sold(Timestamp aTimeStamp, User anDemander){
-        Integer reward = this.reward(aTimeStamp);
+        int reward = this.reward(aTimeStamp);
         this.offered.addPoints(reward);
         anDemander.addPoints(reward);
         this.sold();
@@ -170,5 +171,9 @@ public class Intention {
 
     public boolean isBetween(Date init, Date end) {
         return this.isAfter(init) && this.isBefore(end);
+    }
+
+    public boolean isItsDemander(User anUser) {
+        return anUser.getOffers().contains(this) && ! anUser.isSameUser(this.offered);
     }
 }

@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.service;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.interfaces;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
@@ -18,5 +18,5 @@ public interface UserServiceInterface {
 
     List<IntentionDTO> activatedIntentionsOf(Long id);
 
-    Formless intentionsBetween(Long id, String start, String end);
+    FormDTO intentionsBetween(Long id, String start, String end);
 }
