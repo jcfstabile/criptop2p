@@ -28,7 +28,7 @@ public class InitDbData {
 
     InitDbData(){
         userBuilder = new UserCreationDTOBuilder(
-                "any", "any", "email@init.data", "Address of init data",
+                "any", "any", "email@init.data", "742 Evergreen Terrace",
                 "1234!Aa.", "12345678", "1234567890123456789012");
     }
 
@@ -42,10 +42,40 @@ public class InitDbData {
     @PostConstruct
     void init(){
         if(driverClassName.equals("org.h2.Driver")) {
-            userService.addUser(userBuilder.withEmail("email1@init.data").withWalletAddress("IDD09871").build());
-            userService.addUser(userBuilder.withEmail("email2@init.data").withWalletAddress("IDD09872").build());
-            userService.addUser(userBuilder.withEmail("email3@init.data").withWalletAddress("IDD09873").build());
-            userService.addUser(userBuilder.withName("Alf").withEmail("email4@init.data").withWalletAddress("IDD09874").build());
+
+            userService.addUser(userBuilder
+                    .withName("Apu")
+                    .withSurname("Nahasapeemapetilon")
+                    .withAddress("Kwik-E-Mart")
+                    .withEmail("admin@here.data")
+                    .withPassword("Admin1.")
+                    .withWalletAddress("IDD09871")
+                    .build());
+
+            userService.addUser(userBuilder
+                    .withName("Marge")
+                    .withSurname("Simpson")
+                    .withAddress("742 Evergreen Terrace")
+                    .withEmail("marge@init.data")
+                    .withPassword("Marge1234.")
+                    .withWalletAddress("IDD09872").build());
+
+            userService.addUser(userBuilder
+                    .withName("Homero")
+                    .withSurname("Simpson")
+                    .withAddress("742 Evergreen Terrace")
+                    .withEmail("homero@init.data")
+                    .withPassword("Homero1234.")
+                    .withWalletAddress("IDD09873").build());
+
+            userService.addUser(userBuilder
+                    .withName("Ned")
+                    .withSurname("Flanders")
+                    .withAddress("744 Evergreen Terrace")
+                    .withEmail("ned@init.data")
+                    .withPassword("Flanders1234.")
+                    .withWalletAddress("IDD09874").build());
+
             logger.info("Added fake Users on H2 with: " + driverClassName );
         }
     }
