@@ -64,4 +64,9 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleInternalErrorProcessingQuotation(InternalErrorProcessingQuotationsException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("013", "Error on processing", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler({UsernameWithEmailNotFoundException.class})
+    public ResponseEntity<Object> handleUsernameWithEmailNotFoundException(UsernameWithEmailNotFoundException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("014", "Email not found", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
