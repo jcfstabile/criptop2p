@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.webservice.UserController;
+import ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers.UserController;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;

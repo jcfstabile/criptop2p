@@ -1,7 +1,7 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
+package ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.UserService;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.services.UserService;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.interfaces.UserControllerInterface;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorList;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.responses.ResponseErrorSimple;
@@ -143,7 +143,7 @@ public class UserController implements UserControllerInterface {
             responses = {
                     @ApiResponse( description = "User information for id", responseCode = "200",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Form.class))),
+                                    schema = @Schema(implementation = FormDTO.class))),
                     @ApiResponse( description = "User not found", responseCode = "404",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseErrorSimple.class))),
@@ -153,7 +153,7 @@ public class UserController implements UserControllerInterface {
             }
     )
     @Override
-    public ResponseEntity<Form> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end) {
+    public ResponseEntity<FormDTO> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end) {
         return ResponseEntity.ok(this.userService.intentionsBetween(id, start, end));
     }
 

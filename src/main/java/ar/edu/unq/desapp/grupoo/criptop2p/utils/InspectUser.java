@@ -3,8 +3,8 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Form;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Report;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.FormDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.ReportDTO;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 @Component
 public class InspectUser {
 
-    public Form offersBetween(User anUser, Date init, Date end, Quoter aQuoter) {
-        return new Form(this.reportsOf(anUser.offersBetween(init, end)), aQuoter);
+    public FormDTO offersBetween(User anUser, Date init, Date end, Quoter aQuoter) {
+        return new FormDTO(this.reportsOf(anUser.offersBetween(init, end)), aQuoter);
     }
 
-    private List<Report> reportsOf(List<Intention> intentions){
+    private List<ReportDTO> reportsOf(List<Intention> intentions){
         return this.intentionsClasifficatedBySymbol(intentions).stream().map(listOfIntention -> {
                 BigDecimal price = BigDecimal.valueOf(Double.parseDouble(new BinanceIntegration().priceOf(listOfIntention.get(0).getCrypto()).getPrice()));
-                return new Report(this.crypto(listOfIntention),
+                return new ReportDTO(this.crypto(listOfIntention),
                            this.costInDollars(listOfIntention),
                            this.amount(listOfIntention),
                            price,

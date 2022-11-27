@@ -2,8 +2,8 @@ package ar.edu.unq.desapp.grupoo.criptop2p.utils;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.Quoter;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.*;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Form;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.Report;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.FormDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.ReportDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,11 +20,11 @@ import static org.mockito.Mockito.mock;
 @DisplayName("Formless Tests")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class FormTest {
+class FormDTOTest {
 
-    List<Report> emptyReports;
-    List<Report> aListOfAReport;
-    List<Report> aListOfTwoReports;
+    List<ReportDTO> emptyReportDTOS;
+    List<ReportDTO> aListOfAReportDTO;
+    List<ReportDTO> aListOfTwoReportDTOS;
     BigDecimal quotationUSD;
 
     Quoter aQuoter;
@@ -32,11 +32,11 @@ class FormTest {
     @BeforeEach
     void setUp(){
         quotationUSD = BigDecimal.valueOf(Double.parseDouble("154.10"));
-        emptyReports = new ArrayList<>(0);
-        Report report0 = new Report(CryptoName.ATOMUSDT, new BigDecimal("42.42"), 2, new BigDecimal("42"), new BigDecimal("1000"));
-        Report report1 = new Report(CryptoName.BNBUSDT, new BigDecimal("442.42"), 3, new BigDecimal("42"), new BigDecimal("1000"));
-        aListOfAReport = new ArrayList<>(List.of(report0));
-        aListOfTwoReports = new ArrayList<>(Arrays.asList(report0, report1));
+        emptyReportDTOS = new ArrayList<>(0);
+        ReportDTO reportDTO0 = new ReportDTO(CryptoName.ATOMUSDT, new BigDecimal("42.42"), 2, new BigDecimal("42"), new BigDecimal("1000"));
+        ReportDTO reportDTO1 = new ReportDTO(CryptoName.BNBUSDT, new BigDecimal("442.42"), 3, new BigDecimal("42"), new BigDecimal("1000"));
+        aListOfAReportDTO = new ArrayList<>(List.of(reportDTO0));
+        aListOfTwoReportDTOS = new ArrayList<>(Arrays.asList(reportDTO0, reportDTO1));
         aQuoter = mock(Quoter.class);
 
     }
@@ -46,57 +46,57 @@ class FormTest {
     @Test
     void testFormHasADate(){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1"));
-        Form form = new Form(emptyReports, aQuoter);
-        assertInstanceOf(Date.class, form.getDate());
-        assertNotNull(form.getDate());
+        FormDTO formDTO = new FormDTO(emptyReportDTOS, aQuoter);
+        assertInstanceOf(Date.class, formDTO.getDate());
+        assertNotNull(formDTO.getDate());
     }
 
     @DisplayName("Form has a list of reports")
     @Test
     void testFormHasAListOfReports(){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1"));
-        Form form = new Form(emptyReports, aQuoter);
-        assertInstanceOf(List.class, form.getReports());
-        assertNotNull(form.getReports());
+        FormDTO formDTO = new FormDTO(emptyReportDTOS, aQuoter);
+        assertInstanceOf(List.class, formDTO.getReports());
+        assertNotNull(formDTO.getReports());
     }
 
     @DisplayName("Form hasnt any report")
     @Test
     void testFormHasNotAnyReportWhenGivenAEmptyList(){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1"));
-        Form form = new Form(emptyReports, aQuoter);
-        List<Report> reports = form.getReports();
-        assertEquals(0, reports.size());
+        FormDTO formDTO = new FormDTO(emptyReportDTOS, aQuoter);
+        List<ReportDTO> reportDTOS = formDTO.getReports();
+        assertEquals(0, reportDTOS.size());
     }
 
     @DisplayName("Form has one report and expected state")
     @Test
     void testFormHasOneExpectStateWhenGivenAListWithAReport(@Mock Quoter aQuoter){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1.2"));
-        Form form = new Form(aListOfAReport, aQuoter);
-        List<Report> reports = form.getReports();
-        assertEquals(new BigDecimal("50.904"), form.getTotalInPesos(aQuoter));
-        assertEquals(new BigDecimal("42.42"), form.getTotalInDollars());
-        assertEquals(1, reports.size());
+        FormDTO formDTO = new FormDTO(aListOfAReportDTO, aQuoter);
+        List<ReportDTO> reportDTOS = formDTO.getReports();
+        assertEquals(new BigDecimal("50.904"), formDTO.getTotalInPesos(aQuoter));
+        assertEquals(new BigDecimal("42.42"), formDTO.getTotalInDollars());
+        assertEquals(1, reportDTOS.size());
     }
 
     @DisplayName("Form has two reports and expected state")
     @Test
     void testFormHasAnExpectStateWhenGivenAListWithTwoReport(@Mock Quoter aQuoter){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1.2"));
-        Form form = new Form(aListOfTwoReports, aQuoter);
-        List<Report> reports = form.getReports();
-        assertEquals(new BigDecimal("581.808"), form.getTotalInPesos(aQuoter));
-        assertEquals(new BigDecimal("484.84"), form.getTotalInDollars());
-        assertEquals(2, reports.size());
+        FormDTO formDTO = new FormDTO(aListOfTwoReportDTOS, aQuoter);
+        List<ReportDTO> reportDTOS = formDTO.getReports();
+        assertEquals(new BigDecimal("581.808"), formDTO.getTotalInPesos(aQuoter));
+        assertEquals(new BigDecimal("484.84"), formDTO.getTotalInDollars());
+        assertEquals(2, reportDTOS.size());
     }
 
     @DisplayName("Form has the total in dollars saved into var totalInDollar")
     @Test
     void testFormHasTheTotalInDollarsSavedINtoVarTotalInDollars(@Mock Quoter aQuoter){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1.2"));
-        Form form = new Form(aListOfTwoReports, aQuoter);
-        assertEquals(new BigDecimal("484.84"), form.getTotalDollars());
+        FormDTO formDTO = new FormDTO(aListOfTwoReportDTOS, aQuoter);
+        assertEquals(new BigDecimal("484.84"), formDTO.getTotalDollars());
     }
 
 
@@ -104,7 +104,7 @@ class FormTest {
     @Test
     void testFormHasTheTotalInDollarsSavedINtoVarTotalInPesos(@Mock Quoter aQuoter){
         Mockito.lenient().when(aQuoter.quotationOfUsd()).thenReturn(new BigDecimal("1.2"));
-        Form form = new Form(aListOfTwoReports, aQuoter);
-        assertEquals(new BigDecimal("581.808"), form.getTotalPesos());
+        FormDTO formDTO = new FormDTO(aListOfTwoReportDTOS, aQuoter);
+        assertEquals(new BigDecimal("581.808"), formDTO.getTotalPesos());
     }
 }

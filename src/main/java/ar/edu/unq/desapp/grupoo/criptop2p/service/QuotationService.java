@@ -12,9 +12,9 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.InternalErrorProces
 import ar.edu.unq.desapp.grupoo.criptop2p.service.interfaces.QuotationServiceInterface;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@Component
 public class QuotationService implements QuotationServiceInterface {
 
     @Autowired
@@ -53,7 +52,7 @@ public class QuotationService implements QuotationServiceInterface {
     }
 
     @Transactional
-    @Override
+    //@Override
     public synchronized void saveCachedQuotations() throws JsonProcessingException, InterruptedException {
         while(busy || invalidCache) { wait(); }
         setBusy();
@@ -65,7 +64,7 @@ public class QuotationService implements QuotationServiceInterface {
                 quotations.stream()
                         .map(quotationDTO ->
                                 new Quotation(CryptoName.valueOf(quotationDTO.getCryptoName()),
-                                              new BigDecimal(quotationDTO.getPrice())
+                                        new BigDecimal(quotationDTO.getPrice())
                                 )
                         )
                         .toList();
@@ -73,7 +72,7 @@ public class QuotationService implements QuotationServiceInterface {
         quotationsRepository.save(cq);
     }
 
-    @Override
+    //@Override
     public synchronized List<QuotationDTO> allQuotations() throws InterruptedException {
         while(busy || invalidCache) { wait(); }
         setBusy();
@@ -83,7 +82,7 @@ public class QuotationService implements QuotationServiceInterface {
         return quotations;
     }
 
-    @Override
+    //@Override
     public BigDecimal priceOf(CryptoName cryptoName) throws InterruptedException {
         return new BigDecimal(
                 this.allQuotations()
@@ -99,7 +98,7 @@ public class QuotationService implements QuotationServiceInterface {
     private List<QuotationDTO> grabAllQuotations() {
         List<CryptoName> cryptos = Arrays.asList(CryptoName.values());
         return cryptos.stream().map(crypto ->
-            binanceIntegrator.priceOf(crypto)
+                binanceIntegrator.priceOf(crypto)
         ).toList();
     }
 
@@ -117,18 +116,18 @@ public class QuotationService implements QuotationServiceInterface {
         int millisOf24hs = 864000000;
         Timestamp now24hsBefore = new Timestamp(System.currentTimeMillis() - millisOf24hs);
         this.quotationsRepository.findAll()
-                                 .forEach(quotations -> {
-                                     if (quotations.getTimeStamp().after(now24hsBefore)) {
-                                         try {
-                                             timedQuotationDTOs.add(
-                                                     timedQuotationDTO(quotations.getTimeStamp(),
-                                                                       quotations.getQuotation(ref.cryptoName))
-                                                     );
-                                         } catch (IOException e) {
-                                             throw new InternalErrorProcessingQuotationsException();
-                                         }
-                                     }
-                                 });
+                .forEach(quotations -> {
+                    if (quotations.getTimeStamp().after(now24hsBefore)) {
+                        try {
+                            timedQuotationDTOs.add(
+                                    timedQuotationDTO(quotations.getTimeStamp(),
+                                            quotations.getQuotation(ref.cryptoName))
+                            );
+                        } catch (IOException e) {
+                            throw new InternalErrorProcessingQuotationsException();
+                        }
+                    }
+                });
         return timedQuotationDTOs;
     }
 }
