@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -30,9 +31,10 @@ public class WebServiceAudit {
             if (logger.isInfoEnabled()) {
                 Long now = System.currentTimeMillis();
                 Timestamp timestamp = new Timestamp(now);
+                var auth = SecurityContextHolder.getContext().getAuthentication();
                 logger.info("Timestamp={} User={} Operation={} Parameter(s)={} Execution time={}ms",
                         timestamp,
-                        "WAITING JWT",
+                        auth == null ? "---" : auth.getPrincipal(),
                         joinPoint.getSignature(),
                         Arrays.toString(joinPoint.getArgs()),
                         now - start);
