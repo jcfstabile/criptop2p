@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,7 +39,14 @@ public class WebSecurityConfig {
 
         http.authorizeRequests().antMatchers("/").permitAll();
         http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+        http.authorizeRequests().antMatchers("/swagger-ui/**").permitAll();
         http.headers().frameOptions().disable();
+
+
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/users").permitAll() // Register
+                .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/intentions/**").permitAll();
 
         return http
                 .csrf().disable()
@@ -64,9 +72,4 @@ public class WebSecurityConfig {
                 .and()
                 .build();
     }
-
-     /** Generate password
-     public static void main(String[] args){ System.out.println( "pass: " + new BCryptPasswordEncoder().encode("1234Aa..")); }
-      */
-
 }
