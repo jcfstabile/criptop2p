@@ -30,10 +30,10 @@ public class InitDbData {
     @Autowired
     UserService userService;
 
-    private final String SIMPSON_ADDRESS = "742 Evergreen Terrace";
+    private static final String simpsonAddress = "742 Evergreen Terrace";
     InitDbData(){
         userBuilder = new UserCreationDTOBuilder(
-                "any", "any", "email@init.data", SIMPSON_ADDRESS,
+                "any", "any", "email@init.data", simpsonAddress,
                 "1234!Aa.", "12345678", "1234567890123456789012");
     }
 
@@ -60,7 +60,7 @@ public class InitDbData {
             var idUser01 = userService.addUser(userBuilder
                     .withName("Marge")
                     .withSurname("Simpson")
-                    .withAddress(SIMPSON_ADDRESS)
+                    .withAddress(simpsonAddress)
                     .withEmail("marge@init.data")
                     .withPassword("Marge1234.")
                     .withWalletAddress("IDD09872").build());
@@ -68,7 +68,7 @@ public class InitDbData {
             var idUser02 = userService.addUser(userBuilder
                     .withName("Homero")
                     .withSurname("Simpson")
-                    .withAddress(SIMPSON_ADDRESS)
+                    .withAddress(simpsonAddress)
                     .withEmail("homero@init.data")
                     .withPassword("Homero1234.")
                     .withWalletAddress("IDD09873").build());

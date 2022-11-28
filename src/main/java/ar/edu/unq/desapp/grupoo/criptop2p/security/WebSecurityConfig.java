@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.security;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.service.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
