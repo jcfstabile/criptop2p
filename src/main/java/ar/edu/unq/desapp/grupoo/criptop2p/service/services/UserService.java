@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.ConstraintViolation;
@@ -73,7 +74,9 @@ public class UserService implements UserServiceInterface {
             throw new UserConstraintViolationException(errors);
         }
         try {
-            return this.userRepository.save(user).getId();
+            this.userRepository.save(user);
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            return user.getId();
         } catch (DataIntegrityViolationException e) {
             throw new DataIncomingConflictException();
         } catch (IllegalStateException e) {
