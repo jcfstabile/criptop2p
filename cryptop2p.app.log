@@ -2611,3 +2611,73 @@ Caused by: java.net.UnknownHostException: api1.binance.com
 2022-11-28 14:10:53.046  INFO 6693 --- [pool-1-thread-1] a.e.u.d.g.criptop2p.integrations.Cache   : Caching all quotations
 2022-11-28 14:11:13.630  INFO 6693 --- [pool-1-thread-1] a.e.u.d.g.criptop2p.integrations.Cache   : All quotations cached
 2022-11-28 14:20:53.046  INFO 6693 --- [pool-1-thread-1] a.e.u.d.g.criptop2p.integrations.Cache   : Caching all quotations
+2022-11-28 15:52:11.876  INFO 10540 --- [restartedMain] a.e.u.d.g.c.Criptop2pApplication         : Starting Criptop2pApplication using Java 17.0.4.1 on chesire with PID 10540 (/home/chesire/Escritorio/Desa/criptop2p/build/classes/java/main started by root in /home/chesire/Escritorio/Desa/criptop2p)
+2022-11-28 15:52:11.878  INFO 10540 --- [restartedMain] a.e.u.d.g.c.Criptop2pApplication         : No active profile set, falling back to 1 default profile: "default"
+2022-11-28 15:52:11.984  INFO 10540 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-11-28 15:52:11.984  INFO 10540 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-11-28 15:52:13.224  INFO 10540 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-28 15:52:13.304  INFO 10540 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 69 ms. Found 3 JPA repository interfaces.
+2022-11-28 15:52:14.411  INFO 10540 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-11-28 15:52:14.427  INFO 10540 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-28 15:52:14.427  INFO 10540 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-11-28 15:52:14.503  INFO 10540 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-28 15:52:14.504  INFO 10540 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2519 ms
+2022-11-28 15:52:14.544  INFO 10540 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-11-28 15:52:14.803  INFO 10540 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-11-28 15:52:14.817  INFO 10540 --- [restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:criptop2p'
+2022-11-28 15:52:15.007  INFO 10540 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-28 15:52:15.104  INFO 10540 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-11-28 15:52:15.263  INFO 10540 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-11-28 15:52:15.434  INFO 10540 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2022-11-28 15:52:15.617  WARN 10540 --- [restartedMain] o.h.t.d.java.JavaTypeDescriptorRegistry  : HHH000481: Encountered Java type [class ar.edu.unq.desapp.grupoo.criptop2p.model.TypeIntention] for which we could not locate a JavaTypeDescriptor and which does not appear to implement equals and/or hashCode.  This can lead to significant performance problems when performing equality/dirty checking involving this Java type.  Consider registering a custom JavaTypeDescriptor or at least implementing equals/hashCode.
+2022-11-28 15:52:16.253  INFO 10540 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-11-28 15:52:16.262  INFO 10540 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-11-28 15:52:16.675  INFO 10540 --- [pool-1-thread-1] a.e.u.d.g.criptop2p.integrations.Cache   : Caching all quotations
+2022-11-28 15:52:17.580  INFO 10540 --- [restartedMain] a.e.u.d.g.criptop2p.service.InitDbData   : Added fake Users on H2 with: org.h2.Driver
+2022-11-28 15:52:30.772  INFO 10540 --- [pool-1-thread-1] a.e.u.d.g.criptop2p.integrations.Cache   : All quotations cached
+2022-11-28 15:52:31.221  INFO 10540 --- [restartedMain] a.e.u.d.g.criptop2p.service.InitDbData   : Added fake Intentions on H2 with: org.h2.Driver
+2022-11-28 15:52:31.544  INFO 10540 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@12934cbb, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@22a99f63, org.springframework.security.web.context.SecurityContextPersistenceFilter@3c505fb7, org.springframework.security.web.header.HeaderWriterFilter@301a4ebf, org.springframework.security.web.authentication.logout.LogoutFilter@7df8ec49, ar.edu.unq.desapp.grupoo.criptop2p.security.JWTAuthorizationFilter@18b9fc8b, ar.edu.unq.desapp.grupoo.criptop2p.security.JWTAuthenticatorFilter@4232a5d9, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@50d615aa, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@c446957, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@50d88e14, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3011ffe9, org.springframework.security.web.session.SessionManagementFilter@29693905, org.springframework.security.web.access.ExceptionTranslationFilter@3d569b37, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@9c54bc8]
+2022-11-28 15:52:31.705  WARN 10540 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-11-28 15:52:32.972  INFO 10540 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-11-28 15:52:33.036  INFO 10540 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-11-28 15:52:33.055  INFO 10540 --- [restartedMain] a.e.u.d.g.c.Criptop2pApplication         : Started Criptop2pApplication in 21.685 seconds (JVM running for 22.445)
+2022-11-28 15:55:09.863  INFO 10540 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-11-28 15:55:09.864  INFO 10540 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-11-28 15:55:09.865  INFO 10540 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2022-11-28 15:55:10.764  INFO 10540 --- [http-nio-8080-exec-7] a.e.u.d.g.c.aspect.WebServiceAudit       : Timestamp=2022-11-28 15:55:10.763 User=ar.edu.unq.desapp.grupoo.criptop2p.security.UserDetailsImpl@e341e5 Operation=Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest) Parameter(s)=[SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@5ad4bda0]] Execution time=5ms
+2022-11-28 15:55:11.525  INFO 10540 --- [http-nio-8080-exec-8] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 558 ms
+2022-11-28 15:55:11.566  INFO 10540 --- [http-nio-8080-exec-8] a.e.u.d.g.c.aspect.WebServiceAudit       : Timestamp=2022-11-28 15:55:11.566 User=ar.edu.unq.desapp.grupoo.criptop2p.security.UserDetailsImpl@6e5818f3 Operation=String org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale) Parameter(s)=[SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@66aeb66c], /v3/api-docs, es_AR] Execution time=613ms
+2022-11-28 16:02:16.675  INFO 10540 --- [pool-1-thread-1] a.e.u.d.g.criptop2p.integrations.Cache   : Caching all quotations
+2022-11-28 16:02:32.228  INFO 10540 --- [pool-1-thread-1] a.e.u.d.g.criptop2p.integrations.Cache   : All quotations cached
+2022-11-28 16:02:43.899  INFO 10540 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-11-28 16:02:44.050 ERROR 10540 --- [HikariPool-1 connection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Error thrown while acquiring connection from data source
+
+org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos esta abierta en modo EXCLUSIVO; no puede abrir conexiones adicionales
+The database is open in exclusive mode; can not open additional connections [90135-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:678) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.message.DbException.get(DbException.java:223) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.message.DbException.get(DbException.java:199) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.message.DbException.get(DbException.java:188) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.engine.SessionLocal.checkSuspended(SessionLocal.java:1240) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.engine.SessionLocal.transitionToState(SessionLocal.java:1232) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.engine.SessionLocal.setCurrentCommand(SessionLocal.java:1210) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.engine.SessionLocal.startStatementWithinTransaction(SessionLocal.java:1658) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.command.Command.executeQuery(Command.java:184) ~[h2-2.1.214.jar:2.1.214]
+	at org.h2.jdbc.JdbcConnection.isReadOnly(JdbcConnection.java:538) ~[h2-2.1.214.jar:2.1.214]
+	at com.zaxxer.hikari.pool.PoolBase.setupConnection(PoolBase.java:408) ~[HikariCP-4.0.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:369) ~[HikariCP-4.0.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206) ~[HikariCP-4.0.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476) ~[HikariCP-4.0.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.access$100(HikariPool.java:71) ~[HikariCP-4.0.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:726) ~[HikariCP-4.0.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:712) ~[HikariCP-4.0.3.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2022-11-28 16:02:44.245  WARN 10540 --- [SpringApplicationShutdownHook] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-214]
+2022-11-28 16:02:44.247  INFO 10540 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-11-28 16:02:44.305  INFO 10540 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

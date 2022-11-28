@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class ResponseHandlerTest {
 
@@ -289,6 +291,71 @@ class ResponseHandlerTest {
                 () -> assertEquals("013", body.getErrorCode()),
                 () -> assertEquals("Error on processing", body.getMessage()),
                 () -> assertEquals("Internal error processing quotations", body.getError())
+        );
+    }
+
+
+    @DisplayName("When an username with email not found, an exception is trown")
+    @Test
+    void handlehandleUsernameWithEmailNotFoundException(){
+        UsernameWithEmailNotFoundException usernameWithEmailNotFoundException = new UsernameWithEmailNotFoundException("wrong_email@never.cl");
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleUsernameWithEmailNotFoundException(usernameWithEmailNotFoundException);
+
+        assertNotNull(responseEntity);
+        assertEquals("500 INTERNAL_SERVER_ERROR", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("014", body.getErrorCode()),
+                () -> assertEquals("Email not found", body.getMessage()),
+                () -> assertEquals("User with email: wrong_email@never.cl cant be found", body.getError())
+        );
+    }
+
+    @DisplayName("IOException On Attempt Authentication Exception")
+    @Test
+    void handleIOExceptionOnAttemptAuthenticationException(){
+        IOExceptionOnAttemptAuthenticationException iOExceptionOnAttemptAuthenticationException = new IOExceptionOnAttemptAuthenticationException();
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleIOExceptionOnAttemptAuthentication(iOExceptionOnAttemptAuthenticationException);
+
+        assertNotNull(responseEntity);
+        assertEquals("500 INTERNAL_SERVER_ERROR", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("015", body.getErrorCode()),
+                () -> assertEquals("Error on authentication", body.getMessage()),
+                () -> assertEquals(null, body.getError())
+        );
+    }
+
+    @DisplayName("IncorrectDateFormatException")
+    @Test
+    void handleIncorrectDateFormatException(){
+        DateTimeParseException ex = mock(DateTimeParseException.class);
+        IncorrectDateFormatException incorrectDateFormatException = new IncorrectDateFormatException(ex);
+        ResponseHandler responseHandler = new ResponseHandler();
+        ResponseEntity<Object> responseEntity = responseHandler.handleIncorrectDataFormatException(incorrectDateFormatException);
+
+        assertNotNull(responseEntity);
+        assertEquals("409 CONFLICT", responseEntity.getStatusCode().toString());
+        assertTrue(responseEntity.hasBody());
+
+        ResponseErrorSimple body = (ResponseErrorSimple) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertAll("Should return a error body of a major error",
+                () -> assertEquals("016", body.getErrorCode()),
+                () -> assertEquals("Date/s can't be format", body.getMessage()),
+                () -> assertEquals(null, body.getError())
         );
     }
 }
