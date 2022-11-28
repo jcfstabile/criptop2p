@@ -137,7 +137,7 @@ public class UserController implements UserControllerInterface {
     @Parameter(name = "id", description = "Id of the user to retrieve intentions")
     @Parameter(name = "start", description = "Date to start, with format MM/dd/yyyy")
     @Parameter(name = "end", description = "Date to end, with format MM/dd/yyyy")
-    @GetMapping("/users/intentions_between/{id}/?start={start}&end={end}")
+    @GetMapping("/users/between/{id}")
     @Operation(
             summary = "Get user form about amount operated between 2 dates",
             responses = {
@@ -153,11 +153,28 @@ public class UserController implements UserControllerInterface {
             }
     )
     @Override
-    public ResponseEntity<FormDTO> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end) {
+    public ResponseEntity<FormDTO> intentionsBetween(@PathVariable Long id, @RequestParam String start, @RequestParam String end) {
         return ResponseEntity.ok(this.userService.intentionsBetween(id, start, end));
     }
 
     @PatchMapping("users/{userId}/intentions/{intentionId}")
+    @Parameter(name = "userId", description = "Id of the user to process intention")
+    @Parameter(name = "intentionID", description = "Id of the intention to process")
+    @Parameter(name = "action", description = "Action to process: This can be: accept, delivery, payment or cancel")
+    @Operation(
+            summary = "Process Intention of an user",
+            responses = {
+                    @ApiResponse( description = "Process sucessfull", responseCode = "200",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = FormDTO.class))),
+                    @ApiResponse( description = "User not found", responseCode = "404",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseErrorSimple.class))),
+                    @ApiResponse( description = "Intention not found", responseCode = "505",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseErrorSimple.class))),
+            }
+    )
     @Override
     public ResponseEntity<IntentionDTO> processIntention(@PathVariable Long userId, @PathVariable Long intentionId,
                                                    @RequestParam String action){
