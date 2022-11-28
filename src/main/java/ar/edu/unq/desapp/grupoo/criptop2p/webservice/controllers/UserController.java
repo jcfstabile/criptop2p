@@ -137,7 +137,7 @@ public class UserController implements UserControllerInterface {
     @Parameter(name = "id", description = "Id of the user to retrieve intentions")
     @Parameter(name = "start", description = "Date to start, with format MM/dd/yyyy")
     @Parameter(name = "end", description = "Date to end, with format MM/dd/yyyy")
-    @GetMapping("/users/between/{id}/start={start}&end={end}")
+    @GetMapping("/users/between/{id}")
     @Operation(
             summary = "Get user form about amount operated between 2 dates",
             responses = {
@@ -153,7 +153,7 @@ public class UserController implements UserControllerInterface {
             }
     )
     @Override
-    public ResponseEntity<FormDTO> intentionsBetween(@PathVariable Long id, @PathVariable String start, @PathVariable String end) {
+    public ResponseEntity<FormDTO> intentionsBetween(@PathVariable Long id, @RequestParam String start, @RequestParam String end) {
         return ResponseEntity.ok(this.userService.intentionsBetween(id, start, end));
     }
 
