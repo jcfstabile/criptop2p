@@ -137,7 +137,7 @@ public class UserController implements UserControllerInterface {
     @Parameter(name = "id", description = "Id of the user to retrieve intentions")
     @Parameter(name = "start", description = "Date to start, with format MM/dd/yyyy")
     @Parameter(name = "end", description = "Date to end, with format MM/dd/yyyy")
-    @GetMapping("/users/intentions_between/{id}/?start={start}&end={end}")
+    @GetMapping("/users/between/{id}/start={start}&end={end}")
     @Operation(
             summary = "Get user form about amount operated between 2 dates",
             responses = {

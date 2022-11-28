@@ -64,4 +64,9 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleInternalErrorProcessingQuotation(InternalErrorProcessingQuotationsException exception){
         return new ResponseEntity<>(new ResponseErrorSimple("013", "Error on processing", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler({IncorrectDateFormatException.class})
+    public ResponseEntity<Object> handleIncorrectDataFormatException(IncorrectDateFormatException exception){
+        return new ResponseEntity<>(new ResponseErrorSimple("003", "Date/s can't be format", exception.getMessage()), HttpStatus.CONFLICT);
+    }
 }
