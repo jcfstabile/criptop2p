@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.security;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IOExceptionOnAttemptAuthenticationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ public class JWTAuthenticatorFilter extends UsernamePasswordAuthenticationFilter
         try {
             authCredentials = new ObjectMapper().readValue(request.getReader(), AuthCredentials.class);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IOExceptionOnAttemptAuthenticationException();
         }
 
         var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

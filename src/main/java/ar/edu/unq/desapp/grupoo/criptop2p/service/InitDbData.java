@@ -30,9 +30,10 @@ public class InitDbData {
     @Autowired
     UserService userService;
 
+    String SIMPSON_ADDRESS = "742 Evergreen Terrace";
     InitDbData(){
         userBuilder = new UserCreationDTOBuilder(
-                "any", "any", "email@init.data", "742 Evergreen Terrace",
+                "any", "any", "email@init.data", SIMPSON_ADDRESS,
                 "1234!Aa.", "12345678", "1234567890123456789012");
     }
 
@@ -46,7 +47,6 @@ public class InitDbData {
     @PostConstruct
     void init(){
         if(driverClassName.equals("org.h2.Driver")) {
-//<<<<<<< HEAD
 
             var idUser00 = userService.addUser(userBuilder
                     .withName("Apu")
@@ -60,7 +60,7 @@ public class InitDbData {
             var idUser01 = userService.addUser(userBuilder
                     .withName("Marge")
                     .withSurname("Simpson")
-                    .withAddress("742 Evergreen Terrace")
+                    .withAddress(SIMPSON_ADDRESS)
                     .withEmail("marge@init.data")
                     .withPassword("Marge1234.")
                     .withWalletAddress("IDD09872").build());
@@ -68,7 +68,7 @@ public class InitDbData {
             var idUser02 = userService.addUser(userBuilder
                     .withName("Homero")
                     .withSurname("Simpson")
-                    .withAddress("742 Evergreen Terrace")
+                    .withAddress(SIMPSON_ADDRESS)
                     .withEmail("homero@init.data")
                     .withPassword("Homero1234.")
                     .withWalletAddress("IDD09873").build());
@@ -80,17 +80,6 @@ public class InitDbData {
                     .withEmail("ned@init.data")
                     .withPassword("Flanders1234.")
                     .withWalletAddress("IDD09874").build());
-//=======
-//            UserCreationDTO userCreationDTO00 = this.userBuilder.withEmail("email1@init.data").withWalletAddress("IDD09871").build();
-//            UserCreationDTO userCreationDTO01 = this.userBuilder.withEmail("email2@init.data").withWalletAddress("IDD09872").build();
-//            UserCreationDTO userCreationDTO02 = this.userBuilder.withEmail("email3@init.data").withWalletAddress("IDD09873").build();
-//            UserCreationDTO userCreationDTO03 = this.userBuilder.withName("Alf").withEmail("email4@init.data").withWalletAddress("IDD09874").build();
-//
-//            Long idUser00 = this.userService.addUser(userCreationDTO00);
-//            Long idUser01 = this.userService.addUser(userCreationDTO01);
-//            Long idUser02 = this.userService.addUser(userCreationDTO02);
-//            Long idUser03 = this.userService.addUser(userCreationDTO03);
-//>>>>>>> dev
 
             logger.info("Added fake Users on H2 with: " + driverClassName );
 

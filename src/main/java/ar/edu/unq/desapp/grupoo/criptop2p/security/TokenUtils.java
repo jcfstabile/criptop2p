@@ -10,8 +10,10 @@ import java.util.*;
 
 public class TokenUtils {
     
-    private final static String ACCESS_TOKEN_SECRET = "secret_token_eca1c4De7nEc0D50515";
-    private final static Long ACCESS_TOKEN_VALIDITY_SECONDS = (long) 7 * 24 * 60 * 60;
+    private static final String ACCESS_TOKEN_SECRET = "secret_token_eca1c4De7nEc0D50515";
+    private static final Long ACCESS_TOKEN_VALIDITY_SECONDS = (long) 7 * 24 * 60 * 60;
+
+    private TokenUtils(){}
 
     public static String createToken(String name, String email){
         var expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS * 1000;

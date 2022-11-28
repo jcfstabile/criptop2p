@@ -4,10 +4,11 @@ import ar.edu.unq.desapp.grupoo.criptop2p.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
-public class UserDetailsImpl implements UserDetails {
+public class UserDetailsImpl implements UserDetails, Serializable {
     private final User user;
 
     public UserDetailsImpl(User user){
