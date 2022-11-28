@@ -1,15 +1,24 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
+import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserCreationDTOBuilder;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserInfoDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DataIncomingConflictException;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.DifferenceWithCurrentPriceException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserConstraintViolationException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.UserNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.services.UserService;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import java.math.BigDecimal;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("UserService Tests")
@@ -34,6 +43,12 @@ class UserServiceTest {
     UserConstraintViolationException userConstraintViolationException;
     @Autowired
     UserService userService;
+
+    @AfterEach
+    void eraise(){
+        List<UserInfoDTO> users = userService.findAll();
+        users.forEach(user -> userService.deleteUserById(user.getId()));
+    }
 
     @DisplayName("When an User is correctly formed is added")
     @Test
@@ -145,5 +160,39 @@ class UserServiceTest {
         UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> userService.findByID(id));
 
         assertEquals("Could not find user " + id.toString(), userNotFoundException.getMessage());
+    }
+
+    @SneakyThrows
+    @DisplayName("When the offered price is higher current price throws an exception")
+    @Test
+    void testWhenTheOfferedPriceIshigherCurrentPriceThrowsAnException() {
+        UserCreationDTO anUserCreationDTO = anyUser.withEmail("onionsoup@here.dom").withName("Pepito").withSurname("Valenzuelo").withWalletAddress("asdthjuk").withCvu("7635413249870645732175").build();
+        Long userId = userService.addUser(anUserCreationDTO);
+        BigDecimal quotation = new BigDecimal(new BinanceIntegration().priceOf(CryptoName.ATOMUSDT).getPrice());
+        BigDecimal twentyOnePorcent = quotation.multiply(new BigDecimal("21")).divide(new BigDecimal("100"));
+        BigDecimal offeredPrice = quotation.add(twentyOnePorcent);
+        String offeredPriceSt = offeredPrice.toString();
+        IntentionCreationDTO intentionCreation = new IntentionCreationDTO(1, offeredPriceSt, "BUY", "ATOMUSDT");
+        Exception exception = assertThrows(DifferenceWithCurrentPriceException.class, () ->
+                userService.offer(userId, intentionCreation));
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains("has a difference of 20% or more with"));
+    }
+
+    @SneakyThrows
+    @DisplayName("When the offered price is lower current price throws an exception")
+    @Test
+    void testWhenTheOfferedPriceIsLowerCurrentPriceThrowsAnException() {
+        UserCreationDTO anUserCreationDTO = anyUser.withEmail("onionsoup@here.dom").withName("Pepito").withSurname("Valenzuelo").withWalletAddress("asdthjuk").withCvu("7635413249870645732175").build();
+        Long userId = userService.addUser(anUserCreationDTO);
+        BigDecimal quotation = new BigDecimal(new BinanceIntegration().priceOf(CryptoName.ATOMUSDT).getPrice());
+        BigDecimal twentyOnePorcent = quotation.multiply(new BigDecimal("21")).divide(new BigDecimal("100"));
+        BigDecimal offeredPrice = quotation.subtract(twentyOnePorcent);
+        String offeredPriceSt = offeredPrice.toString();
+        IntentionCreationDTO intentionCreation = new IntentionCreationDTO(1, offeredPriceSt, "BUY", "ATOMUSDT");
+        Exception exception = assertThrows(DifferenceWithCurrentPriceException.class, () ->
+                userService.offer(userId, intentionCreation));
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains("has a difference of 20% or more with"));
     }
 }

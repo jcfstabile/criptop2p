@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class UserService implements UserServiceInterface {
     @Autowired
     private UserRepository userRepository;
