@@ -60,10 +60,9 @@ class UsersEndToEndTest {
         HttpEntity<String> request = new HttpEntity<>(newUserJson.toString(), headers);
 
         assertThat(restTemplate.postForObject(HTTP_LOCALHOST + port + "/api/users", request, String.class))
-                .contains("id").contains("1")
+                .contains("id")
                 .contains("name").contains("surname");
 
-//        assertThat(restTemplate.getForObject(HTTP_LOCALHOST + port + "/api/users", String.class))
         assertThat(restTemplate.exchange(HTTP_LOCALHOST + port + "/api/users", HttpMethod.GET, request, String.class).getBody())
                 .contains("id")
                 .contains("name")

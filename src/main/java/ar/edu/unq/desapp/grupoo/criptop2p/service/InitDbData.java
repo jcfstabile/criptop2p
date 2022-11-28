@@ -30,7 +30,7 @@ public class InitDbData {
     @Autowired
     UserService userService;
 
-    String SIMPSON_ADDRESS = "742 Evergreen Terrace";
+    private final String SIMPSON_ADDRESS = "742 Evergreen Terrace";
     InitDbData(){
         userBuilder = new UserCreationDTOBuilder(
                 "any", "any", "email@init.data", SIMPSON_ADDRESS,
