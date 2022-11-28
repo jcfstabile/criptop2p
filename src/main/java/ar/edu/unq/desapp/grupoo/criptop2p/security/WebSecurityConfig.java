@@ -35,7 +35,6 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         JWTAuthenticatorFilter jwtAuthenticatorFilter = new JWTAuthenticatorFilter();
         jwtAuthenticatorFilter.setAuthenticationManager(authenticationManager);
-        jwtAuthenticatorFilter.setFilterProcessesUrl("/api/login");
 
         http.authorizeRequests().antMatchers("/").permitAll();
         http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
@@ -44,6 +43,7 @@ public class WebSecurityConfig {
 
 
         http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/login").permitAll() // Login
                 .antMatchers(HttpMethod.POST, "/api/users").permitAll() // Register
                 .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/intentions/**").permitAll();

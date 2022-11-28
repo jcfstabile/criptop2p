@@ -13,12 +13,12 @@ public class TokenUtils {
     private final static String ACCESS_TOKEN_SECRET = "secret_token_eca1c4De7nEc0D50515";
     private final static Long ACCESS_TOKEN_VALIDITY_SECONDS = (long) 7 * 24 * 60 * 60;
 
-    public static String createToken(String nombre, String email){
+    public static String createToken(String name, String email){
         var expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS * 1000;
         var expirationDate = new Date(System.currentTimeMillis() + expirationTime);
 
         Map<String, Object> extra = new HashMap<>();
-        extra.put("nombre", nombre);
+        extra.put("name", name);
 
         return Jwts.builder()
                 .setSubject(email)
