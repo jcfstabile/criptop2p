@@ -16,9 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 
 
 @DisplayName("User end-to-end Test")
@@ -27,6 +25,7 @@ class UsersEndToEndTest {
 
     private static final String HTTP_LOCALHOST = "http://localhost:";
 
+    private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBoZXJlLmRhdGEiLCJleHAiOjE2Njk4NTk4ODUsIm5vbWJyZSI6ImFueSJ9.T8JVOnWHTcBqL5DBZsUYyEcno6s7FpO3reXSON0VnVY";
     @Value("${local.server.port}")
     private int port;
 
@@ -46,6 +45,7 @@ class UsersEndToEndTest {
     @Test
     void getUsersTest() throws Exception {
 
+
         JSONObject newUserJson = new JSONObject();
         newUserJson.put("name", "Bert");
         newUserJson.put("surname", "Olagan");
@@ -56,13 +56,14 @@ class UsersEndToEndTest {
         newUserJson.put("password", "12345aA$");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", TOKEN);
         HttpEntity<String> request = new HttpEntity<>(newUserJson.toString(), headers);
 
         assertThat(restTemplate.postForObject(HTTP_LOCALHOST + port + "/api/users", request, String.class))
-                .contains("id").contains("1")
+                .contains("id")
                 .contains("name").contains("surname");
 
-        assertThat(restTemplate.getForObject(HTTP_LOCALHOST + port + "/api/users", String.class))
+        assertThat(restTemplate.exchange(HTTP_LOCALHOST + port + "/api/users", HttpMethod.GET, request, String.class).getBody())
                 .contains("id")
                 .contains("name")
                 .contains("surname")
@@ -84,6 +85,7 @@ class UsersEndToEndTest {
         newUserJson.put("password", "12345aA$");
         HttpHeaders headers_register = new HttpHeaders();
         headers_register.setContentType(MediaType.APPLICATION_JSON);
+        headers_register.set("Authorization", TOKEN);
         HttpEntity<String> request_register = new HttpEntity<>(newUserJson.toString(), headers_register);
         UserDTO anUser = restTemplate.postForObject(HTTP_LOCALHOST + port + "/api/users", request_register, UserDTO.class);
 
@@ -103,6 +105,7 @@ class UsersEndToEndTest {
 
         HttpHeaders headers_offer = new HttpHeaders();
         headers_offer.setContentType(MediaType.APPLICATION_JSON);
+        headers_offer.set("Authorization", TOKEN);
         HttpEntity<String> request_offer = new HttpEntity<>(newIntentionJson.toString(), headers_offer);
         String url = "/api/users/" + anUser.getId() + "/intentions";
         String intentionST = restTemplate.postForObject(HTTP_LOCALHOST + port + url, request_offer, String.class);

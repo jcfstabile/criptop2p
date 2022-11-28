@@ -10,48 +10,57 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ResponseHandler  extends ResponseEntityExceptionHandler {
     @ExceptionHandler({UserNotFoundException.class})
-    public ResponseEntity<Object> handleUserNotFound(UserNotFoundException exception){
+    public ResponseEntity<Object> handleUserNotFound(UserNotFoundException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("001", "User not found", exception.getMessage()), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler({UserConstraintViolationException.class})
-    public ResponseEntity<Object> handleUserConstraintViolation(UserConstraintViolationException exception){
+    public ResponseEntity<Object> handleUserConstraintViolation(UserConstraintViolationException exception) {
         return new ResponseEntity<>(new ResponseErrorList("002", "User data malformed", exception.getErrors()), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler({DataIncomingConflictException.class})
-    public ResponseEntity<Object> handleDataConflictException(DataIncomingConflictException exception){
+    public ResponseEntity<Object> handleDataConflictException(DataIncomingConflictException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("003", "User was already registered", exception.getError()), HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler({ServerCantHandleRequestNowException.class})
-    public ResponseEntity<Object> handleServerCantHandleRequestException(ServerCantHandleRequestNowException exception){
+    public ResponseEntity<Object> handleServerCantHandleRequestException(ServerCantHandleRequestNowException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("004", "A major error had occurred", exception.getError()), HttpStatus.SERVICE_UNAVAILABLE);
     }
+
     @ExceptionHandler({InterruptedErrorException.class})
-    public ResponseEntity<Object> handleInterruptedErrorException(InterruptedErrorException exception){
+    public ResponseEntity<Object> handleInterruptedErrorException(InterruptedErrorException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("005", "A major error had occurred", exception.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
     }
+
     @ExceptionHandler({IntentionNotFoundException.class})
-    public ResponseEntity<Object> handleIntentionNotFoundException(IntentionNotFoundException exception){
+    public ResponseEntity<Object> handleIntentionNotFoundException(IntentionNotFoundException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("006", "Intention not found", exception.getMessage()), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler({NoValidActionErrorException.class})
-    public ResponseEntity<Object> handleNoValidActionErrorException(NoValidActionErrorException exception){
+    public ResponseEntity<Object> handleNoValidActionErrorException(NoValidActionErrorException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("007", "Not a valid action", exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler({StatusChangeNotAllowedRestException.class})
-    public ResponseEntity<Object> handleStatusChangeNotAllowedException(StatusChangeNotAllowedRestException exception){
+    public ResponseEntity<Object> handleStatusChangeNotAllowedException(StatusChangeNotAllowedRestException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("008", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler({IncorrectStatusException.class})
-    public ResponseEntity<Object> handleIncorrectStatusException(IncorrectStatusException exception){
+    public ResponseEntity<Object> handleIncorrectStatusException(IncorrectStatusException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("009", "Incorrect state", exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler({IncorrectUserException.class})
-    public ResponseEntity<Object> handleIncorrectUserException(IncorrectUserException exception){
+    public ResponseEntity<Object> handleIncorrectUserException(IncorrectUserException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("010", "Incorrect user", exception.getMessage()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({DifferenceWithCurrentPriceException.class})
-    public ResponseEntity<Object> handleDifferenceWithCurrentPriceException(DifferenceWithCurrentPriceException exception){
+    public ResponseEntity<Object> handleDifferenceWithCurrentPriceException(DifferenceWithCurrentPriceException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("011", "The action can not be terminated", exception.getMessage()), HttpStatus.CONFLICT);
     }
 
@@ -61,12 +70,22 @@ public class ResponseHandler  extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({InternalErrorProcessingQuotationsException.class})
-    public ResponseEntity<Object> handleInternalErrorProcessingQuotation(InternalErrorProcessingQuotationsException exception){
+    public ResponseEntity<Object> handleInternalErrorProcessingQuotation(InternalErrorProcessingQuotationsException exception) {
         return new ResponseEntity<>(new ResponseErrorSimple("013", "Error on processing", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler({UsernameWithEmailNotFoundException.class})
+    public ResponseEntity<Object> handleUsernameWithEmailNotFoundException(UsernameWithEmailNotFoundException exception) {
+        return new ResponseEntity<>(new ResponseErrorSimple("014", "Email not found", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({IOExceptionOnAttemptAuthenticationException.class})
+    public ResponseEntity<Object> handleIOExceptionOnAttemptAuthentication(IOExceptionOnAttemptAuthenticationException exception) {
+        return new ResponseEntity<>(new ResponseErrorSimple("015", "Error on authentication", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler({IncorrectDateFormatException.class})
-    public ResponseEntity<Object> handleIncorrectDataFormatException(IncorrectDateFormatException exception){
-        return new ResponseEntity<>(new ResponseErrorSimple("003", "Date/s can't be format", exception.getMessage()), HttpStatus.CONFLICT);
+    public ResponseEntity<Object> handleIncorrectDataFormatException(IncorrectDateFormatException exception) {
+        return new ResponseEntity<>(new ResponseErrorSimple("016", "Date/s can't be format", exception.getMessage()), HttpStatus.CONFLICT);
     }
 }
