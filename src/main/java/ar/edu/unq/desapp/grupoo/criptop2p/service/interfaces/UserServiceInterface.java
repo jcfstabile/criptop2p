@@ -3,9 +3,12 @@ package ar.edu.unq.desapp.grupoo.criptop2p.service.interfaces;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
+@Transactional
 public interface UserServiceInterface {
     Long addUser(UserCreationDTO userCreationDTO);
     UserDTO findByID(Long anId);

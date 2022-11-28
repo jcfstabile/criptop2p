@@ -36,7 +36,7 @@ public class Intention {
 
     private boolean halfDone;
 
-    @JoinColumn(name = "offered_id", nullable = true)
+    @JoinColumn(name = "offered_id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User offered;
 
