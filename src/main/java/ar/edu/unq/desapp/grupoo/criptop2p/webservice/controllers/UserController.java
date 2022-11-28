@@ -158,6 +158,22 @@ public class UserController implements UserControllerInterface {
     }
 
     @PatchMapping("users/{userId}/intentions/{intentionId}")
+    @Parameter(name = "userId", description = "Id of the user to process intention")
+    @Parameter(name = "intentionID", description = "Id of the intention to process")
+    @Operation(
+            summary = "Process Intention of an user",
+            responses = {
+                    @ApiResponse( description = "Process sucessfull", responseCode = "200",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = FormDTO.class))),
+                    @ApiResponse( description = "User not found", responseCode = "404",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseErrorSimple.class))),
+                    @ApiResponse( description = "Intention not found", responseCode = "505",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseErrorSimple.class))),
+            }
+    )
     @Override
     public ResponseEntity<IntentionDTO> processIntention(@PathVariable Long userId, @PathVariable Long intentionId,
                                                    @RequestParam String action){
