@@ -65,7 +65,7 @@ public class User implements Serializable {
     String cvu;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "offered")
-    transient List<Intention> offers;
+    List<Intention> offers;
 
     @Column(name="points", nullable = false)
     private int points;

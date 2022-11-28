@@ -9,6 +9,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers.UserController;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
 
+@Disabled
 @DisplayName("User end-to-end Test")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class UsersEndToEndTest {
