@@ -47,7 +47,7 @@ class UserServiceTest {
     @AfterEach
     void eraise(){
         List<UserInfoDTO> users = userService.findAll();
-        users.stream().forEach(user -> userService.deleteUserById(user.getId()));
+        users.forEach(user -> userService.deleteUserById(user.getId()));
     }
 
     @DisplayName("When an User is correctly formed is added")
