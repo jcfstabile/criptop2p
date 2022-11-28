@@ -12,8 +12,8 @@ public class UserLoginDTO {
     private final String user;
     private final String password;
 
-    public UserLoginDTO(String user, String password) {
-        this.user = user;
+    public UserLoginDTO(String email, String password) {
+        this.user = email;
         this.password = password;
     }
 }
