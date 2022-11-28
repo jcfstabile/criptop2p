@@ -160,6 +160,7 @@ public class UserController implements UserControllerInterface {
     @PatchMapping("users/{userId}/intentions/{intentionId}")
     @Parameter(name = "userId", description = "Id of the user to process intention")
     @Parameter(name = "intentionID", description = "Id of the intention to process")
+    @Parameter(name = "action", description = "Action to process: This can be: accept, delivery, payment or cancel")
     @Operation(
             summary = "Process Intention of an user",
             responses = {
