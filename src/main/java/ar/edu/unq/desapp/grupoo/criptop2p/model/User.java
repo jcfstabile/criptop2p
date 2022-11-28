@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.utils.ValidatorCryptoPrice;
 import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
 @Entity
 @Table(name="users")
 @Validated
-public class User{
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
