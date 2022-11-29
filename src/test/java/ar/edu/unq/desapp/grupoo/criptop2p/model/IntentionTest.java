@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
@@ -58,6 +59,21 @@ class IntentionTest {
         assertEquals(2022, intentionBetween.timestamp.toLocalDateTime().toLocalDate().getYear());
         assertTrue(intentionBetween.isBetween(init, end));
     }
+
+
+    @DisplayName("")
+    @Test
+    void testotherUserIsNotTheDemander(){
+        User otherOtherUser = anyUser.withEmail("heasd@here.dom").build();
+        String price = new BinanceIntegration().priceOf(CryptoName.ATOMUSDT).getPrice();
+        BigDecimal currentPrice = new BigDecimal(price);
+        anUser.offer(intention, currentPrice);
+        assertFalse(intention.isItsDemander(anUser));
+        otherUser.accept(intention, currentPrice);
+        assertFalse(intention.isItsDemander(otherOtherUser));
+    }
+
+
 
     @DisplayName("An intention is not between these dates")
     @Test
