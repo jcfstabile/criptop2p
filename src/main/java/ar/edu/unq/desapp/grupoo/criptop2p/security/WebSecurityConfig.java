@@ -41,7 +41,7 @@ public class WebSecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/intentions/**").permitAll();
 
         return http
-                .csrf().disable()
+                .csrf().disable() //NOSONAR
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
