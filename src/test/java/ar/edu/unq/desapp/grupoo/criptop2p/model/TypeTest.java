@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import org.junit.jupiter.api.BeforeEach;
