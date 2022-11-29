@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 @Entity
 @Table(name="intentions")
-public class Intention {
+public class Intention implements java.io.Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
