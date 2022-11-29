@@ -100,12 +100,6 @@ class ResponseHandlerTest {
         );
     }
 
-    /*
-    @ExceptionHandler({InterruptedErrorException.class})
-    public ResponseEntity<Object> handleInterruptedErrorException(InterruptedErrorException exception){
-        return new ResponseEntity<>(new ResponseErrorSimple("005", "A major error had occurred", exception.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
-    }
-     */
     @DisplayName("When the server is interrupted the response is a body error with a 503 status code")
     @Test
     void testHandlerInterruptedErrorException() {
@@ -333,7 +327,7 @@ class ResponseHandlerTest {
         assertAll("Should return a error body of a major error",
                 () -> assertEquals("015", body.getErrorCode()),
                 () -> assertEquals("Error on authentication", body.getMessage()),
-                () -> assertEquals(null, body.getError())
+                () -> assertNull(body.getError())
         );
     }
 
@@ -355,7 +349,7 @@ class ResponseHandlerTest {
         assertAll("Should return a error body of a major error",
                 () -> assertEquals("016", body.getErrorCode()),
                 () -> assertEquals("Date/s can't be format", body.getMessage()),
-                () -> assertEquals(null, body.getError())
+                () -> assertNull(body.getError())
         );
     }
 }
