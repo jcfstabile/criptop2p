@@ -4,7 +4,7 @@ import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.StatusChangeErrorEx
 
 import java.math.BigDecimal;
 
-public abstract class TypeIntention {
+public abstract class TypeIntention implements java.io.Serializable{
     TypeName name;
 
     protected TypeIntention(TypeName aTypeName){
