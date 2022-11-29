@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.service;
+package ar.edu.unq.desapp.grupoo.criptop2p.service.services;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.security.TokenUtils;
 import ar.edu.unq.desapp.grupoo.criptop2p.security.UserDetailsImpl;

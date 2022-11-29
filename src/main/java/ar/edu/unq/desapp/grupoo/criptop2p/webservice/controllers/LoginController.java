@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.webservice.controllers;
 
-import ar.edu.unq.desapp.grupoo.criptop2p.service.LoginService;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.services.LoginService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserLoginDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
