@@ -17,12 +17,25 @@ import java.util.Arrays;
 public class WebServiceAudit {
     static Logger logger = LoggerFactory.getLogger(WebServiceAudit.class);
 
-    @Around("@annotation(org.springframework.web.bind.annotation.GetMapping) ||" +
-            "@annotation(org.springframework.web.bind.annotation.PostMapping) ||" +
-            "@annotation(org.springframework.web.bind.annotation.DeleteMapping) ||" +
-            "@annotation(org.springframework.web.bind.annotation.PatchMapping)"
-    )
-    public Object logWebServiceAudit(ProceedingJoinPoint joinPoint) throws Throwable {
+
+    @Around("@annotation(org.springframework.web.bind.annotation.GetMapping)")
+    public Object logGetWebServiceAudit(ProceedingJoinPoint joinPoint) throws Throwable {
+        return logWebServiceAudit(joinPoint, "GET");
+    }
+
+    @Around("@annotation(org.springframework.web.bind.annotation.PostMapping)")
+    public Object logPostWebServiceAudit(ProceedingJoinPoint joinPoint) throws Throwable {
+        return logWebServiceAudit(joinPoint, "POST");
+    }
+    @Around("@annotation(org.springframework.web.bind.annotation.PatchMapping)")
+    public Object logPatchWebServiceAudit(ProceedingJoinPoint joinPoint) throws Throwable {
+        return logWebServiceAudit(joinPoint, "PATCH");
+    }
+    @Around("@annotation(org.springframework.web.bind.annotation.DeleteMapping)")
+    public Object logDeleteWebServiceAudit(ProceedingJoinPoint joinPoint) throws Throwable {
+        return logWebServiceAudit(joinPoint, "DELETE");
+    }
+    public Object logWebServiceAudit(ProceedingJoinPoint joinPoint, String operation) throws Throwable {
         Long start = System.currentTimeMillis();
         Object proceed = new Object();
         try {
@@ -35,7 +48,7 @@ public class WebServiceAudit {
                 logger.info("Timestamp={} User={} Operation={} Parameter(s)={} Execution time={}ms",
                         timestamp,
                         auth == null ? "---" : auth.getPrincipal(),
-                        joinPoint.getSignature(),
+                        operation,
                         Arrays.toString(joinPoint.getArgs()),
                         now - start);
             }

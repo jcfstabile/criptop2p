@@ -24,10 +24,9 @@ class WebServiceAuditTest {
         ResponseEntity<Object> re = mock(ResponseEntity.class);
         when(pjp.proceed()).thenReturn(re);
 
-        Object response = webServiceAudit.logWebServiceAudit(pjp);
+        Object response = webServiceAudit.logWebServiceAudit(pjp, "OP");
 
         verify(pjp, atLeast(1)).proceed();
-        verify(pjp, atLeast(1)).getSignature()  ;
         verify(pjp, atLeast(1)).getArgs()  ;
         assertEquals(re, response);
     }
