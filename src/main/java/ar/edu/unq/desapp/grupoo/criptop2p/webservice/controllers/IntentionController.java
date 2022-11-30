@@ -60,7 +60,7 @@ public class IntentionController implements IntentionControllerInterface {
 
 
 
-    @GetMapping("/intentions")
+    @GetMapping("/intentions/search")
     @Parameter(name = "state", description = "Status to filter")
     @Operation(
             summary = "Get intentions with a determinated status",
