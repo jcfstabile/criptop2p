@@ -58,8 +58,6 @@ public class IntentionController implements IntentionControllerInterface {
         return ResponseEntity.status(200).body(this.intentionService.intentions());
     }
 
-
-
     @GetMapping("/intentions/search")
     @Parameter(name = "state", description = "Status to filter")
     @Operation(
@@ -118,5 +116,4 @@ public class IntentionController implements IntentionControllerInterface {
                 this.intentionService.findById(id)
         );
     }
-
 }
