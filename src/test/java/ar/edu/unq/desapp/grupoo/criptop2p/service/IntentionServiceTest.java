@@ -51,16 +51,6 @@ class IntentionServiceTest {
         intentionDTO2 = new IntentionCreationDTO(2, priceCK.toString(), "BUY", "CAKEUSDT");
     }
 
-    @AfterEach
-    void eraseAllIntentions() {
-        List<IntentionDTO> intentions = sut.intentions();
-        for (IntentionDTO intention : intentions) {
-            sut.delete(intention.getIntentionId());
-        }
-        anUserController.unregister(userDTO.getId());
-    }
-
-
     @DisplayName("At first, there aren only 8 intentions")
     @Test
     void testThreAren8IntentionCreatedInInitDBData(){
