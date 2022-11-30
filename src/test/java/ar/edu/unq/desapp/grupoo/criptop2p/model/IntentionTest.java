@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoo.criptop2p.model;
 
+import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.IntentionBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +38,50 @@ class IntentionTest {
         intention = anyIntention.withUser(anUser).withType(new Sell()).withCrypto(CryptoName.ATOMUSDT).build();
         intentionBuy = anyIntention.withType(new Buy()).withCrypto(CryptoName.ATOMUSDT).build();
         intentionSell = anyIntention.withType(new Sell()).withCrypto(CryptoName.ATOMUSDT).build();
+    }
 
+    @DisplayName("An intention set its ID")
+    @Test
+    void testSetIntention(){
+        Intention intentionToSet = anyIntention.withUser(anUser).withType(new Sell()).withCrypto(CryptoName.ATOMUSDT).build();
+        intentionToSet.setId(1234567890L);
+        assertEquals(1234567890L, intentionToSet.getId());
+    }
+
+    @DisplayName("An intention is between these dates")
+    @Test
+    void testAnIntentionIsBetweenTheseDates(){
+        Date myDate = new Date();
+        Date init = new Date(myDate.getTime() - 2);
+        Intention intentionBetween = anyIntention.withUser(anUser).withType(new Sell()).withCrypto(CryptoName.ATOMUSDT).build();
+        Date end = new Date(2022, 12,31);
+        assertEquals("NOVEMBER", intentionBetween.timestamp.toLocalDateTime().toLocalDate().getMonth().name());
+        assertEquals(2022, intentionBetween.timestamp.toLocalDateTime().toLocalDate().getYear());
+        assertTrue(intentionBetween.isBetween(init, end));
+    }
+
+
+    @DisplayName("")
+    @Test
+    void testotherUserIsNotTheDemander(){
+        User otherOtherUser = anyUser.withEmail("heasd@here.dom").build();
+        String price = new BinanceIntegration().priceOf(CryptoName.ATOMUSDT).getPrice();
+        BigDecimal currentPrice = new BigDecimal(price);
+        anUser.offer(intention, currentPrice);
+        assertFalse(intention.isItsDemander(anUser));
+        otherUser.accept(intention, currentPrice);
+        assertFalse(intention.isItsDemander(otherOtherUser));
+    }
+
+
+
+    @DisplayName("An intention is not between these dates")
+    @Test
+    void testAnIntentionIsNotBetweenTheseDates(){
+        Intention intentionBetween = anyIntention.withUser(anUser).withType(new Sell()).withCrypto(CryptoName.ATOMUSDT).build();
+        Date init = new Date(2000, 11,01);
+        Date start = new Date(2000, 11,30);
+        assertFalse(intentionBetween.isBetween(init, start));
     }
 
     @DisplayName("An Intention exist")

@@ -58,9 +58,7 @@ public class IntentionController implements IntentionControllerInterface {
         return ResponseEntity.status(200).body(this.intentionService.intentions());
     }
 
-
-
-    @GetMapping("/intentions&status={aState}")
+    @GetMapping("/intentions/search")
     @Parameter(name = "state", description = "Status to filter")
     @Operation(
             summary = "Get intentions with a determinated status",
@@ -74,8 +72,8 @@ public class IntentionController implements IntentionControllerInterface {
             }
     )
     @Override
-    public ResponseEntity<List<IntentionDTO>> intentionsWithState(@PathVariable String aState) {
-        return ResponseEntity.status(200).body(this.intentionService.intentionsWithState(aState));
+    public ResponseEntity<List<IntentionDTO>> intentionsWithState(@RequestParam String status) {
+        return ResponseEntity.status(200).body(this.intentionService.intentionsWithState(status));
     }
 
     @Operation( summary = "Remove intention by id",
@@ -87,7 +85,7 @@ public class IntentionController implements IntentionControllerInterface {
             }
     )
     @Parameter(name = "id", description = "Id of the intention to delete")
-    @DeleteMapping("/intentions/={id}")
+    @DeleteMapping("/intentions/{id}")
     @Override
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.intentionService.delete(id);
@@ -118,5 +116,4 @@ public class IntentionController implements IntentionControllerInterface {
                 this.intentionService.findById(id)
         );
     }
-
 }

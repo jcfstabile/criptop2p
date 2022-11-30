@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.builders.UserCreationDTOBuilder;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.IntentionCreationDTO;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.UserCreationDTO;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +30,10 @@ public class InitDbData {
     @Autowired
     UserService userService;
 
+    private static final String SIMPSON_ADDRESS = "742 Evergreen Terrace";
     InitDbData(){
-        this.userBuilder = new UserCreationDTOBuilder(
-                "any", "any", "email@init.data", "Address of init data",
+        userBuilder = new UserCreationDTOBuilder(
+                "any", "any", "email@init.data", SIMPSON_ADDRESS,
                 "1234!Aa.", "12345678", "1234567890123456789012");
     }
 
@@ -47,15 +47,39 @@ public class InitDbData {
     @PostConstruct
     void init(){
         if(driverClassName.equals("org.h2.Driver")) {
-            UserCreationDTO userCreationDTO00 = this.userBuilder.withEmail("email1@init.data").withWalletAddress("IDD09871").build();
-            UserCreationDTO userCreationDTO01 = this.userBuilder.withEmail("email2@init.data").withWalletAddress("IDD09872").build();
-            UserCreationDTO userCreationDTO02 = this.userBuilder.withEmail("email3@init.data").withWalletAddress("IDD09873").build();
-            UserCreationDTO userCreationDTO03 = this.userBuilder.withName("Alf").withEmail("email4@init.data").withWalletAddress("IDD09874").build();
 
-            Long idUser00 = this.userService.addUser(userCreationDTO00);
-            Long idUser01 = this.userService.addUser(userCreationDTO01);
-            Long idUser02 = this.userService.addUser(userCreationDTO02);
-            Long idUser03 = this.userService.addUser(userCreationDTO03);
+            var idUser00 = userService.addUser(userBuilder
+                    .withName("Apu")
+                    .withSurname("Nahasapeemapetilon")
+                    .withAddress("Kwik-E-Mart")
+                    .withEmail("admin@here.data")
+                    .withPassword("Admin1.")
+                    .withWalletAddress("IDD09871")
+                    .build());
+
+            var idUser01 = userService.addUser(userBuilder
+                    .withName("Marge")
+                    .withSurname("Simpson")
+                    .withAddress(SIMPSON_ADDRESS)
+                    .withEmail("marge@init.data")
+                    .withPassword("Marge1234.")
+                    .withWalletAddress("IDD09872").build());
+
+            var idUser02 = userService.addUser(userBuilder
+                    .withName("Homero")
+                    .withSurname("Simpson")
+                    .withAddress(SIMPSON_ADDRESS)
+                    .withEmail("homero@init.data")
+                    .withPassword("Homero1234.")
+                    .withWalletAddress("IDD09873").build());
+
+            var idUser03 = userService.addUser(userBuilder
+                    .withName("Ned")
+                    .withSurname("Flanders")
+                    .withAddress("744 Evergreen Terrace")
+                    .withEmail("ned@init.data")
+                    .withPassword("Flanders1234.")
+                    .withWalletAddress("IDD09874").build());
 
             logger.info("Added fake Users on H2 with: " + driverClassName );
 
