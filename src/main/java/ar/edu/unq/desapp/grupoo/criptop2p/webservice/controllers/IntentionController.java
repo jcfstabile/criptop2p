@@ -60,7 +60,7 @@ public class IntentionController implements IntentionControllerInterface {
 
 
 
-    @GetMapping("/intentions&status={aState}")
+    @GetMapping("/intentions")
     @Parameter(name = "state", description = "Status to filter")
     @Operation(
             summary = "Get intentions with a determinated status",
@@ -74,7 +74,7 @@ public class IntentionController implements IntentionControllerInterface {
             }
     )
     @Override
-    public ResponseEntity<List<IntentionDTO>> intentionsWithState(@PathVariable String aState) {
+    public ResponseEntity<List<IntentionDTO>> intentionsWithState(@RequestParam String aState) {
         return ResponseEntity.status(200).body(this.intentionService.intentionsWithState(aState));
     }
 
