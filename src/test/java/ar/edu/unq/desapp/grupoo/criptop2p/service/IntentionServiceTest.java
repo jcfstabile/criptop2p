@@ -51,19 +51,9 @@ class IntentionServiceTest {
         intentionDTO2 = new IntentionCreationDTO(2, priceCK.toString(), "BUY", "CAKEUSDT");
     }
 
-    @AfterEach
-    void eraseAllIntentions() {
-        List<IntentionDTO> intentions = sut.intentions();
-        for (IntentionDTO intention : intentions) {
-            sut.delete(intention.getIntentionId());
-        }
-        anUserController.unregister(userDTO.getId());
-    }
-
-
-    @DisplayName("At first, there arent any intention")
+    @DisplayName("At first, there aren only 8 intentions")
     @Test
-    void testThreArentAnyIntention(){
+    void testThreAren8IntentionCreatedInInitDBData(){
         List<IntentionDTO> response = sut.intentions();
         assertEquals(8, response.size());
     }
@@ -121,15 +111,6 @@ class IntentionServiceTest {
         List<IntentionDTO> offereds = sut.intentionsWithState("OFFERED");
         assertEquals(0, solds.size());
         assertEquals(8, offereds.size());
-    }
-
-    @DisplayName("IntentionService can delete an intention when the ID es rigth")
-    @Test
-    void testToDeleteAnIntentionItEliminateOne(){
-        IntentionDTO intention0 = sut.add(intentionDTO0, userDTO);
-        assertEquals(9, sut.intentions().size());
-        sut.delete(intention0.getIntentionId());
-//        assertEquals(0, sut.intentions().size());
     }
 
     @DisplayName("To delete an intention find by ID it throws an exception")

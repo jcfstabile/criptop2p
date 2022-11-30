@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("LoginController Tests")
 @SpringBootTest
-public class LoginControllerTest {
+class LoginControllerTest {
     @Autowired
     LoginController loginController;
 
