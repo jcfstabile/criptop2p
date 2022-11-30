@@ -74,8 +74,8 @@ public class IntentionController implements IntentionControllerInterface {
             }
     )
     @Override
-    public ResponseEntity<List<IntentionDTO>> intentionsWithState(@RequestParam String aState) {
-        return ResponseEntity.status(200).body(this.intentionService.intentionsWithState(aState));
+    public ResponseEntity<List<IntentionDTO>> intentionsWithState(@RequestParam String status) {
+        return ResponseEntity.status(200).body(this.intentionService.intentionsWithState(status));
     }
 
     @Operation( summary = "Remove intention by id",
