@@ -1,0 +1,933 @@
+{
+	"info": {
+		"_postman_id": "610427fc-c701-4546-a264-085cdef45e51",
+		"name": "CriptoP2P",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7489704"
+	},
+	"item": [
+		{
+			"name": "Intenciones de User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Active intentions is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Active intentions has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"",
+							"pm.test(\"Intention in active intentions has count\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('count');",
+							"});",
+							"pm.test(\"Intention in active intentions has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Intention in active intentions has type\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('type');",
+							"});",
+							"pm.test(\"Intention in active intentions has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Intention in active intentions has offeredId\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('offeredId');",
+							"});",
+							"pm.test(\"Intention in active intentions has status\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('status');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/1/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"1",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones de User 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Active intentions is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Active intentions has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"",
+							"pm.test(\"Intention in active intentions has count\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('count');",
+							"});",
+							"pm.test(\"Intention in active intentions has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Intention in active intentions has type\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('type');",
+							"});",
+							"pm.test(\"Intention in active intentions has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Intention in active intentions has offeredId\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('offeredId');",
+							"});",
+							"pm.test(\"Intention in active intentions has status\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('status');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/3/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"3",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search intentions of an unregistred user throw an error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Response has error\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('error');",
+							"});",
+							"pm.test(\"Response has message\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('message');",
+							"});",
+							"pm.test(\"Response has an error\", function () {",
+							"    pm.expect(jsonData.error).eq('Could not find user 987654321');",
+							"});",
+							"pm.test(\"Response's message is the expected\", function () {",
+							"    pm.expect(jsonData.message).eq('User not found');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/987654321/intentions",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"987654321",
+						"intentions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones con status OFFERED",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Active intentions is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Quotations has 14 quotations\", function () {",
+							"    pm.expect(jsonData).to.have.lengthOf(8);",
+							"});",
+							"pm.test(\"Active intentions has an element and is an object\", function () {",
+							"    pm.expect(jsonData[0]).to.not.be.an('undefined');",
+							"    pm.expect(jsonData[0]).to.be.an('object');",
+							"});",
+							"",
+							"pm.test(\"Intention in active intentions has count\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('count');",
+							"});",
+							"pm.test(\"Intention in active intentions has price\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('price');",
+							"});",
+							"pm.test(\"Intention in active intentions has type\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('type');",
+							"});",
+							"pm.test(\"Intention in active intentions has cryptoName\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('cryptoName');",
+							"});",
+							"pm.test(\"Intention in active intentions has offeredId\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('offeredId');",
+							"});",
+							"pm.test(\"Intention in active intentions has status\", function () {",
+							"    pm.expect(jsonData[0]).to.have.own.property('status');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/intentions/search?status=OFFERED",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"intentions",
+						"search"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "OFFERED"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones con status SOLD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Intentions is an array\", function () {",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"pm.test(\"Intention hasn't any intention\", function () {",
+							"    pm.expect(jsonData).to.have.lengthOf(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/intentions/search?status=SOLD",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"intentions",
+						"search"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "SOLD"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones con status incorrecto has an error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Response has an errorCode\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('errorCode');",
+							"});",
+							"",
+							"pm.test(\"Response has and error\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('error');",
+							"});",
+							"pm.test(\"Response has an message\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('message');",
+							"});",
+							"",
+							"pm.test(\"Response has an error\", function () {",
+							"    pm.expect(jsonData.error).eq('The next status is a incorrect status for an intention: RAMMSTEIN');",
+							"});",
+							"pm.test(\"Response has an error\", function () {",
+							"    pm.expect(jsonData.errorCode).eq('009');",
+							"});",
+							"pm.test(\"Response's message is the expected\", function () {",
+							"    pm.expect(jsonData.message).eq('Incorrect state');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/intentions/search?status=RAMMSTEIN",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"intentions",
+						"search"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "RAMMSTEIN"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones entre fechas correctas de un User incorrecto arroja un errror",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Response has error\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('error');",
+							"});",
+							"pm.test(\"Response has message\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('message');",
+							"});",
+							"pm.test(\"Response has an error\", function () {",
+							"    pm.expect(jsonData.error).eq('Could not find user 333');",
+							"});",
+							"pm.test(\"Response's message is the expected\", function () {",
+							"    pm.expect(jsonData.message).eq('User not found');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/between/333?start=11/22/2022&end=11/28/2022",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"between",
+						"333"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "11/22/2022"
+						},
+						{
+							"key": "end",
+							"value": "11/28/2022"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones entre fechas incorrectas de un User correcto arroja un errror",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {",
+							"    pm.response.to.have.status(409);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Response has error\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('error');",
+							"});",
+							"pm.test(\"Response has message\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('message');",
+							"});",
+							"",
+							"pm.test(\"Response has message and it is the expected\", function () {",
+							"    pm.expect(jsonData.message).eq(\"Date/s can't be format\");",
+							"});",
+							"",
+							"pm.test(\"Response's error is the expected\", function () {",
+							"    pm.expect(jsonData.error).eq(\"Text '33/42/222' could not be parsed at index 6\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/between/3?start=33/42/222&end=33/33/3333",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"between",
+						"3"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "33/42/222"
+						},
+						{
+							"key": "end",
+							"value": "33/33/3333"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones entre fechas incorrectas de un User incorrecto arroja un errror",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Response has error\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('error');",
+							"});",
+							"pm.test(\"Response has message\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('message');",
+							"});",
+							"pm.test(\"Response has an error\", function () {",
+							"    pm.expect(jsonData.error).eq('Could not find user 333');",
+							"});",
+							"pm.test(\"Response's message is the expected\", function () {",
+							"    pm.expect(jsonData.message).eq('User not found');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/between/333?start=33/42/222&end=33/33/3333",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"between",
+						"333"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "33/42/222"
+						},
+						{
+							"key": "end",
+							"value": "33/33/3333"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Intenciones entre fechas correctas de un User correcto trae una coleccion de intenciones",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Reports of form is an array\", function () {",
+							"    pm.expect(jsonData.reports).to.be.an('array');",
+							"});",
+							"pm.test(\"Reports has 2 reports\", function () {",
+							"    pm.expect(jsonData.reports).to.have.lengthOf(1);",
+							"});",
+							"pm.test(\"Form has total in dollars\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('totalDollars');",
+							"});",
+							"pm.test(\"Form has total in pèsos\", function () {",
+							"    pm.expect(jsonData).to.have.own.property('totalPesos');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"intention_count\", 1);",
+							"pm.collectionVariables.set(\"intention_price\", 100);",
+							"pm.collectionVariables.set(\"intention_type\", \"SELL\");",
+							"pm.collectionVariables.set(\"intention_crypto_name\", \"ALICEUSDT\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": \"1\",\n    \"price\": \"100\",\n    \"type\": \"SELL\",\n    \"cryptoName\": \"ALICEUSDT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}/api/users/between/3?start=11/22/2022&end=11/30/2022",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"between",
+						"3"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "11/22/2022"
+						},
+						{
+							"key": "end",
+							"value": "11/30/2022"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "created_user_id",
+			"value": ""
+		},
+		{
+			"key": "error_code",
+			"value": ""
+		},
+		{
+			"key": "new_email",
+			"value": ""
+		},
+		{
+			"key": "created_user_email",
+			"value": ""
+		},
+		{
+			"key": "new_wallet",
+			"value": ""
+		},
+		{
+			"key": "new_name",
+			"value": ""
+		},
+		{
+			"key": "new_surname",
+			"value": ""
+		},
+		{
+			"key": "r_name",
+			"value": ""
+		},
+		{
+			"key": "r_surname",
+			"value": ""
+		},
+		{
+			"key": "r_email",
+			"value": ""
+		},
+		{
+			"key": "r_wallet",
+			"value": ""
+		},
+		{
+			"key": "intention_count",
+			"value": ""
+		},
+		{
+			"key": "intention_price",
+			"value": ""
+		},
+		{
+			"key": "intention_type",
+			"value": ""
+		},
+		{
+			"key": "intention_crypto_name",
+			"value": ""
+		},
+		{
+			"key": "intention_offered",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt.price",
+			"value": ""
+		},
+		{
+			"key": "aliceusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "maticusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "axsusdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "neousdt.last_price",
+			"value": ""
+		},
+		{
+			"key": "adausdt",
+			"value": ""
+		},
+		{
+			"key": "intention_offeredId",
+			"value": ""
+		},
+		{
+			"key": "intention3_id",
+			"value": ""
+		}
+	]
+}
