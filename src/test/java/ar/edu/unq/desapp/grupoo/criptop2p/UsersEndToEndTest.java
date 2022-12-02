@@ -71,8 +71,6 @@ class UsersEndToEndTest {
                 .contains("reputation");
     }
 
-    @DisplayName("Server has an intention offers by a user just registered")
-    @Test
     void testPostIntnetionByUser() throws JSONException {
         String price = new BinanceIntegration().priceOf(CryptoName.ALICEUSDT).getPrice();
         JSONObject newUserJson = new JSONObject();

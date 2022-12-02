@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoo.criptop2p.service.services;
+package ar.edu.unq.desapp.grupoo.criptop2p.service;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.integrations.BinanceIntegration;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CachedQuotations;

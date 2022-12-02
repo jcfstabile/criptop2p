@@ -55,13 +55,11 @@ class IntentionTest {
         Date init = new Date(myDate.getTime() - 2);
         Intention intentionBetween = anyIntention.withUser(anUser).withType(new Sell()).withCrypto(CryptoName.ATOMUSDT).build();
         Date end = new Date(2022, 12,31);
-        assertEquals("NOVEMBER", intentionBetween.timestamp.toLocalDateTime().toLocalDate().getMonth().name());
-        assertEquals(2022, intentionBetween.timestamp.toLocalDateTime().toLocalDate().getYear());
         assertTrue(intentionBetween.isBetween(init, end));
     }
 
 
-    @DisplayName("")
+    @DisplayName("other user is not the Demander")
     @Test
     void testotherUserIsNotTheDemander(){
         User otherOtherUser = anyUser.withEmail("heasd@here.dom").build();
