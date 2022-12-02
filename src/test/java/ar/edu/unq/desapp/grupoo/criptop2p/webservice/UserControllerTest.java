@@ -2,8 +2,7 @@ package ar.edu.unq.desapp.grupoo.criptop2p.webservice;
 
 import ar.edu.unq.desapp.grupoo.criptop2p.model.CryptoName;
 import ar.edu.unq.desapp.grupoo.criptop2p.model.Status;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.InitDbData;
-import ar.edu.unq.desapp.grupoo.criptop2p.service.QuotationService;
+import ar.edu.unq.desapp.grupoo.criptop2p.service.services.QuotationService;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.dto.*;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.IntentionNotFoundException;
 import ar.edu.unq.desapp.grupoo.criptop2p.service.exceptions.NoValidActionErrorException;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
